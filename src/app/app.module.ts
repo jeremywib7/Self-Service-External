@@ -142,7 +142,7 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { AccessComponent } from './components/access/access.component';
 import { HomeComponent } from './controllers/home/home.component';
 import { NavbarComponent } from './controllers/navbar/navbar.component';
-import { MenuComponent } from './controllers/menu/menu.component';
+import { MenuBookComponent } from './controllers/menu-book/menu-book.component';
 
 
 @NgModule({
@@ -280,7 +280,8 @@ import { MenuComponent } from './controllers/menu/menu.component';
         AccessComponent,
         HomeComponent,
         NavbarComponent,
-        MenuComponent
+        MenuBookComponent,
+        MenuBookComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

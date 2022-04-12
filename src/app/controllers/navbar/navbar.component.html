@@ -18,6 +18,7 @@
             <ul class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row cursor-pointer">
                 <li>
                     <a pRipple
+                       routerLink="/menu"
                        class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
                         <span>Menu Book</span>
                     </a>
@@ -44,6 +45,7 @@
             <div class="flex justify-content-between lg:block border-top-1 lg:border-top-none surface-border
             py-3 lg:py-0 mt-3 lg:mt-0 align-items-center">
                 <button pButton pRipple [label]="isLoggedIn() ? 'Logout': 'Login'"
+                        (click)="openLoginDialog()"
                         class="p-button-text p-button-rounded border-none font-light line-height-2 mr-4"></button>
                 <p-button icon="pi pi-shopping-cart" styleClass="p-button-rounded" label="Cart" badge="8"></p-button>
 

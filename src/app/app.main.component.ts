@@ -55,14 +55,14 @@ export class AppMainComponent implements AfterViewInit, OnDestroy, OnInit {
     subscription: Subscription;
 
     constructor(public renderer: Renderer2, public app: AppComponent, public configService: ConfigService,
-                private router: Router) {
+                public router: Router) {
     }
 
 
     ngOnInit() {
         this.config = this.configService.config;
         this.subscription = this.configService.configUpdate$.subscribe(config => this.config = config);
-        this.app.menuMode = 'static';
+        this.app.menuMode = 'overlay';
     }
 
     ngAfterViewInit() {
@@ -152,7 +152,7 @@ export class AppMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     isHomePage(): boolean {
-        return this.router.url.endsWith("");
+        return this.router.url === "";
     }
 
     isStatic() {

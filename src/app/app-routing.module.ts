@@ -2,12 +2,11 @@ import {RouterModule} from '@angular/router';
 import {NgModule} from '@angular/core';
 import {AppMainComponent} from './app.main.component';
 import {LandingComponent} from './components/landing/landing.component';
-import {LoginComponent} from './components/login/login.component';
 import {ErrorComponent} from './components/error/error.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
 import {AccessComponent} from './components/access/access.component';
 import {HomeComponent} from "./controllers/home/home.component";
-import {MenuComponent} from "./controllers/menu/menu.component";
+import {MenuBookComponent} from "./controllers/menu-book/menu-book.component";
 
 @NgModule({
     imports: [
@@ -16,7 +15,7 @@ import {MenuComponent} from "./controllers/menu/menu.component";
                 path: '', component: AppMainComponent,
                 children: [
                     {path: '', component: HomeComponent},
-                    {path: 'menu', component: MenuComponent},
+                    {path: 'menu', component: MenuBookComponent},
                 ],
             },
             {path: 'pages/landing', component: LandingComponent},

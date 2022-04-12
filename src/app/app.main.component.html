@@ -7,7 +7,7 @@
                                 'layout-mobile-sidebar-active':menuActiveMobile,
                                 'p-ripple-disabled': !config.ripple, 'p-input-filled': config.inputStyle === 'filled'}">
     <app-navbar></app-navbar>
-    <div [ngClass]="!isHomePage ? 'layout-main-container' : ''">
+    <div [ngClass]="this.router.url === '/' ? '' : 'layout-main-container'">
         <div class="layout-main">
             <router-outlet></router-outlet>
         </div>
