@@ -1,0 +1,85 @@
+<div class="surface-0">
+    <div
+        class="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static">
+        <a class="flex align-items-center" href="#">
+            <img src="assets/layout/images/{{config.dark ? 'logo-white' : 'logo-dark'}}.svg" alt="Sakai Logo"
+                 height="50" class="mr-0 lg:mr-2">
+            <!--            <span-->
+            <!--            class="text-900 font-medium text-2xl line-height-3 mr-8">Self Service</span>-->
+        </a>
+        <a pRipple class="cursor-pointer block lg:hidden text-700" pStyleClass="@next" enterClass="hidden"
+           leaveToClass="hidden" [hideOnOutsideClick]="true">
+            <i class="pi pi-bars text-4xl"></i>
+        </a>
+        <div
+            class="align-items-center surface-0 flex-grow-1 justify-content-between hidden lg:flex absolute lg:static
+             w-full left-0 px-6 lg:px-0 z-2"
+            style="top:92%">
+            <ul class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row cursor-pointer">
+                <li>
+                    <a pRipple
+                       class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
+                        <span>Menu Book</span>
+                    </a>
+                </li>
+                <li>
+                    <a pRipple
+                       class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
+                        <span>Waiting List</span>
+                    </a>
+                </li>
+                <li>
+                    <a pRipple
+                       class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
+                        <span>Membership</span>
+                    </a>
+                </li>
+                <li>
+                    <a pRipple
+                       class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
+                        <span>"User profile Name"</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="flex justify-content-between lg:block border-top-1 lg:border-top-none surface-border
+            py-3 lg:py-0 mt-3 lg:mt-0 align-items-center">
+                <button pButton pRipple [label]="isLoggedIn() ? 'Logout': 'Login'"
+                        class="p-button-text p-button-rounded border-none font-light line-height-2 mr-4"></button>
+                <p-button icon="pi pi-shopping-cart" styleClass="p-button-rounded" label="Cart" badge="8"></p-button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="showLoginDialog" [style]="{width: '450px'}"
+          [modal]="true" class="p-fluid" [draggable]="false">
+    <div class="text-center mb-5">
+        <img src="assets/demo/images/blocks/logos/hyper.svg" alt="Image" height="50" class="mb-3">
+        <div class="text-900 text-3xl font-medium mb-3">Welcome Back</div>
+        <span class="text-600 font-medium line-height-3">Don't have an account?</span>
+        <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Register today!</a>
+    </div>
+
+    <div class="p-fluid p-formgrid grid">
+        <div class="col-12">
+            <label for="username1" class="block text-900 font-medium mb-2">Username</label>
+            <input id="username1" type="text" pInputText>
+        </div>
+
+        <div class="col-12">
+            <label for="password1" class="block text-900 font-medium mb-2">Password</label>
+            <input id="password1" type="password" pInputText>
+        </div>
+
+        <div class="flex align-items-center justify-content-between mb-6">
+            <div class="flex align-items-center">
+                <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2"></p-checkbox>
+                <label for="rememberme1">Remember me</label>
+            </div>
+            <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
+        </div>
+
+        <button pButton pRipple label="Sign In" icon="pi pi-user" class="w-full"></button>
+    </div>
+</p-dialog>
