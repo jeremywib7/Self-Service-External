@@ -59,36 +59,67 @@
     </div>
 </div>
 
-<p-dialog [(visible)]="showLoginDialog" [style]="{width: '450px'}"
+<p-dialog [(visible)]="showLoginDialog" [style]="{width: '450px'}" (onHide)="loginForm.reset()"
           [modal]="true" class="p-fluid" [draggable]="false">
-    <div class="text-center mb-5">
-        <img src="assets/demo/images/blocks/logos/hyper.svg" alt="Image" height="50" class="mb-3">
-        <div class="text-900 text-3xl font-medium mb-3">Welcome Back</div>
-        <span class="text-600 font-medium line-height-3">Don't have an account?</span>
-        <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Register today!</a>
-    </div>
-
-    <div class="p-fluid p-formgrid grid">
-        <div class="col-12">
-            <label for="username1" class="block text-900 font-medium mb-2">Username</label>
-            <input id="username1" type="text" pInputText>
+    <ng-template pTemplate="content">
+        <div class="text-center mb-5">
+            <img src="assets/demo/images/blocks/logos/hyper.svg" alt="Image" height="50" class="mb-3">
+            <div class="text-900 text-3xl font-medium mb-3">Welcome Back</div>
+            <span class="text-600 font-medium line-height-3">Don't have an account?</span>
+            <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">
+                {{isRegisterMode ? 'Login' : 'Register Today'}}
+            </a>
         </div>
 
-        <div class="col-12">
-            <label for="password1" class="block text-900 font-medium mb-2">Password</label>
-            <input id="password1" type="password" pInputText>
-        </div>
+        <form [formGroup]="loginForm">
+            <div class="p-fluid p-formgrid grid">
+                <div class="col-12">
+                    <label for="username1" class="block text-900 font-medium mb-2">Username</label>
+                    <input id="username1" type="text" pInputText formControlName="userName"
+                           [ngClass]="{'ng-invalid ng-dirty' : loginForm.controls.userName.errors &&
+                                            (loginForm.controls.userName.touched || loginForm.controls.userName.dirty)}">
+                    <div *ngIf="loginForm.controls.userName.errors && (loginForm.controls.userName.touched ||
+                                       loginForm.controls.userName.dirty) ">
+                        <div *ngIf="loginForm.hasError('required','userName')">
+                            <small class="p-error">Username is required.</small>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="flex align-items-center justify-content-between mb-6">
-            <div class="flex align-items-center">
-                <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2"></p-checkbox>
-                <label for="rememberme1">Remember me</label>
+                <div class="col-12">
+                    <label for="password1" class="block text-900 font-medium mb-2">Password</label>
+                    <input id="password1" type="password" pInputText formControlName="userPassword"
+                           [ngClass]="{'ng-invalid ng-dirty' : loginForm.controls.userPassword.errors &&
+                                            (loginForm.controls.userPassword.touched || loginForm.controls.userPassword.dirty)}">
+                    <div *ngIf="loginForm.controls.userPassword.errors && (loginForm.controls.userPassword.touched ||
+                                       loginForm.controls.userPassword.dirty) ">
+                        <div *ngIf="loginForm.hasError('required','userPassword')">
+                            <small class="p-error">User password is required.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="flex align-items-center justify-content-between mb-6">
+                        <div class="flex align-items-center">
+                            <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2"></p-checkbox>
+                            <label for="rememberme1">Remember me</label>
+                        </div>
+                        <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot
+                            password?</a>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button pButton pRipple (click)="onLogin()"
+                            [label]="isRegisterMode ? 'Register':'Login' " icon="pi pi-user"
+                            class="w-full"></button>
+                </div>
+
             </div>
-            <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
-        </div>
 
-        <button pButton pRipple [label]="isRegisterMode ? '':'' " icon="pi pi-user" class="w-full"></button>
-    </div>
+        </form>
+    </ng-template>
 </p-dialog>
 
 <p-confirmDialog #cd [breakpoints]="{'960px': '75vw', '640px': '100vw'}"

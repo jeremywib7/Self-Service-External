@@ -87,7 +87,8 @@
                                     class="text-2xl font-semibold">{{product.unitPrice |
                                     currency:'Rp. ':'symbol':'3.0'}}
                                 </span>
-                                <p-button icon="pi pi-shopping-cart" (click)="onAddToCart(op, $event)"
+<!--                                (click)="onAddToCart(op, $event)"-->
+                                <p-button icon="pi pi-shopping-cart"
                                           [disabled]="product.active == false" class="mb-2"></p-button>
                             </div>
                         </div>
@@ -98,15 +99,15 @@
     </div>
 </div>
 
-<p-overlayPanel #op>
-    <ng-template pTemplate>
-        <div>
-            <label class="mb-2">Add Quantity (Max. 100)</label>
-        </div>
-        <br>
-        <p-inputNumber #inputQuantity mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="0"
-                       [max]="100" class="mr-2">
-        </p-inputNumber>
-        <p-button icon="pi pi-check" (onClick)="onConfirmQuantityToCart(inputQuantity, op)"></p-button>
-    </ng-template>
-</p-overlayPanel>
+<!--<p-overlayPanel #op>-->
+<!--    <ng-template pTemplate>-->
+<!--        <div>-->
+<!--            <label class="mb-2">Add Quantity (Max. 100)</label>-->
+<!--        </div>-->
+<!--        <br>-->
+<!--        <p-inputNumber #inputQuantity mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="0"-->
+<!--                       [max]="100" class="mr-2">-->
+<!--        </p-inputNumber>-->
+<!--        <p-button icon="pi pi-check" (onClick)="onConfirmQuantityToCart(inputQuantity, op)"></p-button>-->
+<!--    </ng-template>-->
+<!--</p-overlayPanel>-->

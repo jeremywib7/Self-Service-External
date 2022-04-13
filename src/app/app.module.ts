@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import {LocationStrategy, HashLocationStrategy, DatePipe} from '@angular/common';
@@ -248,6 +248,7 @@ import {Router} from "@angular/router";
         // for HttpClient use:
         LoadingBarHttpClientModule,
         LazyLoadImageModule,
+        ReactiveFormsModule,
     ],
     declarations: [
         AppComponent,

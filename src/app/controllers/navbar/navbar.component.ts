@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 import {AppConfig} from "../../api/appconfig";
 import {Subscription} from "rxjs";
 import {ConfigService} from "../../service/app.config.service";
-import {FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {UserAuthService} from "../../service/user-auth.service";
 import {ConfirmationService, MegaMenuItem, MenuItem} from "primeng/api";
 import {RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
@@ -35,7 +35,7 @@ export class NavbarComponent implements OnInit {
         public configService: ConfigService,
         public userAuthService: UserAuthService,
         private confirmationService: ConfirmationService,
-        private rxFormBuilder: RxFormBuilder,
+        private rxFormBuilder: FormBuilder,
         private userService: UserService) {
     }
 
@@ -106,11 +106,15 @@ export class NavbarComponent implements OnInit {
     }
 
     onLogin() {
-        this.userService.login(this.loginForm).subscribe({
-            next: (value: any) => {
+        if (this.loginForm.valid) {
+            this.userService.login(this.loginForm).subscribe({
+                next: (value: any) => {
 
-            }
-        })
+                }
+            })
+        } else {
+            this.loginForm.markAllAsTouched();
+        }
     }
 
     onLogoutClicked() {
@@ -122,4 +126,5 @@ export class NavbarComponent implements OnInit {
             }
         });
     }
+
 }
