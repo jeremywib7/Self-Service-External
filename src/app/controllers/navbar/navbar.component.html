@@ -1,6 +1,6 @@
 <div class="surface-0">
     <div
-        class="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static">
+        class="py-3 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static">
         <a class="flex align-items-center" href="#">
             <img src="assets/layout/images/{{config.dark ? 'logo-white' : 'logo-dark'}}.svg" alt="Sakai Logo"
                  height="50" class="mr-0 lg:mr-2">
@@ -40,9 +40,9 @@
                        (click)="menu.toggle($event)"
                        class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
                         <span>
-                            <i class="pi pi-user"></i>
-                            "User profile Name"
-                            <i class="pi pi-angle-down"></i>
+                            <i class="pi pi-user mr-2"></i>
+                             Jeremy Yonathan
+                            <i class="ml-2 pi pi-angle-down"></i>
                         </span>
                     </a>
                 </li>
@@ -87,10 +87,22 @@
             <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot password?</a>
         </div>
 
-        <button pButton pRipple label="Sign In" icon="pi pi-user" class="w-full"></button>
+        <button pButton pRipple [label]="isRegisterMode ? '':'' " icon="pi pi-user" class="w-full"></button>
     </div>
 </p-dialog>
 
-<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog #cd [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+                 [style]="{minWidth: '450px'}"
+                 icon="pi pi-exclamation-triangle">
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                (click)="cd.reject()"></button>
+        <button pButton pRipple
+                (click)="cd.accept()"
+                icon="pi pi-check" class="p-button-text" label="Yes"
+        ></button>
+    </ng-template>
+</p-confirmDialog>
 
+<!-- on User Profile Name clicked-->
 <p-tieredMenu #menu [model]="userMenu" [popup]="true"></p-tieredMenu>

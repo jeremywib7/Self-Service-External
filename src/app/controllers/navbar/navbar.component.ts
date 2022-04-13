@@ -6,6 +6,8 @@ import {ConfigService} from "../../service/app.config.service";
 import {FormGroup} from "@angular/forms";
 import {UserAuthService} from "../../service/user-auth.service";
 import {ConfirmationService, MegaMenuItem, MenuItem} from "primeng/api";
+import {RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
+import {UserService} from "../../service/user.service";
 
 @Component({
     selector: 'app-navbar',
@@ -22,14 +24,19 @@ export class NavbarComponent implements OnInit {
 
     subscription: Subscription;
 
-    editMode: boolean = false;
+    isRegisterMode : boolean = false;
 
     showLoginDialog: boolean = false;
 
     loginForm: FormGroup;
 
-    constructor(public router: Router, public configService: ConfigService, public userAuthService: UserAuthService,
-                private confirmationService: ConfirmationService) {
+    constructor(
+        public router: Router,
+        public configService: ConfigService,
+        public userAuthService: UserAuthService,
+        private confirmationService: ConfirmationService,
+        private rxFormBuilder: RxFormBuilder,
+        private userService: UserService) {
     }
 
 
@@ -39,72 +46,43 @@ export class NavbarComponent implements OnInit {
             this.config = config;
         });
         this.initMenuUser();
-        this.initMenuUser();
+        this.initLoginForm();
     }
 
-    ngOnDestroy()
-        :
-        void {
-        if (this.subscription
-        ) {
+    ngOnDestroy(): void {
+        if (this.subscription) {
             this.subscription.unsubscribe();
         }
     }
 
+    initLoginForm() {
+        this.loginForm = this.rxFormBuilder.group({
+            userName: ['',
+                [
+                    RxwebValidators.required(),
+                ]
+            ],
+            userPassword: ['',
+                [
+                    RxwebValidators.required(),
+                ]
+            ],
+        });
+    }
 
     initMenuUser() {
         this.userMenu = [
             {
-                label: 'Edit',
-                icon: 'pi pi-fw pi-pencil',
+                label: 'Settings',
+                icon: 'pi pi-fw pi-cog',
                 items: [
                     {
-                        label: 'Left',
-                        icon: 'pi pi-fw pi-align-left'
+                        label: 'Profile',
+                        icon: 'pi pi-fw pi-user',
                     },
                     {
-                        label: 'Right',
-                        icon: 'pi pi-fw pi-align-right'
-                    },
-                    {
-                        label: 'Center',
-                        icon: 'pi pi-fw pi-align-center'
-                    },
-                    {
-                        label: 'Justify',
-                        icon: 'pi pi-fw pi-align-justify'
-                    },
-
-                ]
-            },
-            {
-                label: 'Events',
-                icon: 'pi pi-fw pi-calendar',
-                items: [
-                    {
-                        label: 'Edit',
-                        icon: 'pi pi-fw pi-pencil',
-                        items: [
-                            {
-                                label: 'Save',
-                                icon: 'pi pi-fw pi-calendar-plus'
-                            },
-                            {
-                                label: 'Delete',
-                                icon: 'pi pi-fw pi-calendar-minus'
-                            },
-
-                        ]
-                    },
-                    {
-                        label: 'Archieve',
+                        label: 'History',
                         icon: 'pi pi-fw pi-calendar-times',
-                        items: [
-                            {
-                                label: 'Remove',
-                                icon: 'pi pi-fw pi-calendar-minus'
-                            }
-                        ]
                     }
                 ]
             },
@@ -119,13 +97,7 @@ export class NavbarComponent implements OnInit {
         ]
     }
 
-    initMenuCategory() {
-
-    }
-
-    isLoggedIn()
-        :
-        boolean {
+    isLoggedIn(): boolean {
         return !!this.userAuthService.isLoggedIn();
     }
 
@@ -133,9 +105,18 @@ export class NavbarComponent implements OnInit {
         this.showLoginDialog = true;
     }
 
+    onLogin() {
+        this.userService.login(this.loginForm).subscribe({
+            next: (value: any) => {
+
+            }
+        })
+    }
+
     onLogoutClicked() {
         this.confirmationService.confirm({
-            message: 'Are you sure that you want to perform this action?',
+            message: 'Are you sure you want to log out?',
+            header: 'Logout',
             accept: () => {
                 //Actual logic to perform a confirmation
             }

@@ -14,4 +14,9 @@ export class AppComponent {
         this.primengConfig.ripple = true;
         document.documentElement.style.fontSize = '14px';
     }
+
+    public static tokenExpired(token: string) {
+        const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+        return (Math.floor((new Date).getTime() / 1000)) >= expiry;
+    }
 }

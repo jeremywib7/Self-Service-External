@@ -1,58 +1,75 @@
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {catchError, EMPTY, Observable} from "rxjs";
-import {UserAuthService} from "../_services/user-auth.service";
+import {
+    HttpErrorResponse,
+    HttpEvent,
+    HttpHandler,
+    HttpInterceptor,
+    HttpRequest
+} from "@angular/common/http";
+import {catchError, EMPTY, finalize, Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {Injectable} from "@angular/core";
-import {ToastrService} from "ngx-toastr";
-import {environment} from "../../environments/environment";
+import {UserAuthService} from "../service/user-auth.service";
+import {MessageService} from "primeng/api";
 
-@Injectable()
+
+@Injectable({
+    providedIn: 'root',
+})
 export class AuthInterceptor implements HttpInterceptor {
 
-  private apiServerUrl = environment.apiBaseUrl;
-  private project = environment.project;
-
-  constructor(private userAuthService: UserAuthService, private router: Router, private toastr: ToastrService) {
-  }
-
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.headers.get('No-Auth') === 'True') {
-      return next.handle(req.clone());
+    constructor(
+        private userAuthService: UserAuthService,
+        private router: Router,
+        public messageService: MessageService,
+    ) {
     }
 
-    const token = this.userAuthService.getToken();
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    req = this.addToken(req, token);
-
-    return next.handle(req).pipe(
-      catchError(
-        (err: HttpErrorResponse) => {
-          if (err.status === 401) {
-            this.userAuthService.clear();
-            this.toastr.info("Please log in again", 'Session expired');
-            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
-              this.router.navigate(['/login']));
-          } else if (err.status === 403) {
-            this.router.navigate(['/forbidden']);
-          } else {
-            this.toastr.error(err.error.message, 'Error');
-          }
-          return EMPTY;
+        if (req.headers.get('No-Auth') === 'True') {
+            return next.handle(req.clone());
         }
 
-      ),
-    );
-  }
+        const token = this.userAuthService.getToken();
 
-  private addToken(request: HttpRequest<any>, token: string) {
-    return request.clone(
-      {
-        setHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true
-      }
-    );
-  }
+        req = this.addToken(req, token);
+
+
+        return next.handle(req).pipe(
+            catchError(
+                (err: HttpErrorResponse) => {
+                    if (err.status === 401) {
+                        this.userAuthService.clear();
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Session Expired',
+                            detail: 'Please log in again'
+                        });
+                        this.router.navigate(['/pages/login'])
+                    } else if (err.status === 403) {
+                        this.router.navigate(['/forbidden']);
+                    } else {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Failed',
+                            detail: err.error.message
+                        });
+                    }
+                    return EMPTY;
+                }
+            ),
+        );
+    }
+
+    private addToken(request: HttpRequest<any>, token: string) {
+        return request.clone(
+            {
+                setHeaders: {
+                    Authorization: `Bearer ${token}`,
+                },
+                withCredentials: true
+            }
+        );
+    }
 
 }

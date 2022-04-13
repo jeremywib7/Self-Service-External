@@ -6,6 +6,7 @@
                                 'layout-static-sidebar-inactive': staticMenuInactive,
                                 'layout-mobile-sidebar-active':menuActiveMobile,
                                 'p-ripple-disabled': !config.ripple, 'p-input-filled': config.inputStyle === 'filled'}">
+    <ngx-loading-bar height="6px" color="var(--primary-color)"></ngx-loading-bar>
     <app-navbar></app-navbar>
     <div [ngClass]="this.router.url === '/' ? '' : 'layout-main-container'">
         <div class="layout-main">
@@ -13,6 +14,6 @@
         </div>
         <app-footer></app-footer>
     </div>
-        <app-config></app-config>
-        <div *ngIf="menuActiveMobile" class="layout-mask p-component-overlay"></div>
+    <app-config></app-config>
+    <div *ngIf="menuActiveMobile" class="layout-mask p-component-overlay"></div>
 </div>

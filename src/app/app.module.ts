@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import {LocationStrategy, HashLocationStrategy, DatePipe} from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -143,7 +143,15 @@ import { AccessComponent } from './components/access/access.component';
 import { HomeComponent } from './controllers/home/home.component';
 import { NavbarComponent } from './controllers/navbar/navbar.component';
 import { MenuBookComponent } from './controllers/menu-book/menu-book.component';
-import {ConfirmationService} from "primeng/api";
+import {ConfirmationService, MessageService} from "primeng/api";
+import {RxFormBuilder} from "@rxweb/reactive-form-validators";
+import {AuthGuard} from "./_auth/auth.guard";
+import {Attributes, IntersectionObserverHooks, LAZYLOAD_IMAGE_HOOKS, LazyLoadImageModule} from "ng-lazyload-image";
+import {AuthInterceptor} from "./_auth/auth.interceptor";
+import {LOADING_BAR_CONFIG} from "@ngx-loading-bar/core";
+import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
+import {UserAuthService} from "./service/user-auth.service";
+import {Router} from "@angular/router";
 
 
 @NgModule({
@@ -235,6 +243,11 @@ import {ConfirmationService} from "primeng/api";
         VirtualScrollerModule,
         AppCodeModule,
         StyleClassModule,
+
+        //my
+        // for HttpClient use:
+        LoadingBarHttpClientModule,
+        LazyLoadImageModule,
     ],
     declarations: [
         AppComponent,
@@ -282,15 +295,46 @@ import {ConfirmationService} from "primeng/api";
         HomeComponent,
         NavbarComponent,
         MenuBookComponent,
-        MenuBookComponent
+        MenuBookComponent,
+
+
     ],
     providers: [
-        {provide: LocationStrategy, useClass: HashLocationStrategy},
-        CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MenuService, ConfigService, ConfirmationService
+        {
+            provide: LocationStrategy, useClass: HashLocationStrategy
+        },
+        CountryService,
+        CustomerService,
+        EventService,
+        IconService,
+        NodeService,
+        PhotoService,
+        MenuService,
+        ConfigService,
+
+        // my
+        AuthGuard,
+        {
+            provide: LAZYLOAD_IMAGE_HOOKS,
+            useClass: AppModule
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        },
+        {
+            provide: LOADING_BAR_CONFIG,
+            useValue: {latencyThreshold: 0}
+        },
+        DatePipe,
+        ConfirmationService,
+        MessageService,
+        ProductService,
+        RxFormBuilder,
     ],
     bootstrap: [AppComponent]
 })
 
-export class AppModule {
+export class AppModule extends IntersectionObserverHooks {
 }
