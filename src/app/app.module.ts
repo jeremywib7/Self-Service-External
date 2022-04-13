@@ -143,6 +143,7 @@ import { AccessComponent } from './components/access/access.component';
 import { HomeComponent } from './controllers/home/home.component';
 import { NavbarComponent } from './controllers/navbar/navbar.component';
 import { MenuBookComponent } from './controllers/menu-book/menu-book.component';
+import {ConfirmationService} from "primeng/api";
 
 
 @NgModule({
@@ -286,7 +287,7 @@ import { MenuBookComponent } from './controllers/menu-book/menu-book.component';
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MenuService, ConfigService
+        PhotoService, ProductService, MenuService, ConfigService, ConfirmationService
     ],
     bootstrap: [AppComponent]
 })

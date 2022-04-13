@@ -37,8 +37,13 @@
                 </li>
                 <li>
                     <a pRipple
+                       (click)="menu.toggle($event)"
                        class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
-                        <span>"User profile Name"</span>
+                        <span>
+                            <i class="pi pi-user"></i>
+                            "User profile Name"
+                            <i class="pi pi-angle-down"></i>
+                        </span>
                     </a>
                 </li>
             </ul>
@@ -85,3 +90,7 @@
         <button pButton pRipple label="Sign In" icon="pi pi-user" class="w-full"></button>
     </div>
 </p-dialog>
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<p-tieredMenu #menu [model]="userMenu" [popup]="true"></p-tieredMenu>
