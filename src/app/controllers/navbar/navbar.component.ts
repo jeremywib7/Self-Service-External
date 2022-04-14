@@ -39,7 +39,7 @@ export class NavbarComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private rxFormBuilder: FormBuilder,
-        private userService: UserService) {
+        public userService: UserService) {
     }
 
 
@@ -112,7 +112,13 @@ export class NavbarComponent implements OnInit {
 
         if (this.loginForm.valid) {
 
-            await lastValueFrom(this.userService.login(this.loginForm.value)).then((value: any) => {
+            await lastValueFrom(this.userService.login(this.loginForm.value)).then((response: any) => {
+                // set in cookies
+                this.userAuthService.setRoles(response.user.role);
+                this.userAuthService.setToken(response.jwtToken);
+
+                this.userService.userInformation.user = response.user;
+
                 this.showLoginDialog = false;
             }).catch(
                 err => {
@@ -127,12 +133,18 @@ export class NavbarComponent implements OnInit {
         }
     }
 
+    onHideDialog() {
+        this.loginForm.reset();
+        this.onLoginMsg = [];
+    }
+
     onLogoutClicked() {
         this.confirmationService.confirm({
             message: 'Are you sure you want to log out?',
             header: 'Logout',
             accept: () => {
                 //Actual logic to perform a confirmation
+                this.userAuthService.clear();
             }
         });
     }

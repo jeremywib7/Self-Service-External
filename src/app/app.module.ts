@@ -152,6 +152,7 @@ import {LOADING_BAR_CONFIG} from "@ngx-loading-bar/core";
 import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
 import {UserAuthService} from "./service/user-auth.service";
 import {Router} from "@angular/router";
+import {UserService} from "./service/user.service";
 
 
 @NgModule({
@@ -331,6 +332,7 @@ import {Router} from "@angular/router";
         DatePipe,
         ConfirmationService,
         MessageService,
+        UserService,
         ProductService,
         RxFormBuilder,
     ],

@@ -35,13 +35,12 @@
                         <span>Membership</span>
                     </a>
                 </li>
-                <li>
-                    <a pRipple
-                       (click)="menu.toggle($event)"
+                <li *ngIf="isLoggedIn()">
+                    <a pRipple (click)="menu.toggle($event)"
                        class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
                         <span>
                             <i class="pi pi-user mr-2"></i>
-                             Jeremy Yonathan
+                            {{this.userService.userInformation.user['username']}}
                             <i class="ml-2 pi pi-angle-down"></i>
                         </span>
                     </a>
@@ -49,9 +48,11 @@
             </ul>
             <div class="flex justify-content-between lg:block border-top-1 lg:border-top-none surface-border
             py-3 lg:py-0 mt-3 lg:mt-0 align-items-center">
-                <button pButton pRipple [label]="isLoggedIn() ? 'Logout': 'Login'"
-                        (click)="openLoginDialog()"
-                        class="p-button-text p-button-rounded border-none font-light line-height-2 mr-4"></button>
+                <button
+                    *ngIf="!isLoggedIn()"
+                    pButton pRipple [label]="'Login'"
+                    (click)="openLoginDialog()"
+                    class="p-button-text p-button-rounded border-none font-light line-height-2 mr-4"></button>
                 <p-button icon="pi pi-shopping-cart" styleClass="p-button-rounded" label="Cart" badge="8"></p-button>
 
             </div>
@@ -59,7 +60,7 @@
     </div>
 </div>
 
-<p-dialog [(visible)]="showLoginDialog" [style]="{width: '450px'}" (onHide)="loginForm.reset()"
+<p-dialog [(visible)]="showLoginDialog" [style]="{width: '450px'}" (onHide)="onHideDialog()"
           [modal]="true" class="p-fluid" [draggable]="false">
     <ng-template pTemplate="content">
         <div class="text-center mb-5">
@@ -74,8 +75,8 @@
         <form [formGroup]="loginForm">
             <div class="p-fluid p-formgrid grid">
                 <div class="col-12">
-                    <label for="username1" class="block text-900 font-medium mb-2">Username</label>
-                    <input id="username1" type="text" pInputText formControlName="userName"
+                    <label for="email1" class="block text-900 font-medium mb-2">Username</label>
+                    <input id="email1" type="text" pInputText formControlName="userName"
                            [ngClass]="{'ng-invalid ng-dirty' : loginForm.controls.userName.errors &&
                                             (loginForm.controls.userName.touched || loginForm.controls.userName.dirty)}">
                     <div *ngIf="loginForm.controls.userName.errors && (loginForm.controls.userName.touched ||
