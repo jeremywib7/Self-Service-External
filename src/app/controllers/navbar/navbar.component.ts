@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AppConfig} from "../../api/appconfig";
-import {Subscription} from "rxjs";
+import {lastValueFrom, Subscription} from "rxjs";
 import {ConfigService} from "../../service/app.config.service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {UserAuthService} from "../../service/user-auth.service";
-import {ConfirmationService, MegaMenuItem, MenuItem} from "primeng/api";
+import {ConfirmationService, MegaMenuItem, MenuItem, Message, MessageService} from "primeng/api";
 import {RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
 import {UserService} from "../../service/user.service";
 
@@ -24,17 +24,20 @@ export class NavbarComponent implements OnInit {
 
     subscription: Subscription;
 
-    isRegisterMode : boolean = false;
+    isRegisterMode: boolean = false;
 
     showLoginDialog: boolean = false;
 
     loginForm: FormGroup;
+
+    onLoginMsg: Message[];
 
     constructor(
         public router: Router,
         public configService: ConfigService,
         public userAuthService: UserAuthService,
         private confirmationService: ConfirmationService,
+        private messageService: MessageService,
         private rxFormBuilder: FormBuilder,
         private userService: UserService) {
     }
@@ -105,13 +108,20 @@ export class NavbarComponent implements OnInit {
         this.showLoginDialog = true;
     }
 
-    onLogin() {
-        if (this.loginForm.valid) {
-            this.userService.login(this.loginForm).subscribe({
-                next: (value: any) => {
+    async onLogin() {
 
+        if (this.loginForm.valid) {
+
+            await lastValueFrom(this.userService.login(this.loginForm.value)).then((value: any) => {
+                this.showLoginDialog = false;
+            }).catch(
+                err => {
+                    this.onLoginMsg = [
+                        {severity:'error', summary:'Failed', detail:'Wrong Credentials'},
+                    ];
                 }
-            })
+            );
+
         } else {
             this.loginForm.markAllAsTouched();
         }
