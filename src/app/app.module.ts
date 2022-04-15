@@ -153,6 +153,10 @@ import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
 import {UserAuthService} from "./service/user-auth.service";
 import {Router} from "@angular/router";
 import {UserService} from "./service/user.service";
+import {initializeApp, provideFirebaseApp} from "@angular/fire/app";
+import {environment} from "../environments/environment.prod";
+import {getAuth, provideAuth} from "@angular/fire/auth";
+import {AngularFireModule} from "@angular/fire/compat";
 
 
 @NgModule({
@@ -213,6 +217,8 @@ import {UserService} from "./service/user.service";
         PanelMenuModule,
         PasswordModule,
         PickListModule,
+        AngularFireModule.initializeApp(environment.firebase),
+        provideAuth(() => getAuth()),
         ProgressBarModule,
         RadioButtonModule,
         RatingModule,
