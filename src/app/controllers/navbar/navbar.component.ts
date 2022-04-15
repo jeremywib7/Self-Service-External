@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AppConfig} from "../../api/appconfig";
-import {lastValueFrom, Subscription} from "rxjs";
+import {from, lastValueFrom, Subscription} from "rxjs";
 import {ConfigService} from "../../service/app.config.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {UserAuthService} from "../../service/user-auth.service";
 import {ConfirmationService, MegaMenuItem, MenuItem, Message, MessageService} from "primeng/api";
 import {RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
-import {UserService} from "../../service/user.service";
+import {AngularFireAuth} from "@angular/fire/compat/auth";
 
 @Component({
     selector: 'app-navbar',
@@ -20,15 +20,28 @@ export class NavbarComponent implements OnInit {
 
     userMenu: MenuItem[];
 
-    categoryMenu: MegaMenuItem;
-
     subscription: Subscription;
 
     isRegisterMode: boolean = false;
 
+    isAuthButtonLoading: boolean = false;
+
     showLoginDialog: boolean = false;
 
-    loginForm: FormGroup;
+    authForm: FormGroup = new FormGroup({
+        email: new FormControl('', {
+            validators: [
+                RxwebValidators.required(),
+                RxwebValidators.email()
+            ], updateOn: 'blur'
+        }),
+        password: new FormControl('', {
+            validators: [
+                RxwebValidators.required(),
+                RxwebValidators.minLength({value: 6})
+            ], updateOn: 'blur'
+        }),
+    });
 
     onLoginMsg: Message[];
 
@@ -36,10 +49,9 @@ export class NavbarComponent implements OnInit {
         public router: Router,
         public configService: ConfigService,
         public userAuthService: UserAuthService,
+        private auth: AngularFireAuth,
         private confirmationService: ConfirmationService,
-        private messageService: MessageService,
-        private rxFormBuilder: FormBuilder,
-        public userService: UserService) {
+        private messageService: MessageService) {
     }
 
 
@@ -49,28 +61,12 @@ export class NavbarComponent implements OnInit {
             this.config = config;
         });
         this.initMenuUser();
-        this.initLoginForm();
     }
 
     ngOnDestroy(): void {
         if (this.subscription) {
             this.subscription.unsubscribe();
         }
-    }
-
-    initLoginForm() {
-        this.loginForm = this.rxFormBuilder.group({
-            userName: ['',
-                [
-                    RxwebValidators.required(),
-                ]
-            ],
-            userPassword: ['',
-                [
-                    RxwebValidators.required(),
-                ]
-            ],
-        });
     }
 
     initMenuUser() {
@@ -108,33 +104,59 @@ export class NavbarComponent implements OnInit {
         this.showLoginDialog = true;
     }
 
-    async onLogin() {
+    onAuth() {
 
-        if (this.loginForm.valid) {
+        if (this.authForm.valid) {
+            const {email, password} = this.authForm.value;
+            this.isAuthButtonLoading = true;
 
-            await lastValueFrom(this.userService.login(this.loginForm.value)).then((response: any) => {
-                // set in cookies
-                this.userAuthService.setRoles(response.user.role);
-                this.userAuthService.setToken(response.jwtToken);
+            if (this.isRegisterMode) {
 
-                this.userService.userInformation.user = response.user;
+                this.auth.createUserWithEmailAndPassword(email, password).then(user => {
+                    console.log(user);
+                }).catch(
+                    err => this.onLoginMsg = [
+                        {severity: 'error', summary: 'Failed', detail: 'Wrong Credentials'},
+                    ]
+                ).finally(() => this.isAuthButtonLoading = false);
 
-                this.showLoginDialog = false;
-            }).catch(
-                err => {
-                    this.onLoginMsg = [
-                        {severity:'error', summary:'Failed', detail:'Wrong Credentials'},
-                    ];
-                }
-            );
+            } else {
+
+                this.auth.signInWithEmailAndPassword(email, password).then(user => {
+                    this.onLoginMsg = [];
+                    console.log(user);
+                }).catch(
+                    err => this.onLoginMsg = [
+                        {severity: 'error', summary: 'Failed', detail: 'Wrong Credentials'},
+                    ]
+                ).finally(() => this.isAuthButtonLoading = false);
+
+                // await lastValueFrom(this.userService.login(this.loginForm.value)).then((response: any) => {
+                //     // set in cookies
+                //     this.userAuthService.setRoles(response.user.role);
+                //     this.userAuthService.setToken(response.jwtToken);
+                //
+                //     this.userService.userInformation.user = response.user;
+                //
+                //     this.showLoginDialog = false;
+                // }).catch(
+                //     err => {
+                //         this.onLoginMsg = [
+                //             {severity: 'error', summary: 'Failed', detail: 'Wrong Credentials'},
+                //         ];
+                //     }
+                // );
+            }
 
         } else {
-            this.loginForm.markAllAsTouched();
+            this.authForm.markAllAsTouched();
         }
+
     }
 
+
     onHideDialog() {
-        this.loginForm.reset();
+        this.authForm.reset();
         this.onLoginMsg = [];
     }
 

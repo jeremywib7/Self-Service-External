@@ -1,42 +1,68 @@
 import {Injectable} from '@angular/core';
+import {from} from "rxjs";
+import {Auth, signInWithEmailAndPassword} from "@angular/fire/auth";
+import {User} from "../model/User";
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class UserAuthService {
 
-  secretKey = "nih71h8dh1j2spaksnjabx1092k1osom1inu1b27y17u2e9109io1ksoj2ih1udubfkkvk12j819291kd00k[pkajkncwniq";
+    userInformation = {
+        user: User
+    }
 
-  constructor() {
-  }
+    user = {
+        username: '',
+        userFirstName: '',
+        userLastName: '',
+        userPassword: '',
+        email: '',
+        role: {
+            roleName: '',
+            roleDescription: '',
+        },
+        gender: '',
+        dateJoined: '',
+        phoneNumber: '',
+        address: '',
+        imageUrl: '',
+        userCode: '',
+        bankAccount: '',
+        accessToken: '',
+    }
 
-  public setRoles(roles: []) {
-    localStorage.setItem('_security_role', JSON.stringify(roles['roleName'].toString())
-    );
-  }
+    constructor() {
+    }
 
-  public getRoles() {
-    return JSON.parse(
-      localStorage.getItem('_security_role'));
-  }
+    public setRoles(roles: []) {
+        localStorage.setItem('_security_role', JSON.stringify(roles['roleName'].toString())
+        );
+    }
 
-  public setToken(accessToken: string) {
-    localStorage.setItem('_security_accessToken',
-      JSON.stringify(accessToken)
-    );
-  }
+    public getRoles() {
+        return JSON.parse(
+            localStorage.getItem('_security_role'));
+    }
 
-  public getToken() {
-    return JSON.parse(localStorage.getItem('_security_accessToken'));
-  }
+    public setToken(accessToken: string) {
+        localStorage.setItem('_security_accessToken',
+            JSON.stringify(accessToken)
+        );
+    }
 
-  public clear() {
-    localStorage.clear();
-  }
+    public getToken() {
+        return JSON.parse(localStorage.getItem('_security_accessToken'));
+    }
 
-  public isLoggedIn() {
-    return this.getRoles() && this.getToken();
-  }
+    public clear() {
+        localStorage.clear();
+    }
+
+    public isLoggedIn() {
+        return this.getRoles() && this.getToken();
+    }
+
 
 }

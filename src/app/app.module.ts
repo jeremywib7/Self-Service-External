@@ -146,18 +146,14 @@ import { MenuBookComponent } from './controllers/menu-book/menu-book.component';
 import {ConfirmationService, MessageService} from "primeng/api";
 import {RxFormBuilder} from "@rxweb/reactive-form-validators";
 import {AuthGuard} from "./_auth/auth.guard";
-import {Attributes, IntersectionObserverHooks, LAZYLOAD_IMAGE_HOOKS, LazyLoadImageModule} from "ng-lazyload-image";
+import {IntersectionObserverHooks, LAZYLOAD_IMAGE_HOOKS, LazyLoadImageModule} from "ng-lazyload-image";
 import {AuthInterceptor} from "./_auth/auth.interceptor";
 import {LOADING_BAR_CONFIG} from "@ngx-loading-bar/core";
 import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
-import {UserAuthService} from "./service/user-auth.service";
-import {Router} from "@angular/router";
-import {UserService} from "./service/user.service";
-import {initializeApp, provideFirebaseApp} from "@angular/fire/app";
 import {environment} from "../environments/environment.prod";
-import {getAuth, provideAuth} from "@angular/fire/auth";
 import {AngularFireModule} from "@angular/fire/compat";
-
+import {UserAuthService} from "./service/user-auth.service";
+import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
 
 @NgModule({
     imports: [
@@ -217,8 +213,6 @@ import {AngularFireModule} from "@angular/fire/compat";
         PanelMenuModule,
         PasswordModule,
         PickListModule,
-        AngularFireModule.initializeApp(environment.firebase),
-        provideAuth(() => getAuth()),
         ProgressBarModule,
         RadioButtonModule,
         RatingModule,
@@ -256,6 +250,11 @@ import {AngularFireModule} from "@angular/fire/compat";
         LoadingBarHttpClientModule,
         LazyLoadImageModule,
         ReactiveFormsModule,
+
+        // firebase
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFirestoreModule,
+
     ],
     declarations: [
         AppComponent,
@@ -338,7 +337,7 @@ import {AngularFireModule} from "@angular/fire/compat";
         DatePipe,
         ConfirmationService,
         MessageService,
-        UserService,
+        UserAuthService,
         ProductService,
         RxFormBuilder,
     ],

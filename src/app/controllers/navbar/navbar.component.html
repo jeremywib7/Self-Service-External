@@ -40,7 +40,7 @@
                        class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
                         <span>
                             <i class="pi pi-user mr-2"></i>
-                            {{this.userService.userInformation.user['username']}}
+                            {{this.userAuthService.userInformation.user['username']}}
                             <i class="ml-2 pi pi-angle-down"></i>
                         </span>
                     </a>
@@ -65,37 +65,47 @@
     <ng-template pTemplate="content">
         <div class="text-center mb-5">
             <img src="assets/demo/images/blocks/logos/hyper.svg" alt="Image" height="50" class="mb-3">
-            <div class="text-900 text-3xl font-medium mb-3">Welcome Back</div>
-            <span class="text-600 font-medium line-height-3">Don't have an account?</span>
-            <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">
-                {{isRegisterMode ? 'Login' : 'Register Today'}}
-            </a>
+            <div class="text-900 text-3xl font-medium mb-3">{{isRegisterMode ? "Register" : "Welcome Back" }}</div>
+            <div class="flex align-items-center justify-content-center">
+                <span class="text-600 font-medium line-height-3 mr-2">
+                    {{isRegisterMode ? "Already have an account?" : "Don't have an account?" }}
+                </span>
+                <button pButton pRipple (click)="isRegisterMode = !isRegisterMode" class="p-button-text w-auto p-1"
+                        [label]="isRegisterMode ? 'Login' : 'Register'">
+                </button>
+            </div>
         </div>
 
-        <form [formGroup]="loginForm">
+        <form [formGroup]="authForm">
             <div class="p-fluid p-formgrid grid">
                 <div class="col-12">
-                    <label for="email1" class="block text-900 font-medium mb-2">Username</label>
-                    <input id="email1" type="text" pInputText formControlName="userName"
-                           [ngClass]="{'ng-invalid ng-dirty' : loginForm.controls.userName.errors &&
-                                            (loginForm.controls.userName.touched || loginForm.controls.userName.dirty)}">
-                    <div *ngIf="loginForm.controls.userName.errors && (loginForm.controls.userName.touched ||
-                                       loginForm.controls.userName.dirty) ">
-                        <div *ngIf="loginForm.hasError('required','userName')">
-                            <small class="p-error">Username is required.</small>
+                    <label for="email1" class="block text-900 font-medium mb-2">Email</label>
+                    <input id="email1" type="text" pInputText formControlName="email"
+                           [ngClass]="{'ng-invalid ng-dirty' : authForm.controls.email.errors &&
+                                            (authForm.controls.email.touched || authForm.controls.email.dirty)}">
+                    <div *ngIf="authForm.controls.email.errors && (authForm.controls.email.touched ||
+                                       authForm.controls.email.dirty) ">
+                        <div *ngIf="authForm.hasError('required','email')">
+                            <small class="p-error">Email is required.</small>
+                        </div>
+                        <div *ngIf="authForm.hasError('email','email')">
+                            <small class="p-error">Email format is invalid.</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12">
                     <label for="password1" class="block text-900 font-medium mb-2">Password</label>
-                    <input id="password1" type="password" pInputText formControlName="userPassword"
-                           [ngClass]="{'ng-invalid ng-dirty' : loginForm.controls.userPassword.errors &&
-                                            (loginForm.controls.userPassword.touched || loginForm.controls.userPassword.dirty)}">
-                    <div *ngIf="loginForm.controls.userPassword.errors && (loginForm.controls.userPassword.touched ||
-                                       loginForm.controls.userPassword.dirty) ">
-                        <div *ngIf="loginForm.hasError('required','userPassword')">
-                            <small class="p-error">User password is required.</small>
+                    <input id="password1" type="password" pInputText formControlName="password"
+                           [ngClass]="{'ng-invalid ng-dirty' : authForm.controls.password.errors &&
+                                            (authForm.controls.password.touched || authForm.controls.password.dirty)}">
+                    <div *ngIf="authForm.controls.password.errors && (authForm.controls.password.touched ||
+                                       authForm.controls.password.dirty) ">
+                        <div *ngIf="authForm.hasError('required','password')">
+                            <small class="p-error">Password is required.</small>
+                        </div>
+                        <div *ngIf="authForm.hasError('minLength','password')">
+                            <small class="p-error">Password minimal length is 6.</small>
                         </div>
                     </div>
                 </div>
@@ -116,7 +126,7 @@
                 </div>
 
                 <div class="col-12">
-                    <button pButton pRipple (click)="onLogin()"
+                    <button pButton pRipple (click)="onAuth()" [loading]="isAuthButtonLoading"
                             [label]="isRegisterMode ? 'Register':'Login' " icon="pi pi-user"
                             class="w-full"></button>
                 </div>

@@ -7,7 +7,6 @@ import {Subscription} from 'rxjs';
 import {Router} from "@angular/router";
 import {UserAuthService} from "./service/user-auth.service";
 import jwt_decode from 'jwt-decode';
-import {UserService} from "./service/user.service";
 
 @Component({
     selector: 'app-main',
@@ -58,7 +57,7 @@ export class AppMainComponent implements AfterViewInit, OnDestroy, OnInit {
     subscription: Subscription;
 
     constructor(public renderer: Renderer2, public app: AppComponent, public configService: ConfigService,
-                public router: Router, private userAuthService: UserAuthService, private userService: UserService) {
+                public router: Router, private userAuthService: UserAuthService) {
     }
 
 
@@ -66,19 +65,6 @@ export class AppMainComponent implements AfterViewInit, OnDestroy, OnInit {
         this.config = this.configService.config;
         this.subscription = this.configService.configUpdate$.subscribe(config => this.config = config);
         this.app.menuMode = 'overlay';
-
-        // check jwt token in local storage
-        // load current user profile
-        if (this.userAuthService.isLoggedIn()) {
-
-            let username = jwt_decode(this.userAuthService.getToken())['sub'];
-            this.userService.getUserByUsername(username).subscribe({
-                next: (user:any) => {
-                    this.userService.userInformation.user = user;
-                }
-            });
-
-        }
     }
 
     ngAfterViewInit() {
