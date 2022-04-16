@@ -24,11 +24,10 @@ const redirectUnauthorizedToHome = () => redirectUnauthorizedTo(['']);
                         path: 'cart',
                         component: CartComponent,
                         canActivate: [AngularFireAuthGuard],
-                        data: {authGuardPipe: redirectUnauthorizedToHome()}
+                        data: {authGuardPipe: redirectUnauthorizedToHome}
                     },
                 ],
             },
-            {path: 'pages/landing', component: LandingComponent},
             {path: 'pages/error', component: ErrorComponent},
             {path: 'pages/notfound', component: NotfoundComponent},
             {path: 'pages/access', component: AccessComponent},

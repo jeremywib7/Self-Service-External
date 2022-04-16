@@ -64,5 +64,4 @@ export class UserAuthService {
         return this.getRoles() && this.getToken();
     }
 
-
 }

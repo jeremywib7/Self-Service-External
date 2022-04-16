@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AppConfig} from "../../api/appconfig";
 import {from, lastValueFrom, Subscription} from "rxjs";
 import {ConfigService} from "../../service/app.config.service";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 import {UserAuthService} from "../../service/user-auth.service";
-import {ConfirmationService, MegaMenuItem, MenuItem, Message, MessageService} from "primeng/api";
-import {RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
+import {ConfirmationService, MenuItem, Message, MessageService} from "primeng/api";
+import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 
 @Component({
@@ -18,17 +18,34 @@ export class NavbarComponent implements OnInit {
 
     config: AppConfig;
 
+
     userMenu: MenuItem[];
 
+    loginMsg: Message[];
+
+    registerMsg: Message[];
+
+    resetPasswordMsg: Message[];
+
+
     subscription: Subscription;
+
 
     isRegisterMode: boolean = false;
 
     isAuthButtonLoading: boolean = false;
 
-    showLoginDialog: boolean = false;
+    isResetPasswordButtonLoading: boolean = false;
 
-    authForm: FormGroup = new FormGroup({
+    isLoggedIn: boolean = false;
+
+    isCheckingLoginStatus: boolean = true;
+
+    showAuthDialog: boolean = false;
+
+    showResetPasswordDialog: boolean = false;
+
+    loginForm: FormGroup = new FormGroup({
         email: new FormControl('', {
             validators: [
                 RxwebValidators.required(),
@@ -43,15 +60,56 @@ export class NavbarComponent implements OnInit {
         }),
     });
 
-    onLoginMsg: Message[];
+    registerForm: FormGroup = new FormGroup({
+        email: new FormControl('', {
+            validators: [
+                RxwebValidators.required(),
+                RxwebValidators.email()
+            ], updateOn: 'blur'
+        }),
+        password: new FormControl('', {
+            validators: [
+                RxwebValidators.required(),
+                RxwebValidators.minLength({value: 6})
+            ], updateOn: 'blur'
+        }),
+    });
+
+    resetPasswordForm: FormGroup = new FormGroup({
+        email: new FormControl('', {
+            validators: [
+                RxwebValidators.required(),
+                RxwebValidators.email()
+            ], updateOn: 'blur'
+        }),
+    });
 
     constructor(
         public router: Router,
         public configService: ConfigService,
         public userAuthService: UserAuthService,
-        private auth: AngularFireAuth,
+        public auth: AngularFireAuth,
         private confirmationService: ConfirmationService,
         private messageService: MessageService) {
+
+        this.auth.authState.subscribe({
+            next: response => {
+
+                // if not null, then user is already logged in
+                if (response) {
+                    this.userAuthService.userInformation.user['username'] = response['email'];
+                    this.isLoggedIn = true;
+                    console.log(this.auth);
+                } else {
+                    // TODO clear global user profile state
+                    this.isLoggedIn = false;
+                }
+
+                // set checking login status to false
+                this.isCheckingLoginStatus = false;
+            }
+        });
+
     }
 
 
@@ -60,6 +118,7 @@ export class NavbarComponent implements OnInit {
         this.subscription = this.configService.configUpdate$.subscribe(config => {
             this.config = config;
         });
+        // init menu settings and logout
         this.initMenuUser();
     }
 
@@ -96,18 +155,38 @@ export class NavbarComponent implements OnInit {
         ]
     }
 
-    isLoggedIn(): boolean {
-        return !!this.userAuthService.isLoggedIn();
+    // reset Forgot password
+    onResetPassword() {
+
+        if (this.resetPasswordForm.valid) {
+            from(this.auth.sendPasswordResetEmail(this.resetPasswordForm.value.email)).subscribe({
+                next: (value: any) => {
+                    this.resetPasswordMsg = [
+                        {severity: 'success', summary: 'Success', detail: 'Password reset sent to this email'},
+                    ];
+                },
+                error: (err: any) => {
+                    console.log(err.code);
+
+                    this.resetPasswordMsg = [
+                        {severity: 'error', summary: 'Failed', detail: 'No user found for this email '},
+                    ];
+                }
+            });
+        } else {
+            this.resetPasswordForm.markAllAsTouched();
+        }
+
     }
 
     openLoginDialog() {
-        this.showLoginDialog = true;
+        this.showAuthDialog = true;
     }
 
     onAuth() {
 
-        if (this.authForm.valid) {
-            const {email, password} = this.authForm.value;
+        if (this.loginForm.valid) {
+            const {email, password} = this.loginForm.value;
             this.isAuthButtonLoading = true;
 
             if (this.isRegisterMode) {
@@ -115,7 +194,7 @@ export class NavbarComponent implements OnInit {
                 this.auth.createUserWithEmailAndPassword(email, password).then(user => {
                     console.log(user);
                 }).catch(
-                    err => this.onLoginMsg = [
+                    err => this.loginMsg = [
                         {severity: 'error', summary: 'Failed', detail: 'Wrong Credentials'},
                     ]
                 ).finally(() => this.isAuthButtonLoading = false);
@@ -123,10 +202,10 @@ export class NavbarComponent implements OnInit {
             } else {
 
                 this.auth.signInWithEmailAndPassword(email, password).then(user => {
-                    this.onLoginMsg = [];
-                    console.log(user);
+                    this.loginMsg = [];
+                    this.showAuthDialog = false;
                 }).catch(
-                    err => this.onLoginMsg = [
+                    err => this.loginMsg = [
                         {severity: 'error', summary: 'Failed', detail: 'Wrong Credentials'},
                     ]
                 ).finally(() => this.isAuthButtonLoading = false);
@@ -149,15 +228,36 @@ export class NavbarComponent implements OnInit {
             }
 
         } else {
-            this.authForm.markAllAsTouched();
+            this.loginForm.markAllAsTouched();
         }
 
     }
 
 
     onHideDialog() {
-        this.authForm.reset();
-        this.onLoginMsg = [];
+        if (this.isRegisterMode) {
+
+        } else {
+            this.loginForm.reset();
+            this.loginMsg = [];
+        }
+    }
+
+    onChangeAuthMode() {
+        this.isRegisterMode = !this.isRegisterMode;
+        this.resetForm();
+    }
+
+    resetForm() {
+        this.loginForm.reset();
+        this.loginMsg = [];
+        this.registerForm.reset();
+        this.registerMsg = [];
+    }
+
+    onHideResetPasswordDialog() {
+        this.resetPasswordForm.reset();
+        this.resetPasswordMsg = [];
     }
 
     onLogoutClicked() {
@@ -165,7 +265,8 @@ export class NavbarComponent implements OnInit {
             message: 'Are you sure you want to log out?',
             header: 'Logout',
             accept: () => {
-                this.auth.signOut().then(res => this.userAuthService.clear());
+                this.isCheckingLoginStatus = true;
+                this.auth.signOut().then();
             }
         });
     }

@@ -155,6 +155,7 @@ import {AngularFireModule} from "@angular/fire/compat";
 import {UserAuthService} from "./service/user-auth.service";
 import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
 import { CartComponent } from './controllers/cart/cart.component';
+import {BlockUIModule} from "primeng/blockui";
 
 @NgModule({
     imports: [
@@ -255,6 +256,7 @@ import { CartComponent } from './controllers/cart/cart.component';
         // firebase
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule,
+        BlockUIModule,
 
     ],
     declarations: [
