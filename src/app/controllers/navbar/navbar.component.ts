@@ -165,8 +165,7 @@ export class NavbarComponent implements OnInit {
             message: 'Are you sure you want to log out?',
             header: 'Logout',
             accept: () => {
-                //Actual logic to perform a confirmation
-                this.userAuthService.clear();
+                this.auth.signOut().then(res => this.userAuthService.clear());
             }
         });
     }

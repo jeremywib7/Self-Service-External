@@ -7,6 +7,10 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
 import {AccessComponent} from './components/access/access.component';
 import {HomeComponent} from "./controllers/home/home.component";
 import {MenuBookComponent} from "./controllers/menu-book/menu-book.component";
+import {CartComponent} from "./controllers/cart/cart.component";
+import {AngularFireAuthGuard, redirectUnauthorizedTo} from "@angular/fire/compat/auth-guard";
+
+const redirectUnauthorizedToHome = () => redirectUnauthorizedTo(['']);
 
 @NgModule({
     imports: [
@@ -16,6 +20,12 @@ import {MenuBookComponent} from "./controllers/menu-book/menu-book.component";
                 children: [
                     {path: '', component: HomeComponent},
                     {path: 'menu', component: MenuBookComponent},
+                    {
+                        path: 'cart',
+                        component: CartComponent,
+                        canActivate: [AngularFireAuthGuard],
+                        data: {authGuardPipe: redirectUnauthorizedToHome()}
+                    },
                 ],
             },
             {path: 'pages/landing', component: LandingComponent},

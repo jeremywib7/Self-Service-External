@@ -154,6 +154,7 @@ import {environment} from "../environments/environment.prod";
 import {AngularFireModule} from "@angular/fire/compat";
 import {UserAuthService} from "./service/user-auth.service";
 import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
+import { CartComponent } from './controllers/cart/cart.component';
 
 @NgModule({
     imports: [
@@ -303,6 +304,7 @@ import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
         NavbarComponent,
         MenuBookComponent,
         MenuBookComponent,
+        CartComponent,
 
 
     ],
