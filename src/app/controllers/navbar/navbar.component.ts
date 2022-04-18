@@ -1,7 +1,7 @@
 import {Component, NgZone, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AppConfig} from "../../api/appconfig";
-import {from, lastValueFrom, Subscription} from "rxjs";
+import {from, lastValueFrom, map, Subscription, switchMap} from "rxjs";
 import {ConfigService} from "../../service/app.config.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {UserAuthService} from "../../service/user-auth.service";
@@ -123,7 +123,6 @@ export class NavbarComponent implements OnInit {
                 if (response) {
                     this.userAuthService.userInformation.user['username'] = response['email'];
                     this.isLoggedIn = true;
-                    console.log(this.auth);
                 } else {
                     // TODO clear global user profile state
                     this.isLoggedIn = false;
@@ -257,35 +256,69 @@ export class NavbarComponent implements OnInit {
         if (this.registerForm.valid) {
             const {email, password} = this.registerForm.value;
 
-            from(this.auth.createUserWithEmailAndPassword(email, password)).subscribe({
-                next: (value: any) => {
-                    this.registerMsg = [];
-                    this.showAuthDialog = false;
-                },
-                error: err => {
-                    console.log("error");
-                    let errorMessage = "";
-                    switch (err.code) {
-                        case 'auth/email-already-in-use': {
-                            errorMessage = 'Email already in use.';
-                            break;
-                        }
-
-                        default: {
-                            errorMessage = 'Register error try again later.';
-                            break;
-                        }
-                    }
-
-                    return this.registerMsg = [{
-                        severity: 'error', detail: errorMessage
-                    }]
-                },
-                complete: () => {
-                    console.log("ok");
-                    this.isRegisterButtonLoading = false;
+            from( this.auth.createUserWithEmailAndPassword(email, password)).subscribe({
+                next: value => {
+                    console.log(value.user.uid);
                 }
-            });
+            })
+
+            // this.auth.createUserWithEmailAndPassword(email, password).then(value => {
+            //     console.log(value);
+            //
+            //     // this.userAuthService.registerCustomer(userFirebase, this.registerForm.value).
+            //     this.registerMsg = [];
+            //     this.showAuthDialog = false;
+            // }).catch(err => {
+            //     let errorMessage = "";
+            //     switch (err.code) {
+            //         case 'auth/email-already-in-use': {
+            //             errorMessage = 'Email already in use.';
+            //             break;
+            //         }
+            //
+            //         default: {
+            //             errorMessage = 'Register error try again later.';
+            //             break;
+            //         }
+            //     }
+            //
+            //     return this.registerMsg = [{
+            //         severity: 'error', detail: errorMessage
+            //     }]
+            // }).finally(() => {
+            //     this.isRegisterButtonLoading = false;
+            // })
+
+            // from(this.auth.createUserWithEmailAndPassword(email, password)).pipe(
+            //     switchMap(userFirebase => this.userAuthService.registerCustomer(userFirebase, this.registerForm.value).pipe(
+            //         map(customer => ({userFirebase, customer}))
+            //     ))).subscribe({
+            //     next: ({userFirebase, customer}) => {
+            //         this.registerMsg = [];
+            //         this.showAuthDialog = false;
+            //     },
+            //     error: err => {
+            //         let errorMessage = "";
+            //         switch (err.code) {
+            //             case 'auth/email-already-in-use': {
+            //                 errorMessage = 'Email already in use.';
+            //                 break;
+            //             }
+            //
+            //             default: {
+            //                 errorMessage = 'Register error try again later.';
+            //                 break;
+            //             }
+            //         }
+            //
+            //         return this.registerMsg = [{
+            //             severity: 'error', detail: errorMessage
+            //         }]
+            //     },
+            //     complete: () => {
+            //         this.isRegisterButtonLoading = false;
+            //     }
+            // })
 
         } else {
             this.registerForm.markAllAsTouched();
@@ -306,6 +339,17 @@ export class NavbarComponent implements OnInit {
     onChangeAuthMode() {
         this.isRegisterMode = !this.isRegisterMode;
         this.resetForm();
+
+        // for testing
+        this.registerForm.patchValue({
+            username: 'TheWorldWar3',
+            firstName: 'Jeremy',
+            lastName: 'Yonathan',
+            gender: 'Male',
+            email: 'jeremywib7@gmail.com',
+            password: '123456'
+
+        })
     }
 
     resetForm() {

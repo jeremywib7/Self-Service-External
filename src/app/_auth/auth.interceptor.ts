@@ -5,7 +5,7 @@ import {
     HttpInterceptor,
     HttpRequest
 } from "@angular/common/http";
-import {catchError, EMPTY, finalize, Observable} from "rxjs";
+import {catchError, EMPTY, Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {Injectable} from "@angular/core";
 import {UserAuthService} from "../service/user-auth.service";

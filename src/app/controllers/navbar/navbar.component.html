@@ -180,7 +180,7 @@
             <div class="p-fluid p-formgrid grid">
 
                 <div class="col-12">
-                    <label for="registerUsername" class="block text-900 font-medium mb-2">Full Name</label>
+                    <label for="registerUsername" class="block text-900 font-medium mb-2">Username</label>
                     <input id="registerUsername" type="text" pInputText formControlName="username"
                            [ngClass]="{'ng-invalid ng-dirty' : registerForm.controls.username.errors &&
                                             (registerForm.controls.username.touched || registerForm.controls.username.dirty)}">
@@ -224,8 +224,8 @@
                     </div>
                 </div>
 
-                <div class="field col-12">
-                    <label class="mb-3">Gender</label>
+                <div class="col-12">
+                    <label class="block text-900 font-medium mb-2">Gender</label>
                     <div class="formgrid grid">
                         <div class="field-radiobutton col-12">
                             <p-radioButton inputId="male" name="gender" formControlName="gender"
