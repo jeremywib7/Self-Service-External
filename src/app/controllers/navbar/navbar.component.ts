@@ -33,7 +33,9 @@ export class NavbarComponent implements OnInit {
 
     isRegisterMode: boolean = false;
 
-    isAuthButtonLoading: boolean = false;
+    isLoginButtonLoading: boolean = false;
+
+    isRegisterButtonLoading: boolean = false;
 
     isResetPasswordButtonLoading: boolean = false;
 
@@ -61,6 +63,28 @@ export class NavbarComponent implements OnInit {
     });
 
     registerForm: FormGroup = new FormGroup({
+        username: new FormControl('', {
+            validators: [
+                RxwebValidators.required(),
+                RxwebValidators.minLength({value: 3}),
+                RxwebValidators.maxLength({value: 20})
+            ], updateOn: 'blur'
+        }),
+        firstName: new FormControl('', {
+            validators: [
+                RxwebValidators.required(),
+            ], updateOn: 'blur'
+        }),
+        lastName: new FormControl('', {
+            validators: [
+                RxwebValidators.required(),
+            ], updateOn: 'blur'
+        }),
+        gender: new FormControl('', {
+            validators: [
+                RxwebValidators.required(),
+            ], updateOn: 'blur'
+        }),
         email: new FormControl('', {
             validators: [
                 RxwebValidators.required(),
@@ -159,19 +183,14 @@ export class NavbarComponent implements OnInit {
     onResetPassword() {
 
         if (this.resetPasswordForm.valid) {
-            from(this.auth.sendPasswordResetEmail(this.resetPasswordForm.value.email)).subscribe({
-                next: (value: any) => {
-                    this.resetPasswordMsg = [
-                        {severity: 'success', summary: 'Success', detail: 'Password reset sent to this email'},
-                    ];
-                },
-                error: (err: any) => {
-                    console.log(err.code);
-
-                    this.resetPasswordMsg = [
-                        {severity: 'error', summary: 'Failed', detail: 'No user found for this email '},
-                    ];
-                }
+            this.auth.sendPasswordResetEmail(this.resetPasswordForm.value.email).then(res => {
+                this.resetPasswordMsg = [
+                    {severity: 'success', summary: 'Success', detail: 'Password reset sent to this email'},
+                ];
+            }).catch(_error => {
+                this.resetPasswordMsg = [
+                    {severity: 'error', summary: 'Failed', detail: 'No user found for this email '},
+                ];
             });
         } else {
             this.resetPasswordForm.markAllAsTouched();
@@ -183,52 +202,93 @@ export class NavbarComponent implements OnInit {
         this.showAuthDialog = true;
     }
 
-    onAuth() {
+    onLogin() {
 
         if (this.loginForm.valid) {
-            const {email, password} = this.loginForm.value;
-            this.isAuthButtonLoading = true;
+            this.isLoginButtonLoading = true;
 
             if (this.isRegisterMode) {
 
-                this.auth.createUserWithEmailAndPassword(email, password).then(user => {
-                    console.log(user);
-                }).catch(
-                    err => this.loginMsg = [
-                        {severity: 'error', summary: 'Failed', detail: 'Wrong Credentials'},
-                    ]
-                ).finally(() => this.isAuthButtonLoading = false);
-
             } else {
+                const {email, password} = this.loginForm.value;
 
                 this.auth.signInWithEmailAndPassword(email, password).then(user => {
                     this.loginMsg = [];
                     this.showAuthDialog = false;
                 }).catch(
-                    err => this.loginMsg = [
-                        {severity: 'error', summary: 'Failed', detail: 'Wrong Credentials'},
-                    ]
-                ).finally(() => this.isAuthButtonLoading = false);
+                    err => {
+                        let errorMessage = "";
+                        switch (err.code) {
+                            case 'auth/user-disabled': {
+                                errorMessage = 'Sorry your user is disabled.';
+                                break;
+                            }
+                            case 'auth/user-not-found': {
+                                errorMessage = 'Sorry user not found.';
+                                break;
+                            }
 
-                // await lastValueFrom(this.userService.login(this.loginForm.value)).then((response: any) => {
-                //     // set in cookies
-                //     this.userAuthService.setRoles(response.user.role);
-                //     this.userAuthService.setToken(response.jwtToken);
-                //
-                //     this.userService.userInformation.user = response.user;
-                //
-                //     this.showLoginDialog = false;
-                // }).catch(
-                //     err => {
-                //         this.onLoginMsg = [
-                //             {severity: 'error', summary: 'Failed', detail: 'Wrong Credentials'},
-                //         ];
-                //     }
-                // );
+                            case 'auth/wrong-password': {
+                                errorMessage = 'Sorry, incorrect password entered. Please try again.';
+                                break;
+                            }
+
+                            default: {
+                                errorMessage = 'Login error try again later.';
+                                break;
+                            }
+                        }
+
+                        return this.loginMsg = [{
+                            severity: 'error', detail: errorMessage
+                        }]
+                    }
+                ).finally(() => this.isLoginButtonLoading = false);
             }
 
         } else {
             this.loginForm.markAllAsTouched();
+        }
+
+    }
+
+    onRegister() {
+
+        if (this.registerForm.valid) {
+            const {email, password} = this.registerForm.value;
+
+            from(this.auth.createUserWithEmailAndPassword(email, password)).subscribe({
+                next: (value: any) => {
+                    this.registerMsg = [];
+                    this.showAuthDialog = false;
+                },
+                error: err => {
+                    console.log("error");
+                    let errorMessage = "";
+                    switch (err.code) {
+                        case 'auth/email-already-in-use': {
+                            errorMessage = 'Email already in use.';
+                            break;
+                        }
+
+                        default: {
+                            errorMessage = 'Register error try again later.';
+                            break;
+                        }
+                    }
+
+                    return this.registerMsg = [{
+                        severity: 'error', detail: errorMessage
+                    }]
+                },
+                complete: () => {
+                    console.log("ok");
+                    this.isRegisterButtonLoading = false;
+                }
+            });
+
+        } else {
+            this.registerForm.markAllAsTouched();
         }
 
     }

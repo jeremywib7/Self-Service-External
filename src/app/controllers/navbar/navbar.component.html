@@ -167,7 +167,7 @@
                 </div>
 
                 <div class="col-12">
-                    <button pButton pRipple (click)="onAuth()" [loading]="isAuthButtonLoading"
+                    <button pButton pRipple (click)="onLogin()" [loading]="isLoginButtonLoading"
                             [label]="isRegisterMode ? 'Register':'Login' " icon="pi pi-user"
                             class="w-full"></button>
                 </div>
@@ -176,8 +176,83 @@
 
         </form>
 
-        <form [formGroup]="registerForm" *ngIf="isRegisterMode">
+        <form [formGroup]="registerForm" *ngIf="isRegisterMode" autocomplete="off">
             <div class="p-fluid p-formgrid grid">
+
+                <div class="col-12">
+                    <label for="registerUsername" class="block text-900 font-medium mb-2">Full Name</label>
+                    <input id="registerUsername" type="text" pInputText formControlName="username"
+                           [ngClass]="{'ng-invalid ng-dirty' : registerForm.controls.username.errors &&
+                                            (registerForm.controls.username.touched || registerForm.controls.username.dirty)}">
+                    <div *ngIf="registerForm.controls.username.errors && (registerForm.controls.username.touched ||
+                                       registerForm.controls.username.dirty) ">
+                        <small *ngIf="registerForm.hasError('required','username')"
+                               class="p-error">Username is required.
+                        </small>
+                        <small *ngIf="registerForm.hasError('minLength','username')"
+                               class="p-error">Min username length is 3.
+                        </small>
+                        <small *ngIf="registerForm.hasError('maxLength','username')"
+                               class="p-error">Max username length is 20.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <label for="registerFirstName" class="block text-900 font-medium mb-2">First Name</label>
+                    <input id="registerFirstName" type="text" pInputText formControlName="firstName"
+                           [ngClass]="{'ng-invalid ng-dirty' : registerForm.controls.firstName.errors &&
+                                            (registerForm.controls.firstName.touched || registerForm.controls.firstName.dirty)}">
+                    <div *ngIf="registerForm.controls.firstName.errors && (registerForm.controls.firstName.touched ||
+                                       registerForm.controls.firstName.dirty) ">
+                        <small *ngIf="registerForm.hasError('required','firstName')"
+                               class="p-error">First Name is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <label for="registerLastName" class="block text-900 font-medium mb-2">Last Name</label>
+                    <input id="registerLastName" type="text" pInputText formControlName="lastName"
+                           [ngClass]="{'ng-invalid ng-dirty' : registerForm.controls.lastName.errors &&
+                                            (registerForm.controls.lastName.touched || registerForm.controls.lastName.dirty)}">
+                    <div *ngIf="registerForm.controls.lastName.errors && (registerForm.controls.lastName.touched ||
+                                       registerForm.controls.lastName.dirty) ">
+                        <small *ngIf="registerForm.hasError('required','lastName')"
+                               class="p-error">Last Name is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="field col-12">
+                    <label class="mb-3">Gender</label>
+                    <div class="formgrid grid">
+                        <div class="field-radiobutton col-12">
+                            <p-radioButton inputId="male" name="gender" formControlName="gender"
+                                           [ngClass]="{'ng-invalid ng-dirty' : registerForm.controls.gender.errors && (registerForm.controls.gender.touched ||
+                           registerForm.controls.gender.dirty)}"
+                                           value="Male"></p-radioButton>
+                            <!--suppress XmlInvalidId -->
+                            <label for="male">Male</label>
+                        </div>
+                        <div class="field-radiobutton col-12">
+                            <p-radioButton inputId="female" name="gender" formControlName="gender"
+                                           [ngClass]="{'ng-invalid ng-dirty' : registerForm.controls.gender.errors && (registerForm.controls.gender.touched ||
+                           registerForm.controls.gender.dirty)}"
+                                           value="Female"></p-radioButton>
+                            <!--suppress XmlInvalidId -->
+                            <label for="female">Female</label>
+                        </div>
+                    </div>
+                    <div *ngIf="registerForm.controls.gender.errors && (registerForm.controls.gender.touched ||
+                           registerForm.controls.gender.dirty) ">
+                        <div *ngIf="registerForm.hasError('required','gender')">
+                            <small class="p-error">Gender is required</small>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="col-12">
                     <label for="registerEmail" class="block text-900 font-medium mb-2">Email</label>
                     <input id="registerEmail" type="text" pInputText formControlName="email"
@@ -197,6 +272,7 @@
                 <div class="col-12">
                     <label for="password1" class="block text-900 font-medium mb-2">Password</label>
                     <input id="password1" type="password" pInputText formControlName="password"
+                           autocomplete="new-password"
                            [ngClass]="{'ng-invalid ng-dirty' : registerForm.controls.password.errors &&
                                             (registerForm.controls.password.touched || registerForm.controls.password.dirty)}">
                     <div *ngIf="registerForm.controls.password.errors && (registerForm.controls.password.touched ||
@@ -211,7 +287,11 @@
                 </div>
 
                 <div class="col-12">
-                    <button pButton pRipple [loading]="isAuthButtonLoading"
+                    <p-messages [value]="registerMsg"></p-messages>
+                </div>
+
+                <div class="col-12">
+                    <button pButton pRipple (click)="onRegister()" [loading]="isRegisterButtonLoading"
                             [label]="'Register'" icon="pi pi-user"
                             class="w-full"></button>
                 </div>
