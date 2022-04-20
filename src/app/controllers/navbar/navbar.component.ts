@@ -8,6 +8,7 @@ import {UserAuthService} from "../../service/user-auth.service";
 import {ConfirmationService, MenuItem, Message, MessageService} from "primeng/api";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
     selector: 'app-navbar',
@@ -63,6 +64,7 @@ export class NavbarComponent implements OnInit {
     });
 
     registerForm: FormGroup = new FormGroup({
+        id: new FormControl(''),
         username: new FormControl('', {
             validators: [
                 RxwebValidators.required(),
@@ -256,69 +258,54 @@ export class NavbarComponent implements OnInit {
         if (this.registerForm.valid) {
             const {email, password} = this.registerForm.value;
 
-            from( this.auth.createUserWithEmailAndPassword(email, password)).subscribe({
+            // update in firebase
+            from(this.auth.createUserWithEmailAndPassword(email, password)).subscribe({
                 next: value => {
-                    console.log(value.user.uid);
+
+                    // update in backend
+                    // get uuid from firebase and set in backend
+                    this.registerForm.get("id").setValue(value.user.uid);
+                    this.userAuthService.registerCustomer(this.registerForm.value).subscribe({
+                        next: () => {
+                            this.registerMsg = [];
+                            this.showAuthDialog = false;
+                        },
+                        error: err => {
+
+                            // cancel created user by delete in firebase
+                            // because username already exists in backend
+                            this.auth.currentUser.then(async res => {
+                                await res.delete();
+                                return this.registerMsg = [{
+                                    severity: 'error', detail: err.error.message
+                                }]
+                            });
+                        },
+                        complete: () => {
+                            this.isRegisterButtonLoading = false;
+                        }
+                    });
+
+                },
+                error: err => {
+                    let errorMessage = "";
+                    switch (err.code) {
+                        case 'auth/email-already-in-use': {
+                            errorMessage = 'Email already in use.';
+                            break;
+                        }
+
+                        default: {
+                            errorMessage = 'Register error try again later.';
+                            break;
+                        }
+                    }
+
+                    return this.registerMsg = [{
+                        severity: 'error', detail: errorMessage
+                    }]
                 }
-            })
-
-            // this.auth.createUserWithEmailAndPassword(email, password).then(value => {
-            //     console.log(value);
-            //
-            //     // this.userAuthService.registerCustomer(userFirebase, this.registerForm.value).
-            //     this.registerMsg = [];
-            //     this.showAuthDialog = false;
-            // }).catch(err => {
-            //     let errorMessage = "";
-            //     switch (err.code) {
-            //         case 'auth/email-already-in-use': {
-            //             errorMessage = 'Email already in use.';
-            //             break;
-            //         }
-            //
-            //         default: {
-            //             errorMessage = 'Register error try again later.';
-            //             break;
-            //         }
-            //     }
-            //
-            //     return this.registerMsg = [{
-            //         severity: 'error', detail: errorMessage
-            //     }]
-            // }).finally(() => {
-            //     this.isRegisterButtonLoading = false;
-            // })
-
-            // from(this.auth.createUserWithEmailAndPassword(email, password)).pipe(
-            //     switchMap(userFirebase => this.userAuthService.registerCustomer(userFirebase, this.registerForm.value).pipe(
-            //         map(customer => ({userFirebase, customer}))
-            //     ))).subscribe({
-            //     next: ({userFirebase, customer}) => {
-            //         this.registerMsg = [];
-            //         this.showAuthDialog = false;
-            //     },
-            //     error: err => {
-            //         let errorMessage = "";
-            //         switch (err.code) {
-            //             case 'auth/email-already-in-use': {
-            //                 errorMessage = 'Email already in use.';
-            //                 break;
-            //             }
-            //
-            //             default: {
-            //                 errorMessage = 'Register error try again later.';
-            //                 break;
-            //             }
-            //         }
-            //
-            //         return this.registerMsg = [{
-            //             severity: 'error', detail: errorMessage
-            //         }]
-            //     },
-            //     complete: () => {
-            //         this.isRegisterButtonLoading = false;
-            //     }
-            // })
+            });
 
         } else {
             this.registerForm.markAllAsTouched();

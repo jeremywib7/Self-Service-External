@@ -46,7 +46,7 @@ export class UserAuthService {
     constructor(private httpClient: HttpClient) {
     }
 
-    public registerCustomer(param: HttpParams,customer: Customer) {
+    public registerCustomer(customer: Customer) {
         return this.httpClient.post(`${this.apiServerUrl}/${this.project}/customer/register`,
             customer, {headers: this.requestHeader});
     }
