@@ -1,11 +1,8 @@
 import {Injectable} from '@angular/core';
-import {from} from "rxjs";
-import {Auth, signInWithEmailAndPassword} from "@angular/fire/auth";
 import {User} from "../model/User";
 import {environment} from "../../environments/environment.prod";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Customer} from "../api/customer";
-
 
 @Injectable({
     providedIn: 'root'

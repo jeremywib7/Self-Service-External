@@ -1,61 +1,255 @@
-<div class="surface-0">
-    <div
-        class="py-3 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static">
-        <a class="flex align-items-center" href="#">
-            <img src="assets/layout/images/{{config.dark ? 'logo-white' : 'logo-dark'}}.svg" alt="Sakai Logo"
-                 height="50" class="mr-0 lg:mr-2">
-            <!--            <span-->
-            <!--            class="text-900 font-medium text-2xl line-height-3 mr-8">Self Service</span>-->
-        </a>
-        <a pRipple class="cursor-pointer block lg:hidden text-700" pStyleClass="@next" enterClass="hidden"
-           leaveToClass="hidden" [hideOnOutsideClick]="true">
-            <i class="pi pi-bars text-4xl"></i>
-        </a>
-        <div
-            class="align-items-center surface-0 flex-grow-1 justify-content-between hidden lg:flex absolute lg:static
-             w-full left-0 px-6 lg:px-0 z-2"
-            style="top:92%">
-            <ul class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row cursor-pointer">
-                <li>
-                    <a pRipple
-                       routerLink="/menu"
-                       class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
-                        <span>Menu Book</span>
-                    </a>
+<div
+    class="bg-gray-900 px-3 sm:px-6 py-3 flex align-items-stretch justify-content-center sm:justify-content-end border-bottom-1 surface-border text-sm">
+    <a pRipple (click)="openLoginDialog()"
+       class="text-white font-medium inline-flex align-items-center cursor-pointer px-3 hover:text-gray-200">
+        <i class="pi {{isLoggedIn ? 'pi-sign-out':'pi-sign-in'}} mr-2 sm:mr-3 text-sm"></i>
+        <span>{{isLoggedIn ? 'Sign Out' : 'Sign In '}}</span>
+    </a>
+    <div class="text-white mx-1 sm:mx-2">|</div>
+    <a pRipple class="text-white font-medium inline-flex align-items-center cursor-pointer px-3 hover:text-gray-200"
+       (click)="openLoginDialog()">
+        <i class="pi pi-user mr-2 sm:mr-3 text-sm"></i>
+        <span>{{isLoggedIn ? 'Profile' : 'Create Account'}}</span>
+    </a>
+</div>
+<div class="surface-overlay px-3 sm:px-6 flex align-items-stretch relative" style="min-height: 80px">
+    <a pRipple class="cursor-pointer flex align-items-center lg:hidden text-700 mr-3 sm:mr-5" pStyleClass="#nav-1"
+       enterClass="hidden" leaveToClass="hidden" [hideOnOutsideClick]="true">
+        <i class="pi pi-bars text-4xl"></i>
+    </a>
+    <div class="flex align-items-center justify-content-center">
+        <img src="assets/images/blocks/logos/hyper.svg" alt="Image" class="lg:mr-6 h-2rem sm:h-3rem">
+    </div>
+    <div id="nav-1"
+         class="surface-overlay hidden lg:flex absolute lg:static left-0 top-100 z-1 shadow-2 lg:shadow-none w-full lg:w-auto py-3 lg:py-0">
+        <ul class="list-none p-0 m-0 flex flex-column lg:flex-row">
+            <li class="flex flex-column lg:flex-row">
+                <a pRipple class="inline-flex align-items-center cursor-pointer border-right-2 lg:border-right-none lg:border-bottom-2 border-transparent
+                    hover:border-primary py-3 lg:py-0 px-6 lg:px-3 text-700 select-none text-xl lg:text-base font-medium lg:font-base w-full lg:w-auto"
+                   pStyleClass="@next" enterClass="hidden" leaveToClass="hidden" [hideOnOutsideClick]="true">
+                    <span>Category</span>
+                </a>
+                <div
+                    class="surface-overlay shadow-none lg:shadow-2 hidden lg:absolute w-full left-0 top-100 pl-8 pr-6 lg:px-6 py-0 lg:py-6">
+                    <div class="flex flex-column lg:flex-row lg:justify-content-between">
+                        <a pStyleClass="@next" enterClass="hidden" leaveToClass="hidden"
+                           class="font-medium text-700 text-lg cursor-pointer block lg:hidden mb-3 select-none">Clothing</a>
+                        <ul class="list-none py-0 pr-0 lg:pl-0 pl-5 m-0 text-700 hidden lg:block">
+                            <li class="font-bold mb-5 text-xl text-900 hidden lg:block">Clothing</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Dresses</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Jeans</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Pants</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Skirts</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Sweaters</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Blouses</li>
+                        </ul>
+                        <a pStyleClass="@next" enterClass="hidden" leaveToClass="hidden"
+                           class="font-medium text-700 text-lg cursor-pointer block lg:hidden mb-3 select-none">Shoes</a>
+                        <ul class="list-none py-0 pr-0 lg:pl-0 pl-5 m-0 text-700 hidden lg:block">
+                            <li class="font-bold mb-5 text-xl text-900 hidden lg:block">Shoes</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Athletic</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Boots</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Sneakers</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Flats</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Outdoor</li>
+                        </ul>
+                        <a pStyleClass="@next" enterClass="hidden" leaveToClass="hidden"
+                           class="font-medium text-700 text-lg cursor-pointer block lg:hidden mb-3 select-none">Accessories</a>
+                        <ul class="list-none py-0 pr-0 lg:pl-0 pl-5 m-0 text-700 hidden lg:block">
+                            <li class="font-bold mb-5 text-xl text-900 hidden lg:block">Accessories</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Handbags</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Gloves</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Belts</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Hats</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Earmuffs</li>
+                        </ul>
+                        <a pStyleClass="@next" enterClass="hidden" leaveToClass="hidden"
+                           class="font-medium text-700 text-lg cursor-pointer block lg:hidden mb-3 select-none">Jewelry</a>
+                        <ul class="list-none py-0 pr-0 lg:pl-0 pl-5 m-0 text-700 hidden lg:block">
+                            <li class="font-bold mb-5 text-xl text-900 hidden lg:block">Jewelry</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Anklets</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Bracelets</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Earrings</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Necklaces</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Rings</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Wedding</li>
+                        </ul>
+                        <a pStyleClass="@next" enterClass="hidden" leaveToClass="hidden"
+                           class="font-medium text-700 text-lg cursor-pointer block lg:hidden mb-3 select-none">Brands</a>
+                        <ul class="list-none py-0 pr-0 lg:pl-0 pl-5 m-0 text-700 hidden lg:block">
+                            <li class="font-bold mb-5 text-xl text-900 hidden lg:block">Brands</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Hyper</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Peak</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Alfred</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Bastion</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Charot</li>
+                            <li class="mb-3 cursor-pointer hover:text-900">Hodly</li>
+                        </ul>
+                        <ul class="list-none p-0 m-0 text-700">
+                            <li class="mt-5 sm:mt-0 mb-5 flex flex-column align-items-center">
+                                <img src="assets/images/blocks/ecommerce/storenavigation/storenavigation-1-1.png"
+                                     alt="Image" style="border-radius:12px" class="w-full lg:w-auto">
+                                <span class="inline-flex surface-0 text-900 px-3 py-2 border-round -mt-5 font-medium">New Products</span>
+                            </li>
+                            <li class="mb-5 flex flex-column align-items-center">
+                                <img src="assets/images/blocks/ecommerce/storenavigation/storenavigation-1-2.png"
+                                     alt="Image" style="border-radius:12px" class="w-full lg:w-auto">
+                                <span class="inline-flex surface-0 text-900 px-3 py-2 border-round -mt-5 font-medium">Discounts</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <!--            <li class="flex flex-column lg:flex-row">-->
+            <!--                <a pRipple class="inline-flex align-items-center cursor-pointer border-right-2 lg:border-right-none lg:border-bottom-2 border-transparent-->
+            <!--                    hover:border-primary py-3 lg:py-0 px-6 lg:px-3 text-700 select-none text-xl lg:text-base font-medium lg:font-base w-full lg:w-auto"-->
+            <!--                   pStyleClass="@next" enterClass="hidden" leaveToClass="hidden" [hideOnOutsideClick]="true">-->
+            <!--                    <span>Men</span>-->
+            <!--                </a>-->
+            <!--                <div class="surface-overlay shadow-none lg:shadow-2 hidden lg:absolute w-full left-0 top-100 px-6 py-0 lg:py-6 h-10rem lg:h-30rem">-->
+            <!--                    <div class="border-2 border-dashed surface-border border-round h-full"></div>-->
+            <!--                </div>-->
+            <!--            </li>-->
+            <li class="flex flex-column lg:flex-row" routerLink="/menu">
+                <a pRipple class="inline-flex align-items-center cursor-pointer border-right-2 lg:border-right-none lg:border-bottom-2 border-transparent
+                    hover:border-primary py-3 lg:py-0 px-6 lg:px-3 text-700 select-none text-xl lg:text-base font-medium lg:font-base w-full lg:w-auto">
+                    <span>Products</span>
+                </a>
+                <!--                <div class="surface-overlay shadow-none lg:shadow-2 hidden lg:absolute w-full left-0 top-100 px-6 py-0 lg:py-6 h-10rem lg:h-30rem">-->
+                <!--                    <div class="border-2 border-dashed surface-border border-round h-full"></div>-->
+                <!--                </div>-->
+            </li>
+            <li class="flex flex-column lg:flex-row">
+                <a pRipple class="inline-flex align-items-center cursor-pointer border-right-2 lg:border-right-none lg:border-bottom-2 border-transparent
+                    hover:border-primary py-3 lg:py-0 px-6 lg:px-3 text-700 select-none text-xl lg:text-base font-medium lg:font-base w-full lg:w-auto">
+                    <span>Membership</span>
+                </a>
+
+            </li>
+        </ul>
+    </div>
+    <div class="flex ml-auto">
+        <ul class="list-none p-0 m-0 flex">
+            <li class="flex">
+                <a pRipple
+                   class="text-900 font-medium inline-flex align-items-center cursor-pointer px-2 sm:px-3 text-700 hover:text-primary">
+                    <i class="pi pi-search mr-2 lg:mr-3 text-xl sm:text-base"></i>
+                    <span class="hidden lg:inline">Search</span>
+                </a>
+            </li>
+            <li class="flex">
+                <a pRipple
+                   class="text-900 font-medium inline-flex align-items-center cursor-pointer px-2 sm:px-3 text-700 hover:text-primary">
+                    <i class="pi pi-heart mr-2 lg:mr-3 text-xl sm:text-base"></i>
+                    <span class="hidden lg:inline">Favorites</span>
+                </a>
+            </li>
+            <li class="flex" pStyleClass="#slideover-cart" enterClass="hidden"
+                enterActiveClass="fadeinright" leaveToClass="hidden" leaveActiveClass="fadeoutright"
+                [hideOnOutsideClick]="true">
+                <a pRipple
+                   class="text-900 font-medium inline-flex align-items-center cursor-pointer px-2 sm:px-3 text-700 hover:text-primary">
+                    <i class="pi pi-shopping-cart lg:mr-3 text-xl sm:text-base" pBadge></i>
+                    <span class="hidden lg:inline">Cart</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- CART -->
+<div id="slideover-cart" class="hidden surface-overlay absolute z-3 top-0 right-0 shadow-2 w-full md:w-30rem h-full">
+    <div class="flex flex-column h-full">
+        <div class="surface-100 p-3 flex">
+            <button pButton pRipple icon="pi pi-chevron-right" class="p-button-text p-button-rounded"
+                    pStyleClass="#slideover-cart" leaveToClass="hidden" leaveActiveClass="fadeoutright"></button>
+            <div class="border-right-1 border-300 mx-3"></div>
+            <span class="text-900 text-xl font-medium inline-flex align-items-center ml-1">Your Cart</span>
+        </div>
+        <div class="flex-auto overflow-y-auto py-5 px-3 md:px-5">
+            <div class="flex align-items-start sm:align-items-center mb-4">
+                <img src="assets/images/blocks/ecommerce/shoppingcart/shopping-cart-1-1.png"
+                     class="w-6rem sm:w-8rem flex-shrink-0"/>
+                <div class="flex-auto px-3">
+                    <div class="flex align-items-center justify-content-between mb-3">
+                        <span class="text-900 font-medium">Product Name</span>
+                        <span class="text-900 font-bold">$50.00</span>
+                    </div>
+                    <div class="text-600 text-sm mb-3">Green | Small</div>
+                    <div class="flex flex-auto justify-content-between align-items-center">
+                        <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" min="0"
+                                       inputStyleClass="w-3rem text-center py-2 px-1 border-transparent"
+                                       class="border-1 surface-border border-round"
+                                       decrementButtonClass="p-button-text py-1 px-1"
+                                       incrementButtonClass="p-button-text py-1 px-1" incrementButtonIcon="pi pi-plus"
+                                       decrementButtonIcon="pi pi-minus"></p-inputNumber>
+                        <button pButton pRipple icon="pi pi-trash"
+                                class="p-button-danger p-button-text p-button-rounded"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex align-items-center bg-green-50 text-green-600 text-sm p-2 border-round mb-4">
+                <i class="pi pi-check mr-2"></i>
+                <span>Item has been added to your cart.</span>
+            </div>
+
+            <p-divider styleClass="text-sm text-500">More items</p-divider>
+
+            <ul class="list-none p-0 m-0">
+                <li class="flex align-items-center mb-4">
+                    <img src="assets/images/blocks/ecommerce/shoppingcart/shopping-cart-1-2.png"
+                         class="w-6rem sm:w-8rem flex-shrink-0"/>
+                    <div class="flex-auto px-3">
+                        <div class="flex align-items-center justify-content-between mb-3">
+                            <span class="text-900 font-medium">Product Name</span>
+                            <span class="text-900 font-bold">$12.00</span>
+                        </div>
+                        <div class="text-600 text-sm mb-3">Blue | Medium</div>
+                        <div class="flex flex-auto justify-content-between align-items-center">
+                            <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal"
+                                           min="0" inputStyleClass="w-3rem text-center py-2 px-1 border-transparent"
+                                           class="border-1 surface-border border-round"
+                                           decrementButtonClass="p-button-text py-1 px-1"
+                                           incrementButtonClass="p-button-text py-1 px-1"
+                                           incrementButtonIcon="pi pi-plus"
+                                           decrementButtonIcon="pi pi-minus"></p-inputNumber>
+                            <button pButton pRipple icon="pi pi-trash"
+                                    class="p-button-danger p-button-text p-button-rounded"></button>
+                        </div>
+                    </div>
                 </li>
-                <li>
-                    <a pRipple
-                       class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
-                        <span>Waiting List</span>
-                    </a>
-                </li>
-                <li>
-                    <a pRipple
-                       class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
-                        <span>Membership</span>
-                    </a>
-                </li>
-                <li *ngIf="isLoggedIn">
-                    <a pRipple (click)="menu.toggle($event)"
-                       class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
-                        <span>
-                            <i class="pi pi-user mr-2"></i>
-                            {{this.userAuthService.userInformation.user['username']}}
-                            <i class="ml-2 pi pi-angle-down"></i>
-                        </span>
-                    </a>
+                <li class="flex align-items-center">
+                    <img src="assets/images/blocks/ecommerce/shoppingcart/shopping-cart-1-3.png"
+                         class="w-6rem sm:w-8rem flex-shrink-0"/>
+                    <div class="flex-auto px-3">
+                        <div class="flex align-items-center justify-content-between mb-3">
+                            <span class="text-900 font-medium">Product Name</span>
+                            <span class="text-900 font-bold">$18.00</span>
+                        </div>
+                        <div class="text-600 text-sm mb-3">White | Large</div>
+                        <div class="flex flex-auto justify-content-between align-items-center">
+                            <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal"
+                                           min="0" inputStyleClass="w-3rem text-center py-2 px-1 border-transparent"
+                                           class="border-1 surface-border border-round"
+                                           decrementButtonClass="p-button-text py-1 px-1"
+                                           incrementButtonClass="p-button-text py-1 px-1"
+                                           incrementButtonIcon="pi pi-plus"
+                                           decrementButtonIcon="pi pi-minus"></p-inputNumber>
+                            <button pButton pRipple icon="pi pi-trash"
+                                    class="p-button-danger p-button-text p-button-rounded"></button>
+                        </div>
+                    </div>
                 </li>
             </ul>
-            <div class="flex justify-content-between lg:block border-top-1 lg:border-top-none surface-border
-            py-3 lg:py-0 mt-3 lg:mt-0 align-items-center">
-                <button
-                    *ngIf="(!isLoggedIn && !isCheckingLoginStatus)"
-                    pButton pRipple [label]="'Login'"
-                    (click)="openLoginDialog()"
-                    class="p-button-text p-button-rounded border-none font-light line-height-2 mr-4"></button>
-                <p-button icon="pi pi-shopping-cart" styleClass="p-button-rounded" label="Cart" badge="8"></p-button>
-
+        </div>
+        <div class="border-top-1 surface-border p-3">
+            <div class="flex align-items-center justify-content-between mb-3">
+                <span class="text-900 font-medium">Total Amount <span class="text-600 text-sm">incl. VAT</span></span>
+                <span class="text-900 font-bold">$80.00</span>
             </div>
+            <button pButton pRipple class="p-button-success mb-3 w-full" label="Check Out"></button>
+            <button pButton pRipple class="p-button-outlined p-button-secondary w-full" label="Continue Shopping"
+                    pStyleClass="#slideover-cart" leaveToClass="hidden" leaveActiveClass="fadeoutright"></button>
         </div>
     </div>
 </div>

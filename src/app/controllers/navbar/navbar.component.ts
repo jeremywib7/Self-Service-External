@@ -8,7 +8,6 @@ import {UserAuthService} from "../../service/user-auth.service";
 import {ConfirmationService, MenuItem, Message, MessageService} from "primeng/api";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
-import {HttpParams} from "@angular/common/http";
 
 @Component({
     selector: 'app-navbar',
@@ -18,7 +17,6 @@ import {HttpParams} from "@angular/common/http";
 export class NavbarComponent implements OnInit {
 
     config: AppConfig;
-
 
     userMenu: MenuItem[];
 
@@ -181,17 +179,41 @@ export class NavbarComponent implements OnInit {
     }
 
     // reset Forgot password
+
     onResetPassword() {
 
         if (this.resetPasswordForm.valid) {
-            this.auth.sendPasswordResetEmail(this.resetPasswordForm.value.email).then(res => {
-                this.resetPasswordMsg = [
-                    {severity: 'success', summary: 'Success', detail: 'Password reset sent to this email'},
-                ];
-            }).catch(_error => {
-                this.resetPasswordMsg = [
-                    {severity: 'error', summary: 'Failed', detail: 'No user found for this email '},
-                ];
+            this.isResetPasswordButtonLoading = true;
+            from(this.auth.sendPasswordResetEmail(this.resetPasswordForm.value.email)).subscribe({
+                next: value => {
+                    this.resetPasswordMsg = [
+                        {severity: 'success', summary: 'Success', detail: 'Password reset sent to this email'},
+                    ];
+                },
+                error: err => {
+                    let errorMessage;
+                    switch (err.code) {
+                        case 'auth/invalid-email': {
+                            errorMessage = 'Email format is invalid';
+                            break;
+                        }
+                        case "auth/user-not-found": {
+                            errorMessage = 'User not found for this email'
+                            break;
+                        }
+                        default: {
+                            errorMessage = 'Reset password error. Try again later';
+                            break;
+                        }
+                    }
+
+                    this.resetPasswordMsg = [
+                        {severity: 'error', summary: 'Failed', detail: errorMessage},
+                    ];
+                }
+            }).add(() => {
+                //Called when operation is complete (both success and error)
+                this.isResetPasswordButtonLoading = false;
             });
         } else {
             this.resetPasswordForm.markAllAsTouched();
@@ -262,16 +284,16 @@ export class NavbarComponent implements OnInit {
             from(this.auth.createUserWithEmailAndPassword(email, password)).subscribe({
                 next: value => {
 
-                    // update in backend
                     // get uuid from firebase and set in backend
                     this.registerForm.get("id").setValue(value.user.uid);
+
+                    // register in backend
                     this.userAuthService.registerCustomer(this.registerForm.value).subscribe({
                         next: () => {
                             this.registerMsg = [];
                             this.showAuthDialog = false;
                         },
                         error: err => {
-
                             // cancel created user by delete in firebase
                             // because username already exists in backend
                             this.auth.currentUser.then(async res => {
@@ -280,6 +302,7 @@ export class NavbarComponent implements OnInit {
                                     severity: 'error', detail: err.error.message
                                 }]
                             });
+
                         },
                         complete: () => {
                             this.isRegisterButtonLoading = false;
