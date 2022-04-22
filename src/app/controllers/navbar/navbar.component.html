@@ -1,13 +1,18 @@
+<!-- LOADING SPINNER -->
+<div class="progress-spinner" *ngIf="isCheckingLoginStatus">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
 <div
     class="bg-gray-900 px-3 sm:px-6 py-3 flex align-items-stretch justify-content-center sm:justify-content-end border-bottom-1 surface-border text-sm">
-    <a pRipple (click)="openLoginDialog()"
+    <a pRipple (click)="openLoginOrLogoutDialog()"
        class="text-white font-medium inline-flex align-items-center cursor-pointer px-3 hover:text-gray-200">
         <i class="pi {{isLoggedIn ? 'pi-sign-out':'pi-sign-in'}} mr-2 sm:mr-3 text-sm"></i>
         <span>{{isLoggedIn ? 'Sign Out' : 'Sign In '}}</span>
     </a>
     <div class="text-white mx-1 sm:mx-2">|</div>
     <a pRipple class="text-white font-medium inline-flex align-items-center cursor-pointer px-3 hover:text-gray-200"
-       (click)="openLoginDialog()">
+       (click)="isLoggedIn ? menu.toggle($event) : openLoginOrLogoutDialog()">
         <i class="pi pi-user mr-2 sm:mr-3 text-sm"></i>
         <span>{{isLoggedIn ? 'Profile' : 'Create Account'}}</span>
     </a>
@@ -17,7 +22,7 @@
        enterClass="hidden" leaveToClass="hidden" [hideOnOutsideClick]="true">
         <i class="pi pi-bars text-4xl"></i>
     </a>
-    <div class="flex align-items-center justify-content-center">
+    <div class="flex align-items-center justify-content-center" routerLink="/">
         <img src="assets/images/blocks/logos/hyper.svg" alt="Image" class="lg:mr-6 h-2rem sm:h-3rem">
     </div>
     <div id="nav-1"
@@ -498,7 +503,6 @@
 </p-dialog>
 
 <p-confirmDialog #cd [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
-                 [style]="{minWidth: '450px'}"
                  icon="pi pi-exclamation-triangle">
     <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
@@ -511,4 +515,4 @@
 </p-confirmDialog>
 
 <!-- on User Profile Name clicked-->
-<p-tieredMenu #menu [model]="userMenu" [popup]="true"></p-tieredMenu>
+<p-menu #menu [popup]="true" [model]="userMenu"></p-menu>

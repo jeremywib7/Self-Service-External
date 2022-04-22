@@ -9,6 +9,8 @@ import {HomeComponent} from "./controllers/home/home.component";
 import {MenuBookComponent} from "./controllers/menu-book/menu-book.component";
 import {CartComponent} from "./controllers/cart/cart.component";
 import {AngularFireAuthGuard, redirectUnauthorizedTo} from "@angular/fire/compat/auth-guard";
+import {HistoryComponent} from "./controllers/history/history.component";
+import {MenuViewComponent} from "./controllers/menu-view/menu-view.component";
 
 const redirectUnauthorizedToHome = () => redirectUnauthorizedTo(['']);
 
@@ -23,6 +25,18 @@ const redirectUnauthorizedToHome = () => redirectUnauthorizedTo(['']);
                     {
                         path: 'cart',
                         component: CartComponent,
+                        canActivate: [AngularFireAuthGuard],
+                        data: {authGuardPipe: redirectUnauthorizedToHome}
+                    },
+                    {
+                        path: 'history',
+                        component: HistoryComponent,
+                        canActivate: [AngularFireAuthGuard],
+                        data: {authGuardPipe: redirectUnauthorizedToHome}
+                    },
+                    {
+                        path: 'view',
+                        component: MenuViewComponent,
                         canActivate: [AngularFireAuthGuard],
                         data: {authGuardPipe: redirectUnauthorizedToHome}
                     },

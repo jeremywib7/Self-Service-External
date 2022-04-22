@@ -1,16 +1,15 @@
 <div class="p-5 pb-0 flex flex-column flex-auto">
-    <div class="grid">
+    <div class="grid -mt-3 -ml-3 -mr-3">
         <div class="col-12">
             <div class="card">
                 <h5>Menu Book</h5>
-
-                <p-dataView #dv [value]="products"  [paginator]="true" [lazy]="true" [rows]="10" filterBy="name"
+                <p-dataView #dv [value]="products" [paginator]="true" [lazy]="true" [rows]="10" filterBy="name"
                             [sortField]="sortField" (onLazyLoad)="loadAllProducts($event)"
                             totalRecords="{{products?.length}}" [loading]="isLoadingProducts"
                             [sortOrder]="sortOrder" layout="grid">
                     <ng-template pTemplate="header">
                         <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-                            <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Sort By Price"
+                            <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Category"
                                         (onChange)="onSortChange($event)"></p-dropdown>
                             <span class="p-input-icon-left mb-2 md:mb-0">
                             <i class="pi pi-search"></i>
@@ -54,6 +53,51 @@
                     </ng-template>
 
                     <ng-template let-product pTemplate="gridItem">
+                        <!--                        <div class="col-12 md:col-6 lg:col-3 mt-5 md:mb-0">-->
+                        <!--                            <div class="p-3">-->
+                        <!--                                <div class="relative text-center mb-3">-->
+                        <!--                                    <img-->
+                        <!--                                        defaultImage="/assets/demo/images/galleria/spinner.gif"-->
+                        <!--                                        [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +-->
+                        <!--                                        'imageName=' + product?.images[0]?.imageName + '&' + 'productId=' + product.id "-->
+                        <!--                                        class="w-9 shadow-2 my-3 mx-0 h-10rem w-15rem"/>-->
+                        <!--                                    <span *ngIf="product.discount"-->
+                        <!--                                          class="bg-pink-500 text-pink-50 font-bold px-2 py-1 absolute"-->
+                        <!--                                          style="border-radius: 1rem; right: 1rem; bottom: 1rem">-->
+                        <!--                                        -%{{((product.unitPrice - product.discountedPrice) /-->
+                        <!--                                        product.unitPrice) * 100}}-->
+                        <!--                                    </span>-->
+                        <!--                                </div>-->
+                        <!--                                <span class="text-900 font-medium text-xl">{{product.name}}</span>-->
+                        <!--                                <div class="my-3">-->
+                        <!--&lt;!&ndash;                        <span class="mr-3">&ndash;&gt;-->
+                        <!--                                    &lt;!&ndash;                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>&ndash;&gt;-->
+                        <!--                                    &lt;!&ndash;                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>&ndash;&gt;-->
+                        <!--                                    &lt;!&ndash;                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>&ndash;&gt;-->
+                        <!--                                    &lt;!&ndash;                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>&ndash;&gt;-->
+                        <!--                                    &lt;!&ndash;                            <i class="pi pi-star-fill text-yellow-500"></i>&ndash;&gt;-->
+                        <!--                                    &lt;!&ndash;                        </span>&ndash;&gt;-->
+                        <!--                                    &lt;!&ndash;                                    <span class="text-500">12 reviews</span>&ndash;&gt;-->
+                        <!--                                </div>-->
+                        <!--                                <div class="mb-4">-->
+                        <!--                                    <span *ngIf="product.discount"-->
+                        <!--                                          class="{{product.discount ? 'line-through': ''}} text-600 mr-3">-->
+                        <!--                                        {{product.unitPrice |-->
+                        <!--                                        currency:'Rp. ':'symbol':'3.0'}}-->
+                        <!--                                                    </span>-->
+                        <!--                                    <span class="font-bold text-900">-->
+                        <!--                                        {{product.discountedPrice |-->
+                        <!--                                        currency:'Rp. ':'symbol':'3.0'}}-->
+                        <!--                                    </span>-->
+                        <!--                                </div>-->
+                        <!--                                <button [disabled]="!product.active"-->
+                        <!--                                        [label]="product.active ? 'Add to cart':'Not available'"-->
+                        <!--                                        pButton pRipple icon="pi pi-shopping-cart"-->
+                        <!--                                        class="w-full"></button>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+
+
                         <div class="col-12 md:col-4">
                             <div class="card m-3 border-1 surface-border">
                                 <div class="flex align-items-center justify-content-between">
@@ -63,15 +107,15 @@
                                     </div>
                                     <span *ngIf="product.active == false"
                                           [class]="'sm:ml-2 item-badge status-' + product.active">
-                                    Not Available
-                                </span>
+                                                            Not Available
+                                                        </span>
                                 </div>
                                 <div class="text-center">
                                     <img
                                         defaultImage="/assets/demo/images/galleria/spinner.gif"
                                         [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
-                                    'imageName=' + product?.images[0]?.imageName + '&' +
-                                    'productId=' + product.id "
+                                                            'imageName=' + product?.images[0]?.imageName + '&' +
+                                                            'productId=' + product.id "
                                         [alt]="product.name"
                                         class="w-9 shadow-2 my-3 mx-0 h-10rem w-15rem" src=""/>
                                     <div class="text-2xl font-bold">
@@ -82,17 +126,38 @@
                                             {{product.description}}
                                         </div>
                                     </div>
-                                    <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+                                    <!--                                    <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>-->
                                 </div>
+
                                 <div class="flex align-items-center justify-content-between">
-                                <span
-                                    class="text-2xl font-semibold">{{product.unitPrice |
-                                    currency:'Rp. ':'symbol':'3.0'}}
-                                </span>
-                                    <!--                                (click)="onAddToCart(op, $event)"-->
-                                    <p-button icon="pi pi-shopping-cart"
-                                              [disabled]="product.active == false" class="mb-2"></p-button>
+                                    <div>
+                                        <span  class="text-xl font-medium {{product.discount ? 'text-pink-500':''}}">
+                                           {{product.discountedPrice | currency:'Rp. ':'symbol':
+                                            '3.0'}}
+                                        </span>
+                                        <span *ngIf="product.discount" class="text-xl font-medium text-700 line-through ml-3">
+                                            {{product.unitPrice | currency:'Rp. ':'symbol':
+                                            '3.0'}}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <p-button icon="pi pi-shopping-cart" routerLink="/view"
+                                                  [disabled]="!product.active" class="mb-2"></p-button>
+                                    </div>
                                 </div>
+
+                                <!--                                <div class="flex align-items-center justify-content-between">-->
+                                <!--                                    <span *ngIf="product.discount"-->
+                                <!--                                          class="line-through">{{product.unitPrice |-->
+                                <!--                                        currency:'Rp. ':'symbol':'3.0'}}-->
+                                <!--                                    </span>-->
+                                <!--                                    &lt;!&ndash;                                (click)="onAddToCart(op, $event)"&ndash;&gt;-->
+                                <!--                                    <p-button icon="pi pi-shopping-cart"-->
+                                <!--                                              [disabled]="!product.active" class="mb-2"></p-button>-->
+                                <!--                                </div>-->
+                                <!--                                <span class="text-2xl font-semibold ">{{product.discountedPrice |-->
+                                <!--                                    currency:'Rp. ':'symbol':'3.0'}}-->
+                                <!--                                    </span>-->
                             </div>
                         </div>
                     </ng-template>

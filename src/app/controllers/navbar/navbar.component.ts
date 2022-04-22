@@ -113,8 +113,7 @@ export class NavbarComponent implements OnInit {
         public configService: ConfigService,
         public userAuthService: UserAuthService,
         public auth: AngularFireAuth,
-        private confirmationService: ConfirmationService,
-        private messageService: MessageService) {
+        private confirmationService: ConfirmationService) {
 
         this.auth.authState.subscribe({
             next: response => {
@@ -154,32 +153,33 @@ export class NavbarComponent implements OnInit {
     initMenuUser() {
         this.userMenu = [
             {
-                label: 'Settings',
+                label: 'Profile',
                 icon: 'pi pi-fw pi-cog',
                 items: [
                     {
-                        label: 'Profile',
+                        label: 'User Profile',
+                        routerLink: '/profile',
                         icon: 'pi pi-fw pi-user',
                     },
                     {
                         label: 'History',
+                        routerLink: '/history',
                         icon: 'pi pi-fw pi-calendar-times',
                     }
                 ]
             },
-            {
-                separator: true
-            },
-            {
-                label: 'Logout',
-                command: () => this.onLogoutClicked(),
-                icon: 'pi pi-fw pi-power-off'
-            }
+            // {
+            //     separator: true
+            // },
+            // {
+            //     label: 'Logout',
+            //     command: () => this.onLogoutClicked(),
+            //     icon: 'pi pi-fw pi-power-off'
+            // }
         ]
     }
 
     // reset Forgot password
-
     onResetPassword() {
 
         if (this.resetPasswordForm.valid) {
@@ -221,8 +221,20 @@ export class NavbarComponent implements OnInit {
 
     }
 
-    openLoginDialog() {
-        this.showAuthDialog = true;
+    openLoginOrLogoutDialog() {
+        // if not logged in
+        if (!this.isLoggedIn) {
+            return this.showAuthDialog = true;
+        }
+        // if already logged in
+        return this.confirmationService.confirm({
+            message: 'Are you sure you want to log out?',
+            header: 'Logout',
+            accept: () => {
+                this.isCheckingLoginStatus = true;
+                this.auth.signOut().then();
+            }
+        });
     }
 
     onLogin() {
@@ -372,17 +384,6 @@ export class NavbarComponent implements OnInit {
     onHideResetPasswordDialog() {
         this.resetPasswordForm.reset();
         this.resetPasswordMsg = [];
-    }
-
-    onLogoutClicked() {
-        this.confirmationService.confirm({
-            message: 'Are you sure you want to log out?',
-            header: 'Logout',
-            accept: () => {
-                this.isCheckingLoginStatus = true;
-                this.auth.signOut().then();
-            }
-        });
     }
 
 }

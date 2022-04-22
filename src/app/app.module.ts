@@ -156,6 +156,10 @@ import {UserAuthService} from "./service/user-auth.service";
 import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
 import { CartComponent } from './controllers/cart/cart.component';
 import {BlockUIModule} from "primeng/blockui";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import { HistoryComponent } from './controllers/history/history.component';
+import { UserProfileComponent } from './controllers/user-profile/user-profile.component';
+import { MenuViewComponent } from './controllers/menu-view/menu-view.component';
 
 @NgModule({
     imports: [
@@ -257,6 +261,7 @@ import {BlockUIModule} from "primeng/blockui";
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule,
         BlockUIModule,
+        ProgressSpinnerModule,
 
     ],
     declarations: [
@@ -280,6 +285,7 @@ import {BlockUIModule} from "primeng/blockui";
         PanelsComponent,
         OverlaysComponent,
         MenusComponent,
+        MenuViewComponent,
         MessagesComponent,
         MessagesComponent,
         MiscComponent,
@@ -307,6 +313,9 @@ import {BlockUIModule} from "primeng/blockui";
         MenuBookComponent,
         MenuBookComponent,
         CartComponent,
+        HistoryComponent,
+        UserProfileComponent,
+        MenuViewComponent,
 
 
     ],
