@@ -1,4 +1,8 @@
 import {Component, OnInit} from '@angular/core';
+import {Product} from "../../model/Product";
+import {ActivatedRoute, Router} from "@angular/router";
+import {ProductService} from "../../service/product.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
     selector: 'app-menu-view',
@@ -41,7 +45,31 @@ export class MenuViewComponent implements OnInit {
 
     galleriaImages: string[];
 
+    product: Product;
+
+    constructor(
+      private router: Router,
+      private activatedRoute: ActivatedRoute,
+      private productService: ProductService
+    ) {
+        this.loadProduct();
+    }
+
+    loadProduct() {
+        let name = this.activatedRoute.snapshot.queryParamMap.get('name');
+        let params = new HttpParams();
+        params = params.append("name", name);
+
+        this.productService.loadProductDetailByName(params).subscribe({
+            next: value => {
+                console.log(value);
+            }
+        });
+    }
+
+
     ngOnInit(): void {
+
         this.images1 = [
             'product-overview-2-1.png',
             'product-overview-2-2.png',

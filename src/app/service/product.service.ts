@@ -72,8 +72,8 @@ export class ProductService {
             .pipe(map((data) => data || []))
     }
 
-    loadProductDetailById(params: HttpParams) {
-        return this.httpClient.get(`${this.apiServerUrl}/${this.project}/product/findById`, {params})
+    loadProductDetailByName(params: HttpParams) {
+        return this.httpClient.get(`${this.apiServerUrl}/${this.project}/productview/`, {params})
             .pipe(map((data) => data || []))
     }
 

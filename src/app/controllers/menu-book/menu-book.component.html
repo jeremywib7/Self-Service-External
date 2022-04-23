@@ -53,51 +53,6 @@
                     </ng-template>
 
                     <ng-template let-product pTemplate="gridItem">
-                        <!--                        <div class="col-12 md:col-6 lg:col-3 mt-5 md:mb-0">-->
-                        <!--                            <div class="p-3">-->
-                        <!--                                <div class="relative text-center mb-3">-->
-                        <!--                                    <img-->
-                        <!--                                        defaultImage="/assets/demo/images/galleria/spinner.gif"-->
-                        <!--                                        [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +-->
-                        <!--                                        'imageName=' + product?.images[0]?.imageName + '&' + 'productId=' + product.id "-->
-                        <!--                                        class="w-9 shadow-2 my-3 mx-0 h-10rem w-15rem"/>-->
-                        <!--                                    <span *ngIf="product.discount"-->
-                        <!--                                          class="bg-pink-500 text-pink-50 font-bold px-2 py-1 absolute"-->
-                        <!--                                          style="border-radius: 1rem; right: 1rem; bottom: 1rem">-->
-                        <!--                                        -%{{((product.unitPrice - product.discountedPrice) /-->
-                        <!--                                        product.unitPrice) * 100}}-->
-                        <!--                                    </span>-->
-                        <!--                                </div>-->
-                        <!--                                <span class="text-900 font-medium text-xl">{{product.name}}</span>-->
-                        <!--                                <div class="my-3">-->
-                        <!--&lt;!&ndash;                        <span class="mr-3">&ndash;&gt;-->
-                        <!--                                    &lt;!&ndash;                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>&ndash;&gt;-->
-                        <!--                                    &lt;!&ndash;                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>&ndash;&gt;-->
-                        <!--                                    &lt;!&ndash;                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>&ndash;&gt;-->
-                        <!--                                    &lt;!&ndash;                            <i class="pi pi-star-fill text-yellow-500 mr-1"></i>&ndash;&gt;-->
-                        <!--                                    &lt;!&ndash;                            <i class="pi pi-star-fill text-yellow-500"></i>&ndash;&gt;-->
-                        <!--                                    &lt;!&ndash;                        </span>&ndash;&gt;-->
-                        <!--                                    &lt;!&ndash;                                    <span class="text-500">12 reviews</span>&ndash;&gt;-->
-                        <!--                                </div>-->
-                        <!--                                <div class="mb-4">-->
-                        <!--                                    <span *ngIf="product.discount"-->
-                        <!--                                          class="{{product.discount ? 'line-through': ''}} text-600 mr-3">-->
-                        <!--                                        {{product.unitPrice |-->
-                        <!--                                        currency:'Rp. ':'symbol':'3.0'}}-->
-                        <!--                                                    </span>-->
-                        <!--                                    <span class="font-bold text-900">-->
-                        <!--                                        {{product.discountedPrice |-->
-                        <!--                                        currency:'Rp. ':'symbol':'3.0'}}-->
-                        <!--                                    </span>-->
-                        <!--                                </div>-->
-                        <!--                                <button [disabled]="!product.active"-->
-                        <!--                                        [label]="product.active ? 'Add to cart':'Not available'"-->
-                        <!--                                        pButton pRipple icon="pi pi-shopping-cart"-->
-                        <!--                                        class="w-full"></button>-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
-
-
                         <div class="col-12 md:col-4">
                             <div class="card m-3 border-1 surface-border">
                                 <div class="flex align-items-center justify-content-between">
@@ -131,17 +86,20 @@
 
                                 <div class="flex align-items-center justify-content-between">
                                     <div>
-                                        <span  class="text-xl font-medium {{product.discount ? 'text-pink-500':''}}">
+                                        <span class="text-xl font-medium {{product.discount ? 'text-pink-500':''}}">
                                            {{product.discountedPrice | currency:'Rp. ':'symbol':
                                             '3.0'}}
                                         </span>
-                                        <span *ngIf="product.discount" class="text-xl font-medium text-700 line-through ml-3">
+                                        <span *ngIf="product.discount"
+                                              class="text-xl font-medium text-700 line-through ml-3">
                                             {{product.unitPrice | currency:'Rp. ':'symbol':
                                             '3.0'}}
                                         </span>
                                     </div>
                                     <div>
-                                        <p-button icon="pi pi-shopping-cart" routerLink="/view"
+                                        <p-button icon="pi pi-shopping-cart"
+                                                  [routerLink]="product.active ? '/view': null"
+                                                  [queryParams]="{name: product.name}"
                                                   [disabled]="!product.active" class="mb-2"></p-button>
                                     </div>
                                 </div>
