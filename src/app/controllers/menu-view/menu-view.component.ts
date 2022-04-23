@@ -3,6 +3,8 @@ import {Product} from "../../model/Product";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProductService} from "../../service/product.service";
 import {HttpParams} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
+import {Environment} from "@angular/cli/lib/config/workspace-schema";
 
 @Component({
     selector: 'app-menu-view',
@@ -11,46 +13,22 @@ import {HttpParams} from "@angular/common/http";
 })
 export class MenuViewComponent implements OnInit {
 
-    color1: string = 'cyan';
+    // global environment
+    apiBaseUrl = environment.apiBaseUrl;
+    projectName = environment.project;
 
-    size1: string = 'M';
+    liked: boolean;
 
-    color2: string = 'pink';
+    selectedImageIndex: number = 0;
 
-    size2: string;
-
-    color3: string = 'bluegray';
-
-    size3: string = 'M';
-
-    color4: string = 'blue';
-
-    liked1: boolean;
-
-    liked2: boolean;
-
-    sizes: any[];
-
-    images1: string[];
-
-    selectedImageIndex1: number = 0;
-
-    images2: string[];
-
-    selectedImageIndex2: number = 0;
-
-    quantity1: number = 1;
-
-    quantity2: number = 1;
-
-    galleriaImages: string[];
+    quantity: number = 1;
 
     product: Product;
 
     constructor(
-      private router: Router,
-      private activatedRoute: ActivatedRoute,
-      private productService: ProductService
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private productService: ProductService
     ) {
         this.loadProduct();
     }
@@ -61,34 +39,18 @@ export class MenuViewComponent implements OnInit {
         params = params.append("name", name);
 
         this.productService.loadProductDetailByName(params).subscribe({
-            next: value => {
-                console.log(value);
+            next: (value: any) => {
+                this.product = value.data;
             }
         });
     }
 
 
     ngOnInit(): void {
+    }
 
-        this.images1 = [
-            'product-overview-2-1.png',
-            'product-overview-2-2.png',
-            'product-overview-2-3.png',
-            // 'product-overview-2-4.png'
-        ];
+    addToCart() {
 
-        this.images2 = [
-            'product-overview-3-1.png',
-            'product-overview-3-2.png',
-            'product-overview-3-3.png',
-            'product-overview-3-4.png'
-        ];
-
-        this.galleriaImages = [
-            'product-overview-4-1.png',
-            'product-overview-4-2.png',
-            'product-overview-4-3.png'
-        ];
     }
 
 

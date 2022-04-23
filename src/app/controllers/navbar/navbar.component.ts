@@ -291,6 +291,7 @@ export class NavbarComponent implements OnInit {
 
         if (this.registerForm.valid) {
             const {email, password} = this.registerForm.value;
+            this.isRegisterButtonLoading = true;
 
             // update in firebase
             from(this.auth.createUserWithEmailAndPassword(email, password)).subscribe({
@@ -340,6 +341,8 @@ export class NavbarComponent implements OnInit {
                         severity: 'error', detail: errorMessage
                     }]
                 }
+            }).add(() => {
+                this.isRegisterButtonLoading = false;
             });
 
         } else {
