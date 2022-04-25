@@ -1,23 +1,29 @@
 <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
     <div class="grid">
         <div class="col-12 lg:col-6 text-center">
-            <img [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
+            <img [lazyLoad]="apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
                                 'imageName=' + product?.images[selectedImageIndex]?.imageName + '&' +
-                                'productId=' + product?.id "
-                 [alt]="product?.name"
-                 class="mb-3 w-24rem h-18rem"/>
+                                'productId=' + product?.id"
+                     [alt]="product?.name"
+                     class="mb-3 w-24rem h-18rem"/>
+
             <div class="grid justify-content-center">
-                <div *ngFor="let image of product?.images; let i = index" class="col-3 ">
-                    <img [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
-                                'imageName=' + image.imageName + '&' +
-                                'productId=' + product?.id "
-                         class="w-7rem h-5rem cursor-pointer border-2 border-round border-transparent transition-colors transition-duration-150"
-                         [ngClass]="{'border-primary': selectedImageIndex === i}"
-                         (click)="selectedImageIndex = i"/>
+                <div class="flex">
+                    <p-skeleton width="7rem" height="5rem" styleClass="mr-2"></p-skeleton>
+                    <p-skeleton width="7rem" height="5rem" styleClass="mr-2"></p-skeleton>
+                    <p-skeleton width="7rem" height="5rem"></p-skeleton>
                 </div>
+                <!--                <div *ngFor="let image of product?.images; let i = index" class="col-3 ">-->
+                <!--                    <img #i [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +-->
+                <!--                                'imageName=' + image.imageName + '&' +-->
+                <!--                                'productId=' + product?.id "-->
+                <!--                         class="w-7rem h-5rem cursor-pointer border-2 border-round border-transparent transition-colors transition-duration-150"-->
+                <!--                         [ngClass]="{'border-primary': selectedImageIndex === i}"-->
+                <!--                         (click)="selectedImageIndex = i"/>-->
+                <!--                </div>-->
             </div>
         </div>
-        <div class="col-12 lg:col-6 py-3 lg:pl-6">
+        <div *ngIf="isDoneLoadProductInfo" class="col-12 lg:col-6 py-3 lg:pl-6">
             <div class="flex align-items-center text-xl font-medium text-900 mb-4">
                 <span>{{product?.name}}</span>
             </div>
@@ -26,11 +32,43 @@
 
             <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between mb-5">
                 <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" min="0"
-                               inputStyleClass="w-3rem text-center" [(ngModel)]="quantity"
+                               inputStyleClass="w-3rem text-center" [(ngModel)]="currentQuantity"
                                decrementButtonClass="p-button-text" incrementButtonClass="p-button-text"
                                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
                 <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 sm:ml-5">
-                    <button (click)="updateCart(product?.id)" pButton pRipple label="Add to CustomerCart" class="flex-1 mr-5"></button>
+                    <button (click)="updateCart(product?.id)" pButton pRipple label="Add to Cart"
+                            class="flex-1 mr-5"></button>
+                    <i class="pi text-2xl cursor-pointer"
+                       [ngClass]="{'pi-heart text-600': !liked, 'pi-heart-fill text-orange-500': liked}"
+                       (click)="liked = !liked"></i>
+                </div>
+            </div>
+
+            <ol class="list-none p-0 m-0 surface-100 text-center text-900">
+                <li class="line-height-3 p-3 font-bold border-bottom-1 border-300">Product Description</li>
+                <li class="line-height-3 p-3 border-bottom-1 border-300">
+                    {{product?.description}}
+                </li>
+                <li class="line-height-3 p-3 border-bottom-1 border-300">Total calories for this product
+                    is {{product?.totalCalories}} cals
+                </li>
+            </ol>
+        </div>
+        <div *ngIf="!isDoneLoadProductInfo" class="col-12 lg:col-6 py-3 lg:pl-6">
+            <div class="flex align-items-center text-xl font-medium text-900 mb-4">
+                <span>{{product?.name}}</span>
+            </div>
+            <span class="text-900 font-medium text-3xl block mb-5">{{product?.unitPrice | currency:'Rp. ':
+                'symbol':'3.0'}}</span>
+
+            <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between mb-5">
+                <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" min="0"
+                               inputStyleClass="w-3rem text-center" [(ngModel)]="currentQuantity"
+                               decrementButtonClass="p-button-text" incrementButtonClass="p-button-text"
+                               incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
+                <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 sm:ml-5">
+                    <button (click)="updateCart(product?.id)" pButton pRipple label="Add to Cart"
+                            class="flex-1 mr-5"></button>
                     <i class="pi text-2xl cursor-pointer"
                        [ngClass]="{'pi-heart text-600': !liked, 'pi-heart-fill text-orange-500': liked}"
                        (click)="liked = !liked"></i>

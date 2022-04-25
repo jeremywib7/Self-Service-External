@@ -160,6 +160,7 @@ import {ProgressSpinnerModule} from "primeng/progressspinner";
 import { HistoryComponent } from './controllers/history/history.component';
 import { UserProfileComponent } from './controllers/user-profile/user-profile.component';
 import { MenuViewComponent } from './controllers/menu-view/menu-view.component';
+import { ImageLoaderComponent } from './components/image-loader/image-loader.component';
 
 @NgModule({
     imports: [
@@ -316,6 +317,7 @@ import { MenuViewComponent } from './controllers/menu-view/menu-view.component';
         HistoryComponent,
         UserProfileComponent,
         MenuViewComponent,
+        ImageLoaderComponent,
 
 
     ],

@@ -20,11 +20,17 @@ export class MenuViewComponent implements OnInit {
     apiBaseUrl = environment.apiBaseUrl;
     projectName = environment.project;
 
+    isDoneLoadProductInfo: boolean = false;
+
+    isDoneLoadMainImage: boolean = false;
+
     liked: boolean;
 
     selectedImageIndex: number = 0;
 
-    quantity: number = 1;
+    cartQuantity: number = 0;
+
+    currentQuantity: number = 1;
 
     product: Product;
 
@@ -47,6 +53,19 @@ export class MenuViewComponent implements OnInit {
         this.productService.loadProductDetailByName(params).subscribe({
             next: (value: any) => {
                 this.product = value.data;
+
+                // wait until cart is initialized
+                // then check this product in customer cart
+                // if exists then set quantity based on the cart
+                (async () => {
+                    while (this.cartService.cartInformation['orderedProduct'] === undefined)
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    let index = this.cartService.cartInformation['orderedProduct'].findIndex(
+                        orderedProduct => orderedProduct.product.id === this.product.id
+                    );
+                    this.currentQuantity = this.cartService.cartInformation['orderedProduct'][index].quantity;
+                })();
+
             }
         });
     }
@@ -59,14 +78,13 @@ export class MenuViewComponent implements OnInit {
         let params = new HttpParams();
         params = params.append("customerId", this.userAuthService.customerInformation.customer['id']);
         params = params.append("productId", productId);
-        params = params.append("productQuantity", this.quantity);
+        params = params.append("productQuantity", this.currentQuantity);
 
         this.cartService.updateCart(params).subscribe({
-            next: value => {
-                console.log(value);
+            next: (value:any) => {
+                this.cartService.cartInformation['orderedProduct'] = value.data.orderedProduct;
             }
         });
     }
-
 
 }

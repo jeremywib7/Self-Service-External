@@ -129,8 +129,8 @@ export class NavbarComponent implements OnInit {
                     // get cart
                     let params = new HttpParams().append("customerId",response.uid);
                     this.cartService.viewCart(params).subscribe({
-                        next: value => {
-                            console.log(value);
+                        next: (value:any) => {
+                            this.cartService.cartInformation = value.data;
                         }
                     });
 
