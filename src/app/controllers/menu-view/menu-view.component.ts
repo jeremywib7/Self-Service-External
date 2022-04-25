@@ -5,6 +5,9 @@ import {ProductService} from "../../service/product.service";
 import {HttpParams} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {Environment} from "@angular/cli/lib/config/workspace-schema";
+import {CartService} from "../../service/cart.service";
+import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {UserAuthService} from "../../service/user-auth.service";
 
 @Component({
     selector: 'app-menu-view',
@@ -28,6 +31,9 @@ export class MenuViewComponent implements OnInit {
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
+        private cartService: CartService,
+        public auth: AngularFireAuth,
+        private userAuthService: UserAuthService,
         private productService: ProductService
     ) {
         this.loadProduct();
@@ -49,8 +55,17 @@ export class MenuViewComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    addToCart() {
+    updateCart(productId: string) {
+        let params = new HttpParams();
+        params = params.append("customerId", this.userAuthService.customerInformation.customer['id']);
+        params = params.append("productId", productId);
+        params = params.append("productQuantity", this.quantity);
 
+        this.cartService.updateCart(params).subscribe({
+            next: value => {
+                console.log(value);
+            }
+        });
     }
 
 

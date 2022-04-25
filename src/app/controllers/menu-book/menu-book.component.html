@@ -43,7 +43,7 @@
                                     class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
                                 <span
                                     class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">${{product.price}}</span>
-                                    <p-button icon="pi pi-shopping-cart" label="Add to Cart"
+                                    <p-button icon="pi pi-shopping-cart" label="Add to CustomerCart"
                                               [disabled]="product.active == false" class="mb-2"></p-button>
                                     <span *ngIf="product.active == false"
                                           [class]="'item-badge status-' + product.active">Not Available</span>

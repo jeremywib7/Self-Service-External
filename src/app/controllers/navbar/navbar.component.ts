@@ -8,6 +8,8 @@ import {UserAuthService} from "../../service/user-auth.service";
 import {ConfirmationService, MenuItem, Message, MessageService} from "primeng/api";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {CartService} from "../../service/cart.service";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
     selector: 'app-navbar',
@@ -112,6 +114,7 @@ export class NavbarComponent implements OnInit {
         public router: Router,
         public configService: ConfigService,
         public userAuthService: UserAuthService,
+        private cartService: CartService,
         public auth: AngularFireAuth,
         private confirmationService: ConfirmationService) {
 
@@ -120,7 +123,18 @@ export class NavbarComponent implements OnInit {
 
                 // if not null, then user is already logged in
                 if (response) {
-                    this.userAuthService.userInformation.user['username'] = response['email'];
+                    this.userAuthService.customerInformation.customer['id'] = response.uid;
+                    this.userAuthService.customerInformation.customer['email'] = response['email'];
+
+                    // get cart
+                    let params = new HttpParams().append("customerId",response.uid);
+                    this.cartService.viewCart(params).subscribe({
+                        next: value => {
+                            console.log(value);
+                        }
+                    });
+
+                    // this.userAuthService.
                     this.isLoggedIn = true;
                 } else {
                     // TODO clear global user profile state

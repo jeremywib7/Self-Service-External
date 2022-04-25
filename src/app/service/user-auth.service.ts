@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {User} from "../model/User";
 import {environment} from "../../environments/environment.prod";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Customer} from "../api/customer";
+import {CustomerProfile} from "../model/CustomerProfile";
 
 @Injectable({
     providedIn: 'root'
@@ -12,28 +12,8 @@ export class UserAuthService {
     private apiServerUrl = environment.apiBaseUrl;
     private project = environment.project;
 
-    userInformation = {
-        user: User
-    }
-
-    user = {
-        username: '',
-        userFirstName: '',
-        userLastName: '',
-        userPassword: '',
-        email: '',
-        role: {
-            roleName: '',
-            roleDescription: '',
-        },
-        gender: '',
-        dateJoined: '',
-        phoneNumber: '',
-        address: '',
-        imageUrl: '',
-        userCode: '',
-        bankAccount: '',
-        accessToken: '',
+    customerInformation = {
+        customer: CustomerProfile
     }
 
     requestHeader = new HttpHeaders(

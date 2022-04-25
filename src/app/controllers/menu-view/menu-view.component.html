@@ -30,7 +30,7 @@
                                decrementButtonClass="p-button-text" incrementButtonClass="p-button-text"
                                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
                 <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 sm:ml-5">
-                    <button (click)="addToCart()" pButton pRipple label="Add to Cart" class="flex-1 mr-5"></button>
+                    <button (click)="updateCart(product?.id)" pButton pRipple label="Add to CustomerCart" class="flex-1 mr-5"></button>
                     <i class="pi text-2xl cursor-pointer"
                        [ngClass]="{'pi-heart text-600': !liked, 'pi-heart-fill text-orange-500': liked}"
                        (click)="liked = !liked"></i>
