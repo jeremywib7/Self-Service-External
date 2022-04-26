@@ -4,7 +4,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ProductService} from "../../service/product.service";
 import {HttpParams} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
-import {Environment} from "@angular/cli/lib/config/workspace-schema";
 import {CartService} from "../../service/cart.service";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {UserAuthService} from "../../service/user-auth.service";
@@ -28,9 +27,7 @@ export class MenuViewComponent implements OnInit {
 
     selectedImageIndex: number = 0;
 
-    cartQuantity: number = 0;
-
-    currentQuantity: number = 1;
+    currentQuantity: number = 0;
 
     product: Product;
 
@@ -46,6 +43,7 @@ export class MenuViewComponent implements OnInit {
     }
 
     loadProduct() {
+        this.isDoneLoadProductInfo = false;
         let name = this.activatedRoute.snapshot.queryParamMap.get('name');
         let params = new HttpParams();
         params = params.append("name", name);
@@ -59,11 +57,14 @@ export class MenuViewComponent implements OnInit {
                 // if exists then set quantity based on the cart
                 (async () => {
                     while (this.cartService.cartInformation['orderedProduct'] === undefined)
-                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        await new Promise(resolve => setTimeout(resolve, 500));
                     let index = this.cartService.cartInformation['orderedProduct'].findIndex(
                         orderedProduct => orderedProduct.product.id === this.product.id
                     );
-                    this.currentQuantity = this.cartService.cartInformation['orderedProduct'][index].quantity;
+                    if (index !== -1) {
+                        this.currentQuantity = this.cartService.cartInformation['orderedProduct'][index].quantity;
+                    }
+                    this.isDoneLoadProductInfo = true;
                 })();
 
             }

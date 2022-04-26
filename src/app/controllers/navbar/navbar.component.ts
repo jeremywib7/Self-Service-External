@@ -1,11 +1,11 @@
-import {Component, NgZone, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AppConfig} from "../../api/appconfig";
-import {from, lastValueFrom, map, Subscription, switchMap} from "rxjs";
+import {from, Subscription} from "rxjs";
 import {ConfigService} from "../../service/app.config.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {UserAuthService} from "../../service/user-auth.service";
-import {ConfirmationService, MenuItem, Message, MessageService} from "primeng/api";
+import {ConfirmationService, MenuItem, Message} from "primeng/api";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {CartService} from "../../service/cart.service";
