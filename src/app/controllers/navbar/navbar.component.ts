@@ -10,6 +10,8 @@ import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {CartService} from "../../service/cart.service";
 import {HttpParams} from "@angular/common/http";
+import {CustomerProfile} from "../../model/CustomerProfile";
+import {CustomerCart} from "../../model/CustomerCart";
 
 @Component({
     selector: 'app-navbar',
@@ -39,8 +41,6 @@ export class NavbarComponent implements OnInit {
     isRegisterButtonLoading: boolean = false;
 
     isResetPasswordButtonLoading: boolean = false;
-
-    isLoggedIn: boolean = false;
 
     isCheckingLoginStatus: boolean = true;
 
@@ -123,22 +123,30 @@ export class NavbarComponent implements OnInit {
 
                 // if not null, then user is already logged in
                 if (response) {
-                    this.userAuthService.customerInformation.customer['id'] = response.uid;
-                    this.userAuthService.customerInformation.customer['email'] = response['email'];
+                    this.userAuthService.customer['id'] = response.uid;
+                    this.userAuthService.customer['email'] = response['email'];
 
-                    // get cart
-                    let params = new HttpParams().append("customerId",response.uid);
-                    this.cartService.viewCart(params).subscribe({
-                        next: (value:any) => {
-                            this.cartService.cartInformation = value.data;
-                        }
-                    });
+                    // because view cart in method register
+                    // if not will be called twice
+                    if (!this.isRegisterMode) {
+                        // get cart
+                        let params = new HttpParams().append("customerId",response.uid);
+                        this.cartService.viewCart(params).subscribe({
+                            next: (value:any) => {
+                                this.cartService.cart = value.data;
+                            }
+                        });
 
-                    // this.userAuthService.
-                    this.isLoggedIn = true;
+                    }
+
+                    this.userAuthService.isLoggedIn = true;
                 } else {
-                    // TODO clear global user profile state
-                    this.isLoggedIn = false;
+                    // clear global state
+                    this.userAuthService.customer = new CustomerProfile();
+                    this.cartService.cart = new CustomerCart();
+
+                    // set logged in to false
+                    this.userAuthService.isLoggedIn = false;
                 }
 
                 // set checking login status to false
@@ -237,7 +245,7 @@ export class NavbarComponent implements OnInit {
 
     openLoginOrLogoutDialog() {
         // if not logged in
-        if (!this.isLoggedIn) {
+        if (!this.userAuthService.isLoggedIn) {
             return this.showAuthDialog = true;
         }
         // if already logged in
@@ -319,6 +327,15 @@ export class NavbarComponent implements OnInit {
                         next: () => {
                             this.registerMsg = [];
                             this.showAuthDialog = false;
+
+                            // get cart information
+                            let params = new HttpParams().append("customerId", value.user.uid);
+                            this.cartService.viewCart(params).subscribe({
+                                next: (value:any) => {
+                                    this.cartService.cart = value.data;
+                                }
+                            });
+
                         },
                         error: err => {
                             // cancel created user by delete in firebase

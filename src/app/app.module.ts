@@ -145,9 +145,7 @@ import { NavbarComponent } from './controllers/navbar/navbar.component';
 import { MenuBookComponent } from './controllers/menu-book/menu-book.component';
 import {ConfirmationService, MessageService} from "primeng/api";
 import {RxFormBuilder} from "@rxweb/reactive-form-validators";
-import {AuthGuard} from "./_auth/auth.guard";
 import {IntersectionObserverHooks, LAZYLOAD_IMAGE_HOOKS, LazyLoadImageModule} from "ng-lazyload-image";
-import {AuthInterceptor} from "./_auth/auth.interceptor";
 import {LOADING_BAR_CONFIG} from "@ngx-loading-bar/core";
 import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
 import {environment} from "../environments/environment.prod";
@@ -335,15 +333,9 @@ import { ImageLoaderComponent } from './components/image-loader/image-loader.com
         ConfigService,
 
         // my
-        AuthGuard,
         {
             provide: LAZYLOAD_IMAGE_HOOKS,
             useClass: AppModule
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptor,
-            multi: true
         },
         {
             provide: LOADING_BAR_CONFIG,

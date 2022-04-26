@@ -7,14 +7,14 @@
     class="bg-gray-900 px-3 sm:px-6 py-3 flex align-items-stretch justify-content-center sm:justify-content-end border-bottom-1 surface-border text-sm">
     <a pRipple (click)="openLoginOrLogoutDialog()"
        class="text-white font-medium inline-flex align-items-center cursor-pointer px-3 hover:text-gray-200">
-        <i class="pi {{isLoggedIn ? 'pi-sign-out':'pi-sign-in'}} mr-2 sm:mr-3 text-sm"></i>
-        <span>{{isLoggedIn ? 'Sign Out' : 'Sign In '}}</span>
+        <i class="pi {{this.userAuthService.isLoggedIn ? 'pi-sign-out':'pi-sign-in'}} mr-2 sm:mr-3 text-sm"></i>
+        <span>{{this.userAuthService.isLoggedIn ? 'Sign Out' : 'Sign In '}}</span>
     </a>
     <div class="text-white mx-1 sm:mx-2">|</div>
     <a pRipple class="text-white font-medium inline-flex align-items-center cursor-pointer px-3 hover:text-gray-200"
-       (click)="isLoggedIn ? menu.toggle($event) : openLoginOrLogoutDialog()">
+       (click)="this.userAuthService.isLoggedIn ? menu.toggle($event) : openLoginOrLogoutDialog()">
         <i class="pi pi-user mr-2 sm:mr-3 text-sm"></i>
-        <span>{{isLoggedIn ? 'Profile' : 'Create Account'}}</span>
+        <span>{{this.userAuthService.isLoggedIn ? 'Profile' : 'Create Account'}}</span>
     </a>
 </div>
 <div class="surface-overlay shadow-1 px-3 sm:px-6 flex align-items-stretch relative" style="min-height: 80px">
@@ -169,7 +169,7 @@
             <button pButton pRipple icon="pi pi-chevron-right" class="p-button-text p-button-rounded"
                     pStyleClass="#slideover-cart" leaveToClass="hidden" leaveActiveClass="fadeoutright"></button>
             <div class="border-right-1 border-300 mx-3"></div>
-            <span class="text-900 text-xl font-medium inline-flex align-items-center ml-1">Your CustomerCart</span>
+            <span class="text-900 text-xl font-medium inline-flex align-items-center ml-1">Your Cart</span>
         </div>
         <div class="flex-auto overflow-y-auto py-5 px-3 md:px-5">
             <div class="flex align-items-start sm:align-items-center mb-4">
@@ -500,18 +500,6 @@
 
     </ng-template>
 </p-dialog>
-
-<p-confirmDialog #cd [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
-                 icon="pi pi-exclamation-triangle">
-    <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
-                (click)="cd.reject()"></button>
-        <button pButton pRipple
-                (click)="cd.accept()"
-                icon="pi pi-check" class="p-button-text" label="Yes"
-        ></button>
-    </ng-template>
-</p-confirmDialog>
 
 <!-- on User Profile Name clicked-->
 <p-menu #menu [popup]="true" [model]="userMenu"></p-menu>

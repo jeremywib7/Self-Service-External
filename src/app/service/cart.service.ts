@@ -12,9 +12,7 @@ export class CartService {
     private apiServerUrl = environment.apiBaseUrl;
     private project = environment.project;
 
-    cartInformation = {
-       cart: CustomerCart
-    }
+    public cart: CustomerCart = new CustomerCart();
 
     constructor(private httpClient: HttpClient) {
     }
@@ -26,6 +24,11 @@ export class CartService {
 
     viewCart(params: HttpParams) {
         return this.httpClient.get(`${this.apiServerUrl}/${this.project}/cart/view`, {params})
+            .pipe(map((data) => data || []))
+    }
+
+    removeProductFromCart(params: HttpParams) {
+        return this.httpClient.delete(`${this.apiServerUrl}/${this.project}/cart/delete`, {params})
             .pipe(map((data) => data || []))
     }
 }

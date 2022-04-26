@@ -25,19 +25,24 @@
             </div>
         </div>
         <div *ngIf="isDoneLoadProductInfo" class="col-12 lg:col-6 py-3 lg:pl-6">
-            <div class="flex align-items-center text-xl font-medium text-900 mb-4">
+            <div class="flex align-items-center justify-content-between text-xl font-medium text-900 mb-2">
                 <span>{{product?.name}}</span>
+                <button *ngIf="this.isInCart" (click)="onDeleteFromCart()" pButton pRipple icon="pi pi-trash"
+                        class="p-button-danger p-button-text p-button-rounded"></button>
             </div>
-            <span class="text-900 font-medium text-3xl block mb-5">{{product?.unitPrice | currency:'Rp. ':
-                'symbol':'3.0'}}</span>
+            <span class="text-900 font-medium text-3xl block mb-5">
+                {{product?.unitPrice | currency:'Rp. ':
+                'symbol':'3.0'}}
+            </span>
 
             <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between mb-5">
-                <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" min="0"
+                <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" min="1"
                                inputStyleClass="w-3rem text-center" [(ngModel)]="currentQuantity"
                                decrementButtonClass="p-button-text" incrementButtonClass="p-button-text"
                                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
                 <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 sm:ml-5">
-                    <button (click)="updateCart(product?.id)" pButton pRipple label="Add to Cart"
+                    <button (click)="onUpdateCart(product?.id)" pButton pRipple
+                            [label]="isInCart ? 'Update Cart': 'Add To Cart'"
                             class="flex-1 mr-5"></button>
                     <i class="pi text-2xl cursor-pointer"
                        [ngClass]="{'pi-heart text-600': !liked, 'pi-heart-fill text-orange-500': liked}"
@@ -61,7 +66,6 @@
             </div>
             <span class="text-900 font-medium text-3xl block mb-5">
                             <p-skeleton width="10rem" height="3rem"></p-skeleton>
-
             </span>
 
             <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between mb-5">

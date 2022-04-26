@@ -7,6 +7,8 @@ import {environment} from "../../../environments/environment";
 import {CartService} from "../../service/cart.service";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {UserAuthService} from "../../service/user-auth.service";
+import {Subscription} from "rxjs";
+import {ConfirmationService} from "primeng/api";
 
 @Component({
     selector: 'app-menu-view',
@@ -25,21 +27,29 @@ export class MenuViewComponent implements OnInit {
 
     liked: boolean;
 
+    isInCart: boolean = false;
+
     selectedImageIndex: number = 0;
 
     currentQuantity: number = 0;
 
     product: Product;
 
+    subscription: Subscription;
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private cartService: CartService,
+        private confirmationService: ConfirmationService,
         public auth: AngularFireAuth,
         private userAuthService: UserAuthService,
         private productService: ProductService
     ) {
         this.loadProduct();
+    }
+
+    ngOnInit(): void {
     }
 
     loadProduct() {
@@ -56,13 +66,18 @@ export class MenuViewComponent implements OnInit {
                 // then check this product in customer cart
                 // if exists then set quantity based on the cart
                 (async () => {
-                    while (this.cartService.cartInformation['orderedProduct'] === undefined)
-                        await new Promise(resolve => setTimeout(resolve, 500));
-                    let index = this.cartService.cartInformation['orderedProduct'].findIndex(
+                    while (this.cartService.cart['orderedProduct'] === undefined)
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    let index = this.cartService.cart['orderedProduct'].findIndex(
                         orderedProduct => orderedProduct.product.id === this.product.id
                     );
+                    // get quantity from global state
+                    // if -1 then still there is no quantity in the cart
                     if (index !== -1) {
-                        this.currentQuantity = this.cartService.cartInformation['orderedProduct'][index].quantity;
+                        this.isInCart = true;
+                        this.currentQuantity = this.cartService.cart['orderedProduct'][index].quantity;
+                    } else {
+                        this.isInCart = false;
                     }
                     this.isDoneLoadProductInfo = true;
                 })();
@@ -72,18 +87,37 @@ export class MenuViewComponent implements OnInit {
     }
 
 
-    ngOnInit(): void {
-    }
+    onUpdateCart(productId: string) {
 
-    updateCart(productId: string) {
         let params = new HttpParams();
-        params = params.append("customerId", this.userAuthService.customerInformation.customer['id']);
+        params = params.append("customerId", this.userAuthService.customer['id']);
         params = params.append("productId", productId);
         params = params.append("productQuantity", this.currentQuantity);
 
         this.cartService.updateCart(params).subscribe({
-            next: (value:any) => {
-                this.cartService.cartInformation['orderedProduct'] = value.data.orderedProduct;
+            next: (value: any) => {
+                this.cartService.cart['orderedProduct'] = value.data.orderedProduct;
+                this.isInCart = true;
+            }
+        });
+    }
+
+    onDeleteFromCart() {
+        this.confirmationService.confirm({
+            message: 'Are you sure you want remove ' + `<b>${this.product.name}</b>` + ' from your cart ?',
+            header: 'Remove Product',
+            accept: () => {
+                let params = new HttpParams()
+                    .append("customerId", this.userAuthService.customer['id'])
+                    .append("productId", this.product.id);
+                this.cartService.removeProductFromCart(params).subscribe({
+                    next: value => {
+                        console.log(value);
+                        // this.router.navigate(["/menu"]);
+                    }
+                })
+                // this.isCheckingLoginStatus = true;
+                // this.auth.signOut().then();
             }
         });
     }
