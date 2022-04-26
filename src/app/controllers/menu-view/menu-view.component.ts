@@ -27,8 +27,6 @@ export class MenuViewComponent implements OnInit {
 
     liked: boolean;
 
-    isInCart: boolean = false;
-
     selectedImageIndex: number = 0;
 
     currentQuantity: number = 0;
@@ -40,10 +38,10 @@ export class MenuViewComponent implements OnInit {
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private cartService: CartService,
+        public cartService: CartService,
         private confirmationService: ConfirmationService,
         public auth: AngularFireAuth,
-        private userAuthService: UserAuthService,
+        public userAuthService: UserAuthService,
         private productService: ProductService
     ) {
         this.loadProduct();
@@ -74,30 +72,14 @@ export class MenuViewComponent implements OnInit {
                     // get quantity from global state
                     // if -1 then still there is no quantity in the cart
                     if (index !== -1) {
-                        this.isInCart = true;
+                        this.cartService.isInCart = true;
                         this.currentQuantity = this.cartService.cart['orderedProduct'][index].quantity;
                     } else {
-                        this.isInCart = false;
+                        this.cartService.isInCart = false;
                     }
                     this.isDoneLoadProductInfo = true;
                 })();
 
-            }
-        });
-    }
-
-
-    onUpdateCart(productId: string) {
-
-        let params = new HttpParams();
-        params = params.append("customerId", this.userAuthService.customer['id']);
-        params = params.append("productId", productId);
-        params = params.append("productQuantity", this.currentQuantity);
-
-        this.cartService.updateCart(params).subscribe({
-            next: (value: any) => {
-                this.cartService.cart['orderedProduct'] = value.data.orderedProduct;
-                this.isInCart = true;
             }
         });
     }
@@ -111,13 +93,12 @@ export class MenuViewComponent implements OnInit {
                     .append("customerId", this.userAuthService.customer['id'])
                     .append("productId", this.product.id);
                 this.cartService.removeProductFromCart(params).subscribe({
-                    next: value => {
-                        console.log(value);
-                        // this.router.navigate(["/menu"]);
+                    next: (value: any) => {
+                        this.currentQuantity = 0;
+                        this.router.navigate(["/menu"]);
+                        this.cartService.cart.orderedProduct = value.data.orderedProduct;
                     }
                 })
-                // this.isCheckingLoginStatus = true;
-                // this.auth.signOut().then();
             }
         });
     }

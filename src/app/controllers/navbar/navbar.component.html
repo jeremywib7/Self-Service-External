@@ -134,28 +134,33 @@
         </ul>
     </div>
     <div class="flex ml-auto">
-        <ul class="list-none p-0 m-0 flex">
-            <li class="flex">
-                <a pRipple
-                   class="text-900 font-medium inline-flex align-items-center cursor-pointer px-2 sm:px-3 text-700 hover:text-primary">
-                    <i class="pi pi-search mr-2 lg:mr-3 text-xl sm:text-base"></i>
-                    <span class="hidden lg:inline">Search</span>
-                </a>
-            </li>
-            <li class="flex">
-                <a pRipple
-                   class="text-900 font-medium inline-flex align-items-center cursor-pointer px-2 sm:px-3 text-700 hover:text-primary">
-                    <i class="pi pi-heart mr-2 lg:mr-3 text-xl sm:text-base"></i>
-                    <span class="hidden lg:inline">Favorites</span>
-                </a>
-            </li>
-            <li class="flex" pStyleClass="#slideover-cart" enterClass="hidden"
+        <ul class="list-none p-0 m-0 flex">`
+            <li pStyleClass="#slideover-cart" enterClass="hidden"
                 enterActiveClass="fadeinright" leaveToClass="hidden" leaveActiveClass="fadeoutright"
                 [hideOnOutsideClick]="true">
                 <a pRipple
-                   class="text-900 font-medium inline-flex align-items-center cursor-pointer px-2 sm:px-3 text-700 hover:text-primary">
-                    <i class="pi pi-shopping-cart lg:mr-3 text-xl sm:text-base" pBadge></i>
-                    <span class="hidden lg:inline">CustomerCart</span>
+                   class="flex px-6 p-3 h-full lg:px-3 lg:py-2 align-items-center text-600 border-left-2 lg:border-bottom-2 lg:border-left-none border-transparent hover:border-blue-500 font-medium cursor-pointer transition-colors transition-duration-150">
+                    <i class="pi pi-shopping-cart text-base lg:text-2xl mr-2 lg:mr-0" pBadge severity="danger"
+                       [value]="cartService?.cart?.orderedProduct?.length.toString()"></i>
+                    <span class="block lg:hidden font-medium">Cart</span>
+                </a>
+            </li>
+            <li>
+                <a pRipple
+                   class="flex px-6 p-3 h-full lg:px-3 lg:py-2 align-items-center text-600 border-left-2 lg:border-bottom-2 lg:border-left-none border-transparent hover:border-blue-500 font-medium cursor-pointer transition-colors transition-duration-150">
+                    <i class="pi pi-bell text-base lg:text-2xl mr-2 lg:mr-0"></i>
+                    <span class="block lg:hidden font-medium">Notifications</span>
+                </a>
+            </li>
+            <li class="border-top-1 surface-border lg:border-top-none">
+                <a pRipple
+                   class="flex px-6 p-3 h-full lg:px-3 lg:py-2 align-items-center text-600 border-left-2 lg:border-bottom-2 lg:border-left-none border-transparent hover:border-blue-500 font-medium cursor-pointer transition-colors transition-duration-150">
+                    <img src="assets/images/blocks/avatars/circle/avatar-f-1.png" class="mr-3 lg:mr-0"
+                         style="width: 28px; height: 28px"/>
+                    <div class="block lg:hidden">
+                        <div class="text-900 font-medium">Josephine Lillard</div>
+                        <span class="text-600 font-medium text-sm">Marketing Specialist</span>
+                    </div>
                 </a>
             </li>
         </ul>
@@ -172,17 +177,24 @@
             <span class="text-900 text-xl font-medium inline-flex align-items-center ml-1">Your Cart</span>
         </div>
         <div class="flex-auto overflow-y-auto py-5 px-3 md:px-5">
-            <div class="flex align-items-start sm:align-items-center mb-4">
+            <div *ngFor="let orderedProduct of cartService?.cart?.orderedProduct"
+                 class="flex align-items-start sm:align-items-center mb-4">
                 <img src="assets/images/blocks/ecommerce/shoppingcart/shopping-cart-1-1.png"
                      class="w-6rem sm:w-8rem flex-shrink-0"/>
                 <div class="flex-auto px-3">
                     <div class="flex align-items-center justify-content-between mb-3">
-                        <span class="text-900 font-medium">Product Name</span>
-                        <span class="text-900 font-bold">$50.00</span>
+                        <span class="text-900 font-medium">{{orderedProduct.product.name}}</span>
+                        <span
+                            class="text-900 font-bold">{{orderedProduct.product.discountedPrice * orderedProduct.quantity
+                            | currency:'Rp. ':'symbol':'3.0'}}</span>
                     </div>
-                    <div class="text-600 text-sm mb-3">Green | Small</div>
+                    <!--                    <div class="text-600 text-sm mb-3">Green | Small</div>-->
                     <div class="flex flex-auto justify-content-between align-items-center">
-                        <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" min="0"
+                        <p-inputNumber [showButtons]="true"
+                                       [ngModel]="orderedProduct.quantity"
+                                       (onInput)="cartService.updateProductInCart(
+                                       orderedProduct.product.id, $event.value,this.userAuthService.customer['id'])"
+                                       buttonLayout="horizontal" spinnerMode="horizontal" min="0"
                                        inputStyleClass="w-3rem text-center py-2 px-1 border-transparent"
                                        class="border-1 surface-border border-round"
                                        decrementButtonClass="p-button-text py-1 px-1"

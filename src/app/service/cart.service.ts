@@ -14,7 +14,27 @@ export class CartService {
 
     public cart: CustomerCart = new CustomerCart();
 
+    public isInCart: boolean = false;
+
     constructor(private httpClient: HttpClient) {
+    }
+
+    public updateProductInCart(productId: string, currentQuantity: number, customerId: string) {
+        let params = new HttpParams();
+        params = params.append("customerId", customerId);
+        params = params.append("productId", productId);
+        params = params.append("productQuantity", currentQuantity);
+
+        this.updateCart(params).subscribe({
+            next: (value: any) => {
+                this.cart['orderedProduct'] = value.data.orderedProduct;
+                this.isInCart = true;
+            },
+            error: err => {
+                return false;
+            }
+        });
+
     }
 
     updateCart(params: HttpParams) {

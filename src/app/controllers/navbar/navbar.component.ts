@@ -114,7 +114,7 @@ export class NavbarComponent implements OnInit {
         public router: Router,
         public configService: ConfigService,
         public userAuthService: UserAuthService,
-        private cartService: CartService,
+        public cartService: CartService,
         public auth: AngularFireAuth,
         private confirmationService: ConfirmationService) {
 
@@ -199,6 +199,10 @@ export class NavbarComponent implements OnInit {
             //     icon: 'pi pi-fw pi-power-off'
             // }
         ]
+    }
+
+    onUpdateQuantity(event:any) {
+        console.log(event.value);
     }
 
     // reset Forgot password
