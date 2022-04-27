@@ -95,7 +95,7 @@ export class MenuViewComponent implements OnInit {
                 this.cartService.removeProductFromCart(params).subscribe({
                     next: (value: any) => {
                         this.currentQuantity = 0;
-                        this.router.navigate(["/menu"]);
+                        this.router.navigate(["/menu"]).then(r => null);
                         this.cartService.cart.orderedProduct = value.data.orderedProduct;
                     }
                 })

@@ -177,9 +177,11 @@
             <span class="text-900 text-xl font-medium inline-flex align-items-center ml-1">Your Cart</span>
         </div>
         <div class="flex-auto overflow-y-auto py-5 px-3 md:px-5">
-            <div *ngFor="let orderedProduct of cartService?.cart?.orderedProduct"
+            <div #allTheseThings *ngFor="let orderedProduct of cartService?.cart?.orderedProduct; let last = last"
                  class="flex align-items-start sm:align-items-center mb-4">
-                <img src="assets/images/blocks/ecommerce/shoppingcart/shopping-cart-1-1.png"
+                <img [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
+                                                'imageName=' + orderedProduct?.product?.images + '&' +
+                                                'productId=' + orderedProduct?.product?.id "
                      class="w-6rem sm:w-8rem flex-shrink-0"/>
                 <div class="flex-auto px-3">
                     <div class="flex align-items-center justify-content-between mb-3">

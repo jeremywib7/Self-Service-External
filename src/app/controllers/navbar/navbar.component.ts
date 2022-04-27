@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {Router} from "@angular/router";
 import {AppConfig} from "../../api/appconfig";
 import {from, Subscription} from "rxjs";
@@ -12,6 +12,7 @@ import {CartService} from "../../service/cart.service";
 import {HttpParams} from "@angular/common/http";
 import {CustomerProfile} from "../../model/CustomerProfile";
 import {CustomerCart} from "../../model/CustomerCart";
+import {environment} from "../../../environments/environment";
 
 @Component({
     selector: 'app-navbar',
@@ -19,6 +20,10 @@ import {CustomerCart} from "../../model/CustomerCart";
     styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+
+    // global environment
+    apiBaseUrl = environment.apiBaseUrl;
+    projectName = environment.project;
 
     config: AppConfig;
 
@@ -47,6 +52,8 @@ export class NavbarComponent implements OnInit {
     showAuthDialog: boolean = false;
 
     showResetPasswordDialog: boolean = false;
+
+    @ViewChildren('allTheseThings') things: QueryList<any>;
 
     loginForm: FormGroup = new FormGroup({
         email: new FormControl('', {
@@ -170,6 +177,18 @@ export class NavbarComponent implements OnInit {
         if (this.subscription) {
             this.subscription.unsubscribe();
         }
+    }
+
+    ngAfterViewInit() {
+        this.things.changes.subscribe({
+            next: value => {
+                this.ngForRendred();
+            }
+        })
+    }
+
+    ngForRendred() {
+        console.log('NgFor is Rendered');
     }
 
     initMenuUser() {

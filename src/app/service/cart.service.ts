@@ -29,9 +29,6 @@ export class CartService {
             next: (value: any) => {
                 this.cart['orderedProduct'] = value.data.orderedProduct;
                 this.isInCart = true;
-            },
-            error: err => {
-                return false;
             }
         });
 
