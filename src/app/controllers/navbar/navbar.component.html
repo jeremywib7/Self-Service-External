@@ -177,7 +177,8 @@
             <span class="text-900 text-xl font-medium inline-flex align-items-center ml-1">Your Cart</span>
         </div>
         <div class="flex-auto overflow-y-auto py-5 px-3 md:px-5">
-            <div #allTheseThings *ngFor="let orderedProduct of cartService?.cart?.orderedProduct; let last = last"
+            <div #allTheseThings
+                 *ngFor="let orderedProduct of cartService?.cart?.orderedProduct;let i = index; let last = last"
                  class="flex align-items-start sm:align-items-center mb-4">
                 <img [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
                                                 'imageName=' + orderedProduct?.product?.images + '&' +
@@ -194,15 +195,15 @@
                     <div class="flex flex-auto justify-content-between align-items-center">
                         <p-inputNumber [showButtons]="true"
                                        [ngModel]="orderedProduct.quantity"
-                                       (onInput)="cartService.updateProductInCart(
-                                       orderedProduct.product.id, $event.value,this.userAuthService.customer['id'])"
-                                       buttonLayout="horizontal" spinnerMode="horizontal" min="0"
+                                       (onInput)="onChangeQuantityFromCart($event.value, orderedProduct.product.id, i)"
+                                       buttonLayout="horizontal" spinnerMode="horizontal" min="1"
                                        inputStyleClass="w-3rem text-center py-2 px-1 border-transparent"
                                        class="border-1 surface-border border-round"
                                        decrementButtonClass="p-button-text py-1 px-1"
                                        incrementButtonClass="p-button-text py-1 px-1" incrementButtonIcon="pi pi-plus"
                                        decrementButtonIcon="pi pi-minus"></p-inputNumber>
-                        <button pButton pRipple icon="pi pi-trash"
+                        <button (click)="onDeleteFromCart(orderedProduct.product.name,orderedProduct.product.id, i)"
+                                pButton pRipple icon="pi pi-trash"
                                 class="p-button-danger p-button-text p-button-rounded"></button>
                     </div>
                 </div>

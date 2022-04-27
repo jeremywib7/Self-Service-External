@@ -137,9 +137,9 @@ export class NavbarComponent implements OnInit {
                     // if not will be called twice
                     if (!this.isRegisterMode) {
                         // get cart
-                        let params = new HttpParams().append("customerId",response.uid);
+                        let params = new HttpParams().append("customerId", response.uid);
                         this.cartService.viewCart(params).subscribe({
-                            next: (value:any) => {
+                            next: (value: any) => {
                                 this.cartService.cart = value.data;
                             }
                         });
@@ -220,7 +220,7 @@ export class NavbarComponent implements OnInit {
         ]
     }
 
-    onUpdateQuantity(event:any) {
+    onUpdateQuantity(event: any) {
         console.log(event.value);
     }
 
@@ -354,7 +354,7 @@ export class NavbarComponent implements OnInit {
                             // get cart information
                             let params = new HttpParams().append("customerId", value.user.uid);
                             this.cartService.viewCart(params).subscribe({
-                                next: (value:any) => {
+                                next: (value: any) => {
                                     this.cartService.cart = value.data;
                                 }
                             });
@@ -403,6 +403,65 @@ export class NavbarComponent implements OnInit {
             this.registerForm.markAllAsTouched();
         }
 
+    }
+
+    onChangeQuantityFromCart(quantity: number, productId: string, index: number) {
+        if (quantity >= 0) {
+            let params = new HttpParams();
+            params = params.append("customerId", this.userAuthService.customer['id']);
+            params = params.append("productId", productId);
+            params = params.append("productQuantity", quantity);
+
+            this.cartService.updateInCart(params).subscribe({
+                next: () => {
+                    this.cartService.cart.orderedProduct[index].quantity = quantity;
+                    this.cartService.isInCart = true;
+                }
+            });
+        }
+    }
+
+    onDeleteFromCart(productName: string, productId: string, index) {
+        this.confirmationService.confirm({
+            message: 'Are you sure you want remove ' + `<b>${productName}</b>` + ' from your cart ?',
+            header: 'Remove Product',
+            accept: () => {
+                // set skeleton in menu view active
+                this.cartService.isDoneLoadProductInfo = false;
+
+                // get index
+                // let index = this.cartService.cart['orderedProduct'].findIndex(
+                //     orderedProduct => orderedProduct.product.id === productId
+                // );
+
+                let params = new HttpParams()
+                    .append("customerId", this.userAuthService.customer['id'])
+                    .append("productId", productId);
+                this.cartService.removeProductFromCart(params).subscribe({
+                    next: () => {
+                        this.cartService.cart.orderedProduct.splice(index, 1);
+
+                        // check if user in menu view then update is in cart status,
+                        // so it updates the button in menu view
+                        let index1 = this.cartService.cart.orderedProduct.findIndex(
+                            orderedProduct => orderedProduct.product.id === this.cartService.lastViewedProductId
+                        );
+
+                        // last viewed product still in the cart
+                        if (index1 != -1) {
+                            this.cartService.isInCart = true;
+                        } else {
+                            // last viewed product is deleted
+                            this.cartService.isInCart = false;
+                        }
+
+                        // set skeleton in menu view active
+                        this.cartService.isDoneLoadProductInfo = true;
+
+                    }
+                })
+            }
+        });
     }
 
 

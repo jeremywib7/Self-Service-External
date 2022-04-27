@@ -21,8 +21,6 @@ export class MenuViewComponent implements OnInit {
     apiBaseUrl = environment.apiBaseUrl;
     projectName = environment.project;
 
-    isDoneLoadProductInfo: boolean = false;
-
     isDoneLoadMainImage: boolean = false;
 
     liked: boolean;
@@ -31,9 +29,9 @@ export class MenuViewComponent implements OnInit {
 
     currentQuantity: number = 0;
 
-    product: Product;
+    index: number = -1;
 
-    subscription: Subscription;
+    product: Product;
 
     constructor(
         private router: Router,
@@ -51,7 +49,9 @@ export class MenuViewComponent implements OnInit {
     }
 
     loadProduct() {
-        this.isDoneLoadProductInfo = false;
+        this.cartService.isDoneLoadProductInfo = false; // set skeleton
+
+        // create params
         let name = this.activatedRoute.snapshot.queryParamMap.get('name');
         let params = new HttpParams();
         params = params.append("name", name);
@@ -66,18 +66,25 @@ export class MenuViewComponent implements OnInit {
                 (async () => {
                     while (this.cartService.cart['orderedProduct'] === undefined)
                         await new Promise(resolve => setTimeout(resolve, 1000));
-                    let index = this.cartService.cart['orderedProduct'].findIndex(
+                    this.index = this.cartService.cart['orderedProduct'].findIndex(
                         orderedProduct => orderedProduct.product.id === this.product.id
                     );
+
                     // get quantity from global state
                     // if -1 then still there is no quantity in the cart
-                    if (index !== -1) {
+                    if (this.index !== -1) {
                         this.cartService.isInCart = true;
-                        this.currentQuantity = this.cartService.cart['orderedProduct'][index].quantity;
+                        this.currentQuantity = this.cartService.cart['orderedProduct'][this.index].quantity;
                     } else {
                         this.cartService.isInCart = false;
                     }
-                    this.isDoneLoadProductInfo = true;
+
+                    // set last viewed product id
+                    // to check if still exist after a deletion process from cart
+                    this.cartService.lastViewedProductId = this.product.id;
+
+                    // set skeleton loading done
+                    this.cartService.isDoneLoadProductInfo = true;
                 })();
 
             }
@@ -95,8 +102,8 @@ export class MenuViewComponent implements OnInit {
                 this.cartService.removeProductFromCart(params).subscribe({
                     next: (value: any) => {
                         this.currentQuantity = 0;
+                        this.cartService.cart.orderedProduct.splice(this.index,1)
                         this.router.navigate(["/menu"]).then(r => null);
-                        this.cartService.cart.orderedProduct = value.data.orderedProduct;
                     }
                 })
             }

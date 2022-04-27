@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="isDoneLoadProductInfo" class="col-12 lg:col-6 py-3 lg:pl-6">
+        <div *ngIf="cartService.isDoneLoadProductInfo" class="col-12 lg:col-6 py-3 lg:pl-6">
             <div class="flex align-items-center justify-content-between text-xl font-medium text-900 mb-2">
                 <span>{{product?.name}}</span>
                 <button *ngIf="cartService.isInCart" (click)="onDeleteFromCart()" pButton pRipple icon="pi pi-trash"
@@ -37,12 +37,13 @@
 
             <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between mb-5">
                 <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" min="1"
-                               inputStyleClass="w-3rem text-center" [(ngModel)]="currentQuantity"
+                               inputStyleClass="w-3rem text-center" [(ngModel)]="this.currentQuantity"
                                decrementButtonClass="p-button-text" incrementButtonClass="p-button-text"
                                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
                 <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 sm:ml-5">
                     <button
-                        (click)="cartService.updateProductInCart(product?.id, this.currentQuantity,this.userAuthService.customer['id'])"
+                        (click)="cartService.onSubmitProductToCart(product?.id, this.currentQuantity,
+                        this.userAuthService.customer['id'], this.index)"
                         pButton pRipple
                         [label]="cartService.isInCart ? 'Update Cart': 'Add To Cart'"
                         class="flex-1 mr-5"></button>
@@ -62,7 +63,7 @@
                 </li>
             </ol>
         </div>
-        <div *ngIf="!isDoneLoadProductInfo" class="col-12 lg:col-6 py-3 lg:pl-6">
+        <div *ngIf="!cartService.isDoneLoadProductInfo" class="col-12 lg:col-6 py-3 lg:pl-6">
             <div class="align-items-center text-xl font-medium text-900 mb-4">
                 <p-skeleton width="9rem" height="1.5rem"></p-skeleton>
             </div>

@@ -14,27 +14,45 @@ export class CartService {
 
     public cart: CustomerCart = new CustomerCart();
 
+    public isDoneLoadProductInfo: boolean = false;
+
     public isInCart: boolean = false;
+
+    public lastViewedProductId: string = "";
 
     constructor(private httpClient: HttpClient) {
     }
 
-    public updateProductInCart(productId: string, currentQuantity: number, customerId: string) {
+    public onSubmitProductToCart(productId: string, currentQuantity: number, customerId: string, index: number) {
         let params = new HttpParams();
         params = params.append("customerId", customerId);
         params = params.append("productId", productId);
         params = params.append("productQuantity", currentQuantity);
 
-        this.updateCart(params).subscribe({
-            next: (value: any) => {
-                this.cart['orderedProduct'] = value.data.orderedProduct;
-                this.isInCart = true;
-            }
-        });
+        if (this.isInCart) {
+            this.updateInCart(params).subscribe({
+                next: () => {
+                    this.cart.orderedProduct[index].quantity = currentQuantity;
+                    this.isInCart = true;
+                }
+            });
+        } else {
+            this.addToCart(params).subscribe({
+                next: (value: any) => {
+                    this.cart['orderedProduct'].push(value.data);
+                    this.isInCart = true;
+                }
+            });
+        }
 
     }
 
-    updateCart(params: HttpParams) {
+    addToCart(params: HttpParams) {
+        return this.httpClient.post(`${this.apiServerUrl}/${this.project}/cart/add`, null,
+            {params: params}).pipe(map((data) => data || []))
+    }
+
+    updateInCart(params: HttpParams) {
         return this.httpClient.post(`${this.apiServerUrl}/${this.project}/cart/update`, null,
             {params: params}).pipe(map((data) => data || []))
     }
