@@ -11,6 +11,7 @@ import {CartComponent} from "./controllers/cart/cart.component";
 import {AngularFireAuthGuard, redirectUnauthorizedTo} from "@angular/fire/compat/auth-guard";
 import {HistoryComponent} from "./controllers/history/history.component";
 import {MenuViewComponent} from "./controllers/menu-view/menu-view.component";
+import {OrderDetailComponent} from "./controllers/order-detail/order-detail.component";
 
 const redirectUnauthorizedToHome = () => redirectUnauthorizedTo(['']);
 
@@ -37,6 +38,12 @@ const redirectUnauthorizedToHome = () => redirectUnauthorizedTo(['']);
                     {
                         path: 'view',
                         component: MenuViewComponent,
+                        canActivate: [AngularFireAuthGuard],
+                        data: {authGuardPipe: redirectUnauthorizedToHome}
+                    },
+                    {
+                        path: 'order-detail',
+                        component: OrderDetailComponent,
                         canActivate: [AngularFireAuthGuard],
                         data: {authGuardPipe: redirectUnauthorizedToHome}
                     },

@@ -13,6 +13,7 @@ import {HttpParams} from "@angular/common/http";
 import {CustomerProfile} from "../../model/CustomerProfile";
 import {CustomerCart} from "../../model/CustomerCart";
 import {environment} from "../../../environments/environment";
+import {OrderService} from "../../service/order.service";
 
 @Component({
     selector: 'app-navbar',
@@ -37,6 +38,8 @@ export class NavbarComponent implements OnInit {
 
 
     subscription: Subscription;
+
+    totalPrice: number = 0;
 
 
     isRegisterMode: boolean = false;
@@ -121,6 +124,7 @@ export class NavbarComponent implements OnInit {
         public router: Router,
         public configService: ConfigService,
         public userAuthService: UserAuthService,
+        public orderService: OrderService,
         public cartService: CartService,
         public auth: AngularFireAuth,
         private confirmationService: ConfirmationService) {
@@ -136,11 +140,16 @@ export class NavbarComponent implements OnInit {
                     // because view cart in method register
                     // if not will be called twice
                     if (!this.isRegisterMode) {
-                        // get cart
+                        // get cart items
                         let params = new HttpParams().append("customerId", response.uid);
                         this.cartService.viewCart(params).subscribe({
                             next: (value: any) => {
-                                this.cartService.cart = value.data;
+                                this.cartService.cart = value.data
+
+                                // get total price of cart
+                                this.cartService.cart.orderedProduct.forEach((value1, index) => {
+                                    cartService.totalPrice += value1.product.discountedPrice * value1.quantity;
+                                })
                             }
                         });
 
@@ -405,6 +414,18 @@ export class NavbarComponent implements OnInit {
 
     }
 
+    onConfirmOrder() {
+        let params = new HttpParams().append("customerId", this.cartService.cart.customerProfile.id)
+
+        this.orderService.addOrder(params).subscribe({
+            next: value => {
+                // close sidecart
+                document.getElementById("closeSideCart").click();
+            }
+        })
+
+    }
+
     onChangeQuantityFromCart(quantity: number, productId: string, index: number) {
         if (quantity > 0) {
             let params = new HttpParams();
@@ -415,6 +436,11 @@ export class NavbarComponent implements OnInit {
             this.cartService.updateInCart(params).subscribe({
                 next: () => {
                     this.cartService.cart.orderedProduct[index].quantity = quantity;
+
+                    this.cartService.totalPrice = 0; // reset to 0
+
+                    // calculate total price of cart
+                    this.cartService.calculateTotalPrice();
                 }
             });
 
@@ -429,15 +455,17 @@ export class NavbarComponent implements OnInit {
                 // set skeleton in menu view active
                 this.cartService.isDoneLoadProductInfo = false;
 
+                // create http params
                 let params = new HttpParams()
                     .append("customerId", this.userAuthService.customer['id'])
                     .append("productId", productId);
+
                 this.cartService.removeProductFromCart(params).subscribe({
                     next: () => {
                         this.cartService.cart.orderedProduct.splice(index, 1);
 
-                        // check if user in menu view then update is in cart status,
-                        // so it updates the button in menu view
+                        // check if last viewed product still in the cart,
+                        // so it updates the button in menu view between add product or update product
                         let index1 = this.cartService.cart.orderedProduct.findIndex(
                             orderedProduct => orderedProduct.product.id === this.cartService.lastViewedProductId
                         );
@@ -445,8 +473,11 @@ export class NavbarComponent implements OnInit {
                         // if != -1 then last viewed product still in the cart
                         this.cartService.isInCart = index1 != -1;
 
-                        // set skeleton in menu view active
+                        // set skeleton in menu view done
                         this.cartService.isDoneLoadProductInfo = true;
+
+                        // calculate total price of cart
+                        this.cartService.calculateTotalPrice();
 
                     }
                 })

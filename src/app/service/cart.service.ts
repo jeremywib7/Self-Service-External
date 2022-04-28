@@ -3,6 +3,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {map} from "rxjs";
 import {CustomerCart} from "../model/CustomerCart";
+import {OrderedProduct} from "../model/OrderedProduct";
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +21,8 @@ export class CartService {
 
     public lastViewedProductId: string = "";
 
+    public totalPrice: number = 0;
+
     constructor(private httpClient: HttpClient) {
     }
 
@@ -32,23 +35,44 @@ export class CartService {
         if (this.isInCart) {
             this.updateInCart(params).subscribe({
                 next: () => {
+                    // search product index
                     let index = this.cart.orderedProduct.findIndex(
                         orderedProduct => orderedProduct.product.id === productId
                     );
 
+                    // update product quantity in cart
                     this.cart.orderedProduct[index].quantity = currentQuantity;
+
+                    // calculate total price in cart
+                    this.calculateTotalPrice();
+
                     this.isInCart = true;
                 }
             });
         } else {
             this.addToCart(params).subscribe({
                 next: (value: any) => {
+
+                    // add or push product in cart
                     this.cart['orderedProduct'].push(value.data);
+
+                    // // calculate total price in cart
+                    this.calculateTotalPrice();
+
                     this.isInCart = true;
                 }
             });
         }
 
+    }
+
+    // calculate total price of cart
+    public calculateTotalPrice() {
+        this.totalPrice = 0;
+
+        this.cart.orderedProduct.forEach((value1, index) => {
+            this.totalPrice += value1.product.discountedPrice * value1.quantity;
+        })
     }
 
     addToCart(params: HttpParams) {

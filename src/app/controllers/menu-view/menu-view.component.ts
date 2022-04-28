@@ -103,7 +103,10 @@ export class MenuViewComponent implements OnInit {
                     next: (value: any) => {
                         this.currentQuantity = 0;
                         this.cartService.cart.orderedProduct.splice(this.index,1)
+
                         this.router.navigate(["/menu"]).then(r => null);
+
+                        this.cartService.calculateTotalPrice();
                     }
                 })
             }
