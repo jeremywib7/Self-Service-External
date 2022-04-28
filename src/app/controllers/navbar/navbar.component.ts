@@ -406,7 +406,7 @@ export class NavbarComponent implements OnInit {
     }
 
     onChangeQuantityFromCart(quantity: number, productId: string, index: number) {
-        if (quantity >= 0) {
+        if (quantity > 0) {
             let params = new HttpParams();
             params = params.append("customerId", this.userAuthService.customer['id']);
             params = params.append("productId", productId);
@@ -415,9 +415,9 @@ export class NavbarComponent implements OnInit {
             this.cartService.updateInCart(params).subscribe({
                 next: () => {
                     this.cartService.cart.orderedProduct[index].quantity = quantity;
-                    this.cartService.isInCart = true;
                 }
             });
+
         }
     }
 
@@ -428,11 +428,6 @@ export class NavbarComponent implements OnInit {
             accept: () => {
                 // set skeleton in menu view active
                 this.cartService.isDoneLoadProductInfo = false;
-
-                // get index
-                // let index = this.cartService.cart['orderedProduct'].findIndex(
-                //     orderedProduct => orderedProduct.product.id === productId
-                // );
 
                 let params = new HttpParams()
                     .append("customerId", this.userAuthService.customer['id'])
@@ -447,13 +442,8 @@ export class NavbarComponent implements OnInit {
                             orderedProduct => orderedProduct.product.id === this.cartService.lastViewedProductId
                         );
 
-                        // last viewed product still in the cart
-                        if (index1 != -1) {
-                            this.cartService.isInCart = true;
-                        } else {
-                            // last viewed product is deleted
-                            this.cartService.isInCart = false;
-                        }
+                        // if != -1 then last viewed product still in the cart
+                        this.cartService.isInCart = index1 != -1;
 
                         // set skeleton in menu view active
                         this.cartService.isDoneLoadProductInfo = true;

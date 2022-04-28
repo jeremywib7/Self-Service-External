@@ -23,7 +23,7 @@ export class CartService {
     constructor(private httpClient: HttpClient) {
     }
 
-    public onSubmitProductToCart(productId: string, currentQuantity: number, customerId: string, index: number) {
+    public onSubmitProductToCart(productId: string, currentQuantity: number, customerId: string) {
         let params = new HttpParams();
         params = params.append("customerId", customerId);
         params = params.append("productId", productId);
@@ -32,6 +32,10 @@ export class CartService {
         if (this.isInCart) {
             this.updateInCart(params).subscribe({
                 next: () => {
+                    let index = this.cart.orderedProduct.findIndex(
+                        orderedProduct => orderedProduct.product.id === productId
+                    );
+
                     this.cart.orderedProduct[index].quantity = currentQuantity;
                     this.isInCart = true;
                 }
