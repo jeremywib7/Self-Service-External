@@ -417,7 +417,7 @@ export class NavbarComponent implements OnInit {
     onConfirmOrder() {
         let params = new HttpParams().append("customerId", this.cartService.cart.customerProfile.id)
 
-        this.orderService.addOrder(params).subscribe({
+        this.orderService.addOrder(params, this.cartService.cart.orderedProduct).subscribe({
             next: value => {
                 // close sidecart
                 document.getElementById("closeSideCart").click();

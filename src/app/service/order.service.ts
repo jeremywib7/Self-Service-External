@@ -17,8 +17,8 @@ export class OrderService {
     }
 
     //customerCarts: CustomerCart[]
-    addOrder(params: HttpParams) {
-        return this.httpClient.post(`${this.apiServerUrl}/${this.project}/order/add`, null, {params: params})
+    addOrder(params: HttpParams, orderedProduct: OrderedProduct[]) {
+        return this.httpClient.post(`${this.apiServerUrl}/${this.project}/order/add`, orderedProduct, {params: params})
             .pipe(map((data) => data || []))
     }
 }

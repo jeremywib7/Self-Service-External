@@ -35,15 +35,16 @@ export class CartService {
         if (this.isInCart) {
             this.updateInCart(params).subscribe({
                 next: () => {
-                    // search product index
+
+                    // search product index in cart
                     let index = this.cart.orderedProduct.findIndex(
                         orderedProduct => orderedProduct.product.id === productId
                     );
 
-                    // update product quantity in cart
+                    // update product quantity index in cart
                     this.cart.orderedProduct[index].quantity = currentQuantity;
 
-                    // calculate total price in cart
+                    // re-calculate total price in cart
                     this.calculateTotalPrice();
 
                     this.isInCart = true;
@@ -56,7 +57,7 @@ export class CartService {
                     // add or push product in cart
                     this.cart['orderedProduct'].push(value.data);
 
-                    // // calculate total price in cart
+                    // re-calculate total price in cart
                     this.calculateTotalPrice();
 
                     this.isInCart = true;
