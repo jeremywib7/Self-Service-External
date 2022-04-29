@@ -144,10 +144,12 @@ export class NavbarComponent implements OnInit {
                         let params = new HttpParams().append("customerId", response.uid);
                         this.cartService.viewCart(params).subscribe({
                             next: (value: any) => {
-                                this.cartService.cart = value.data
+                                this.cartService.cart = value.data;
+
+                                console.log(this.cartService.cart.cartOrderedProduct);
 
                                 // get total price of cart
-                                this.cartService.cart.orderedProduct.forEach((value1, index) => {
+                                this.cartService.cart.cartOrderedProduct.forEach((value1, index) => {
                                     cartService.totalPrice += value1.product.discountedPrice * value1.quantity;
                                 })
                             }
@@ -417,7 +419,7 @@ export class NavbarComponent implements OnInit {
     onConfirmOrder() {
         let params = new HttpParams().append("customerId", this.cartService.cart.customerProfile.id)
 
-        this.orderService.addOrder(params, this.cartService.cart.orderedProduct).subscribe({
+        this.orderService.addOrder(params, this.cartService.cart.cartOrderedProduct).subscribe({
             next: value => {
                 // close sidecart
                 document.getElementById("closeSideCart").click();
@@ -435,7 +437,7 @@ export class NavbarComponent implements OnInit {
 
             this.cartService.updateInCart(params).subscribe({
                 next: () => {
-                    this.cartService.cart.orderedProduct[index].quantity = quantity;
+                    this.cartService.cart.cartOrderedProduct[index].quantity = quantity;
 
                     this.cartService.totalPrice = 0; // reset to 0
 
@@ -462,11 +464,11 @@ export class NavbarComponent implements OnInit {
 
                 this.cartService.removeProductFromCart(params).subscribe({
                     next: () => {
-                        this.cartService.cart.orderedProduct.splice(index, 1);
+                        this.cartService.cart.cartOrderedProduct.splice(index, 1);
 
                         // check if last viewed product still in the cart,
                         // so it updates the button in menu view between add product or update product
-                        let index1 = this.cartService.cart.orderedProduct.findIndex(
+                        let index1 = this.cartService.cart.cartOrderedProduct.findIndex(
                             orderedProduct => orderedProduct.product.id === this.cartService.lastViewedProductId
                         );
 

@@ -64,17 +64,17 @@ export class MenuViewComponent implements OnInit {
                 // then check this product in customer cart
                 // if exists then set quantity based on the cart
                 (async () => {
-                    while (this.cartService.cart['orderedProduct'] === undefined)
+                    while (this.cartService.cart['cartOrderedProduct'] === undefined)
                         await new Promise(resolve => setTimeout(resolve, 1000));
-                    this.index = this.cartService.cart['orderedProduct'].findIndex(
-                        orderedProduct => orderedProduct.product.id === this.product.id
+                    this.index = this.cartService.cart['cartOrderedProduct'].findIndex(
+                        cartOrderedProduct => cartOrderedProduct.product.id === this.product.id
                     );
 
                     // get quantity from global state
                     // if -1 then still there is no quantity in the cart
                     if (this.index !== -1) {
                         this.cartService.isInCart = true;
-                        this.currentQuantity = this.cartService.cart['orderedProduct'][this.index].quantity;
+                        this.currentQuantity = this.cartService.cart['cartOrderedProduct'][this.index].quantity;
                     } else {
                         this.cartService.isInCart = false;
                     }
@@ -102,7 +102,7 @@ export class MenuViewComponent implements OnInit {
                 this.cartService.removeProductFromCart(params).subscribe({
                     next: (value: any) => {
                         this.currentQuantity = 0;
-                        this.cartService.cart.orderedProduct.splice(this.index,1)
+                        this.cartService.cart.cartOrderedProduct.splice(this.index,1)
 
                         this.router.navigate(["/menu"]).then(r => null);
 

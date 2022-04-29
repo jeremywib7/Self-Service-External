@@ -141,7 +141,7 @@
                 <a pRipple
                    class="flex px-6 p-3 h-full lg:px-3 lg:py-2 align-items-center text-600 border-left-2 lg:border-bottom-2 lg:border-left-none border-transparent hover:border-blue-500 font-medium cursor-pointer transition-colors transition-duration-150">
                     <i class="pi pi-shopping-cart text-base lg:text-2xl mr-2 lg:mr-0" pBadge severity="danger"
-                       [value]="cartService?.cart?.orderedProduct?.length.toString()"></i>
+                       [value]="cartService?.cart?.cartOrderedProduct?.length.toString()"></i>
                     <span class="block lg:hidden font-medium">Cart</span>
                 </a>
             </li>
@@ -178,7 +178,7 @@
         </div>
         <div class="flex-auto overflow-y-auto py-5 px-3 md:px-5">
             <div #allTheseThings
-                 *ngFor="let orderedProduct of cartService?.cart?.orderedProduct;let i = index; let last = last"
+                 *ngFor="let orderedProduct of cartService?.cart?.cartOrderedProduct;let i = index; let last = last"
                  class="flex align-items-start sm:align-items-center mb-4">
                 <img [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
                                                 'imageName=' + orderedProduct?.product?.images + '&' +
@@ -193,7 +193,12 @@
                     </div>
                     <!--                    <div class="text-600 text-sm mb-3">Green | Small</div>-->
                     <div class="flex flex-auto justify-content-between align-items-center">
-                        <p-inputNumber [showButtons]="true"
+                        <div *ngIf="orderedProduct.product.active === false ||
+                                       orderedProduct.product.deleted === true">
+                            <span class="text-pink-500">Product is not available</span>
+                        </div>
+                        <p-inputNumber *ngIf="orderedProduct.product.active === true &&
+                                       orderedProduct.product.deleted === false" [showButtons]="true"
                                        [ngModel]="orderedProduct.quantity"
                                        (onInput)="onChangeQuantityFromCart($event.value, orderedProduct.product.id, i)"
                                        buttonLayout="horizontal" spinnerMode="horizontal" min="1"
@@ -209,7 +214,7 @@
                 </div>
             </div>
 
-            <div *ngIf="cartService?.cart?.orderedProduct?.length === 0"
+            <div *ngIf="cartService?.cart?.cartOrderedProduct?.length === 0"
                  class="surface-section px-4 py-8 md:px-6 lg:px-8">
 
                 <div class="flex justify-content-center">
@@ -230,11 +235,11 @@
                     | currency:'Rp. ':'symbol':'3.0'}}</span>
             </div>
 
-            <p-inplace #confirmOrder [active]="false" [disabled]="!cartService?.cart?.orderedProduct?.length">
+            <p-inplace #confirmOrder [active]="false" [disabled]="!cartService?.cart?.cartOrderedProduct?.length">
                 <ng-template pTemplate="display">
                     <div class="inline-flex w-full">
                         <div class="grid align-items-center col-12">
-                            <button [disabled]="!cartService?.cart?.orderedProduct?.length" pButton pRipple
+                            <button [disabled]="!cartService?.cart?.cartOrderedProduct?.length" pButton pRipple
                                     class="p-button-success w-full" label="Place Order"></button>
                         </div>
                     </div>
@@ -243,9 +248,9 @@
                 <ng-template pTemplate="content">
                     <div class="grid">
                         <div class="col-10">
-                            <button [disabled]="!cartService?.cart?.orderedProduct?.length" pButton pRipple
+                            <button [disabled]="!cartService?.cart?.cartOrderedProduct?.length" pButton pRipple
                                     (click)="onConfirmOrder()"
-                                    [routerLink]="cartService?.cart?.orderedProduct?.length ? '/order-detail' : null"
+                                    [routerLink]="cartService?.cart?.cartOrderedProduct?.length ? '/order-detail' : null"
                                     class="p-button-success mb-3 w-full" label="Confirm Order"></button>
                         </div>
                         <div class="col-2">

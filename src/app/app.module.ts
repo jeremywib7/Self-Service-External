@@ -160,7 +160,7 @@ import {UserProfileComponent} from './controllers/user-profile/user-profile.comp
 import {MenuViewComponent} from './controllers/menu-view/menu-view.component';
 import {ImageLoaderComponent} from './components/image-loader/image-loader.component';
 import {OrderDetailComponent} from './controllers/order-detail/order-detail.component';
-import {OrderedProduct} from "./model/OrderedProduct";
+import {CartOrderedProduct} from "./model/CartOrderedProduct";
 import {OrderService} from "./service/order.service";
 
 @NgModule({

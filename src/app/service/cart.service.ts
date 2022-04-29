@@ -3,7 +3,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {map} from "rxjs";
 import {CustomerCart} from "../model/CustomerCart";
-import {OrderedProduct} from "../model/OrderedProduct";
+import {CartOrderedProduct} from "../model/CartOrderedProduct";
 
 @Injectable({
     providedIn: 'root'
@@ -37,12 +37,12 @@ export class CartService {
                 next: () => {
 
                     // search product index in cart
-                    let index = this.cart.orderedProduct.findIndex(
-                        orderedProduct => orderedProduct.product.id === productId
+                    let index = this.cart.cartOrderedProduct.findIndex(
+                        cartOrderedProduct => cartOrderedProduct.product.id === productId
                     );
 
                     // update product quantity index in cart
-                    this.cart.orderedProduct[index].quantity = currentQuantity;
+                    this.cart.cartOrderedProduct[index].quantity = currentQuantity;
 
                     // re-calculate total price in cart
                     this.calculateTotalPrice();
@@ -55,7 +55,7 @@ export class CartService {
                 next: (value: any) => {
 
                     // add or push product in cart
-                    this.cart['orderedProduct'].push(value.data);
+                    this.cart['cartOrderedProduct'].push(value.data);
 
                     // re-calculate total price in cart
                     this.calculateTotalPrice();
@@ -71,7 +71,7 @@ export class CartService {
     public calculateTotalPrice() {
         this.totalPrice = 0;
 
-        this.cart.orderedProduct.forEach((value1, index) => {
+        this.cart.cartOrderedProduct.forEach((value1, index) => {
             this.totalPrice += value1.product.discountedPrice * value1.quantity;
         })
     }

@@ -1,11 +1,11 @@
 import {CustomerProfile} from "./CustomerProfile";
-import {OrderedProduct} from "./OrderedProduct";
+import {CartOrderedProduct} from "./CartOrderedProduct";
 
 export class CustomerCart {
     id: string;
     dateCreated: string;
     updatedOn: string;
     customerProfile: CustomerProfile;
-    orderedProduct: OrderedProduct[];
+    cartOrderedProduct: CartOrderedProduct[];
 }
 

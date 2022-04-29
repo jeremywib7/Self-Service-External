@@ -9,6 +9,7 @@ export class Product {
     totalCalories: string;
     description: string;
     active: boolean;
+    deleted: boolean;
     unitPrice: number;
     discountedPrice: number;
     images: Image[];

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {OrderedProduct} from "../model/OrderedProduct";
+import {CartOrderedProduct} from "../model/CartOrderedProduct";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {map} from "rxjs";
 import {environment} from "../../environments/environment";
@@ -16,8 +16,7 @@ export class OrderService {
     constructor(private httpClient: HttpClient) {
     }
 
-    //customerCarts: CustomerCart[]
-    addOrder(params: HttpParams, orderedProduct: OrderedProduct[]) {
+    addOrder(params: HttpParams, orderedProduct: CartOrderedProduct[]) {
         return this.httpClient.post(`${this.apiServerUrl}/${this.project}/order/add`, orderedProduct, {params: params})
             .pipe(map((data) => data || []))
     }

@@ -1,7 +1,7 @@
 import {Product} from "./Product";
 import {CustomerCart} from "./CustomerCart";
 
-export class OrderedProduct {
+export class CartOrderedProduct {
     id: string;
     product: Product;
     quantity: number;
