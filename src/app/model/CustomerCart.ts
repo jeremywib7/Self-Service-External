@@ -6,6 +6,7 @@ export class CustomerCart {
     dateCreated: string;
     updatedOn: string;
     customerProfile: CustomerProfile;
+    isPlacedInOrder: boolean;
     cartOrderedProduct: CartOrderedProduct[];
 }
 

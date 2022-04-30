@@ -50,6 +50,8 @@ export class NavbarComponent implements OnInit {
 
     isResetPasswordButtonLoading: boolean = false;
 
+    isPlaceOrderButtonLoading: boolean = false;
+
     isCheckingLoginStatus: boolean = true;
 
     showAuthDialog: boolean = false;
@@ -145,8 +147,8 @@ export class NavbarComponent implements OnInit {
                         this.cartService.viewCart(params).subscribe({
                             next: (value: any) => {
                                 this.cartService.cart = value.data;
-
-                                console.log(this.cartService.cart.cartOrderedProduct);
+                                // this.cartService?.cart.isPlacedInOrder
+                                console.log(value.data);
 
                                 // get total price of cart
                                 this.cartService.cart.cartOrderedProduct.forEach((value1, index) => {
@@ -416,13 +418,21 @@ export class NavbarComponent implements OnInit {
 
     }
 
-    onConfirmOrder() {
+    onPlaceOrder() {
+        this.isPlaceOrderButtonLoading = true;
         let params = new HttpParams().append("customerId", this.cartService.cart.customerProfile.id)
 
         this.orderService.addOrder(params, this.cartService.cart.cartOrderedProduct).subscribe({
-            next: value => {
-                // close sidecart
+            next: () => {
+                this.isPlaceOrderButtonLoading = false;
+
+                // update status set as placed order true
+                this.cartService.cart.isPlacedInOrder = true;
+
+                // close side cart
                 document.getElementById("closeSideCart").click();
+
+                this.router.navigate(["/order-pending"]).then(null);
             }
         })
 

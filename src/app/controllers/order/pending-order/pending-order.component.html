@@ -1,0 +1,34 @@
+<div class="px-4 py-8 md:px-6 lg:px-8">
+    <!--    [imageSrc]="'./assets/angular-logo.png'"-->
+    <div class="card">
+        <div *ngIf="this.cartService?.cart?.customerProfile?.id;then content else skeleton">here is ignored</div>
+
+        <ng-template #content>
+            <div class="mt-4 mb-2 font-bold text-4xl text-900 text-center">One step ahead !</div>
+            <div class="text-center">
+                <qrcode
+                    *ngIf="this.cartService?.cart?.customerProfile?.id"
+                    [qrdata]="this.cartService?.cart?.customerProfile?.id"
+                    [allowEmptyString]="true"
+                    [ariaLabel]="'QR Code image with the following content...'"
+                    [cssClass]="'center'"
+                    [colorDark]="'#000000ff'"
+                    [colorLight]="'#ffffffff'"
+                    [elementType]="'canvas'"
+                    [errorCorrectionLevel]="'M'"
+                    [imageHeight]="75"
+                    [imageWidth]="75"
+                    [margin]="4"
+                    [scale]="1"
+                    [title]="'A custom title attribute'"
+                    [width]="300"
+                ></qrcode>
+            </div>
+            <p class="text-700 text-3xl mt-0 mb-6 text-center">Proceeds to cashier and enjoy your order.</p>
+        </ng-template>
+
+        <ng-template #skeleton>
+        </ng-template>
+
+    </div>
+</div>

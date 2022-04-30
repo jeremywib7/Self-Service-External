@@ -159,9 +159,11 @@ import {HistoryComponent} from './controllers/history/history.component';
 import {UserProfileComponent} from './controllers/user-profile/user-profile.component';
 import {MenuViewComponent} from './controllers/menu-view/menu-view.component';
 import {ImageLoaderComponent} from './components/image-loader/image-loader.component';
-import {OrderDetailComponent} from './controllers/order-detail/order-detail.component';
+import {SuccessOrderComponent} from './controllers/order/success-order/success-order.component';
 import {CartOrderedProduct} from "./model/CartOrderedProduct";
 import {OrderService} from "./service/order.service";
+import {PendingOrderComponent} from './controllers/order/pending-order/pending-order.component';
+import {QRCodeModule} from "angularx-qrcode";
 
 @NgModule({
     imports: [
@@ -264,6 +266,7 @@ import {OrderService} from "./service/order.service";
         AngularFirestoreModule,
         BlockUIModule,
         ProgressSpinnerModule,
+        QRCodeModule,
 
     ],
     declarations: [
@@ -319,7 +322,8 @@ import {OrderService} from "./service/order.service";
         UserProfileComponent,
         MenuViewComponent,
         ImageLoaderComponent,
-        OrderDetailComponent,
+        SuccessOrderComponent,
+        PendingOrderComponent,
     ],
     providers: [
         {

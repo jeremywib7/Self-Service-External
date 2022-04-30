@@ -171,7 +171,7 @@
 <div id="slideover-cart" class="hidden surface-overlay absolute z-3 top-0 right-0 shadow-2 w-full md:w-30rem h-full">
     <div class="flex flex-column h-full">
         <div class="surface-100 p-3 flex">
-            <button id="closeSideCart" pButton pRipple icon="pi pi-chevron-right" class="p-button-text p-button-rounded"
+            <button #closeSideCart id="closeSideCart" pButton pRipple icon="pi pi-chevron-right" class="p-button-text p-button-rounded"
                     pStyleClass="#slideover-cart" leaveToClass="hidden" leaveActiveClass="fadeoutright"></button>
             <div class="border-right-1 border-300 mx-3"></div>
             <span class="text-900 text-xl font-medium inline-flex align-items-center ml-1">Your Cart</span>
@@ -197,17 +197,20 @@
                                        orderedProduct.product.deleted === true">
                             <span class="text-pink-500">Product is not available</span>
                         </div>
-                        <p-inputNumber *ngIf="orderedProduct.product.active === true &&
-                                       orderedProduct.product.deleted === false" [showButtons]="true"
-                                       [ngModel]="orderedProduct.quantity"
-                                       (onInput)="onChangeQuantityFromCart($event.value, orderedProduct.product.id, i)"
-                                       buttonLayout="horizontal" spinnerMode="horizontal" min="1"
-                                       inputStyleClass="w-3rem text-center py-2 px-1 border-transparent"
-                                       class="border-1 surface-border border-round"
-                                       decrementButtonClass="p-button-text py-1 px-1"
-                                       incrementButtonClass="p-button-text py-1 px-1" incrementButtonIcon="pi pi-plus"
-                                       decrementButtonIcon="pi pi-minus"></p-inputNumber>
-                        <button (click)="onDeleteFromCart(orderedProduct.product.name,orderedProduct.product.id, i)"
+                        <p-inputNumber
+                            *ngIf="orderedProduct.product.active === true &&orderedProduct.product.deleted === false"
+                            [showButtons]="!cartService.cart.isPlacedInOrder"
+                            [readonly]="cartService.cart.isPlacedInOrder"
+                            [ngModel]="orderedProduct.quantity"
+                            (onInput)="onChangeQuantityFromCart($event.value, orderedProduct.product.id, i)"
+                            buttonLayout="horizontal" spinnerMode="horizontal" min="1"
+                            inputStyleClass="w-3rem text-center py-2 px-1 border-transparent"
+                            class="border-1 surface-border border-round"
+                            decrementButtonClass="p-button-text py-1 px-1"
+                            incrementButtonClass="p-button-text py-1 px-1" incrementButtonIcon="pi pi-plus"
+                            decrementButtonIcon="pi pi-minus"></p-inputNumber>
+                        <button *ngIf="!cartService.cart.isPlacedInOrder"
+                                (click)="onDeleteFromCart(orderedProduct.product.name,orderedProduct.product.id, i)"
                                 pButton pRipple icon="pi pi-trash"
                                 class="p-button-danger p-button-text p-button-rounded"></button>
                     </div>
@@ -235,35 +238,44 @@
                     | currency:'Rp. ':'symbol':'3.0'}}</span>
             </div>
 
-            <p-inplace #confirmOrder [active]="false" [disabled]="!cartService?.cart?.cartOrderedProduct?.length">
-                <ng-template pTemplate="display">
-                    <div class="inline-flex w-full">
-                        <div class="grid align-items-center col-12">
-                            <button [disabled]="!cartService?.cart?.cartOrderedProduct?.length" pButton pRipple
-                                    class="p-button-success w-full" label="Place Order"></button>
-                        </div>
-                    </div>
+            <div *ngIf="!cartService?.cart?.isPlacedInOrder;then content else other_content">here is ignored</div>
 
-                </ng-template>
-                <ng-template pTemplate="content">
-                    <div class="grid">
-                        <div class="col-10">
-                            <button [disabled]="!cartService?.cart?.cartOrderedProduct?.length" pButton pRipple
-                                    (click)="onConfirmOrder()"
-                                    [routerLink]="cartService?.cart?.cartOrderedProduct?.length ? '/order-detail' : null"
-                                    class="p-button-success mb-3 w-full" label="Confirm Order"></button>
+            <ng-template #content>
+                <p-inplace #confirmOrder [active]="false"
+                           [disabled]="!cartService?.cart?.cartOrderedProduct?.length">
+                    <ng-template pTemplate="display">
+                        <div class="inline-flex w-full">
+                            <div class="grid align-items-center col-12">
+                                <button [disabled]="!cartService?.cart?.cartOrderedProduct?.length" pButton pRipple
+                                        class="p-button-success w-full" label="Place Order"></button>
+                            </div>
                         </div>
-                        <div class="col-2">
-                            <button pButton pRipple (click)="confirmOrder.active = false"
-                                    class="p-button-danger mb-3 w-full" icon="pi pi-times"></button>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        Please double check your order, to make sure everything is correct
-                    </div>
-                </ng-template>
-            </p-inplace>
 
+                    </ng-template>
+                    <ng-template pTemplate="content">
+                        <div class="grid">
+                            <div class="col-10">
+                                <button [disabled]="!cartService?.cart?.cartOrderedProduct?.length" pButton pRipple
+                                        (click)="onPlaceOrder()"
+                                        [loading]="isPlaceOrderButtonLoading"
+                                        class="p-button-success mb-3 w-full" label="Confirm Order"></button>
+                            </div>
+                            <div class="col-2">
+                                <button pButton pRipple (click)="confirmOrder.active = false"
+                                        class="p-button-danger mb-3 w-full" icon="pi pi-times"></button>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            Please double check your order, to make sure everything is correct
+                        </div>
+                    </ng-template>
+                </p-inplace>
+            </ng-template>
+            <ng-template #other_content>
+                <button routerLink="/order-pending" (click)="closeSideCart.click()" pButton pRipple
+                        class="p-button-success mb-3 w-full"
+                        label="Pay"></button>
+            </ng-template>
 
         </div>
     </div>
