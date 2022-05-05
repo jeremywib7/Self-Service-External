@@ -71,9 +71,11 @@ export class CartService {
     public calculateTotalPrice() {
         this.totalPrice = 0;
 
-        this.cart.cartOrderedProduct.forEach((value1, index) => {
+        this.cart.cartOrderedProduct?.forEach((value1, index) => {
             this.totalPrice += value1.product.discountedPrice * value1.quantity;
         })
+
+        return this.totalPrice;
     }
 
     addToCart(params: HttpParams) {

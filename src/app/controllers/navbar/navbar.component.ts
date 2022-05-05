@@ -147,13 +147,13 @@ export class NavbarComponent implements OnInit {
                         this.cartService.viewCart(params).subscribe({
                             next: (value: any) => {
                                 this.cartService.cart = value.data;
-                                // this.cartService?.cart.isPlacedInOrder
+
+                                // update user profile data
+                                this.userAuthService.formProfile.patchValue(value.data.customerProfile);
+
                                 console.log(value.data);
 
-                                // get total price of cart
-                                this.cartService.cart.cartOrderedProduct.forEach((value1, index) => {
-                                    cartService.totalPrice += value1.product.discountedPrice * value1.quantity;
-                                })
+                                this.cartService.calculateTotalPrice();
                             }
                         });
 
@@ -300,44 +300,40 @@ export class NavbarComponent implements OnInit {
         if (this.loginForm.valid) {
             this.isLoginButtonLoading = true;
 
-            if (this.isRegisterMode) {
+            const {email, password} = this.loginForm.value;
 
-            } else {
-                const {email, password} = this.loginForm.value;
-
-                this.auth.signInWithEmailAndPassword(email, password).then(user => {
-                    this.loginMsg = [];
-                    this.showAuthDialog = false;
-                }).catch(
-                    err => {
-                        let errorMessage = "";
-                        switch (err.code) {
-                            case 'auth/user-disabled': {
-                                errorMessage = 'Sorry your user is disabled.';
-                                break;
-                            }
-                            case 'auth/user-not-found': {
-                                errorMessage = 'Sorry user not found.';
-                                break;
-                            }
-
-                            case 'auth/wrong-password': {
-                                errorMessage = 'Sorry, incorrect password entered. Please try again.';
-                                break;
-                            }
-
-                            default: {
-                                errorMessage = 'Login error try again later.';
-                                break;
-                            }
+            this.auth.signInWithEmailAndPassword(email, password).then(user => {
+                this.loginMsg = [];
+                this.showAuthDialog = false;
+            }).catch(
+                err => {
+                    let errorMessage = "";
+                    switch (err.code) {
+                        case 'auth/user-disabled': {
+                            errorMessage = 'Sorry your user is disabled.';
+                            break;
+                        }
+                        case 'auth/user-not-found': {
+                            errorMessage = 'Sorry user not found.';
+                            break;
                         }
 
-                        return this.loginMsg = [{
-                            severity: 'error', detail: errorMessage
-                        }]
+                        case 'auth/wrong-password': {
+                            errorMessage = 'Sorry, incorrect password entered. Please try again.';
+                            break;
+                        }
+
+                        default: {
+                            errorMessage = 'Login error try again later.';
+                            break;
+                        }
                     }
-                ).finally(() => this.isLoginButtonLoading = false);
-            }
+
+                    return this.loginMsg = [{
+                        severity: 'error', detail: errorMessage
+                    }]
+                }
+            ).finally(() => this.isLoginButtonLoading = false);
 
         } else {
             this.loginForm.markAllAsTouched();

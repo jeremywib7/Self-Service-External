@@ -7,7 +7,6 @@ import {environment} from "../../../environments/environment";
 import {CartService} from "../../service/cart.service";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {UserAuthService} from "../../service/user-auth.service";
-import {Subscription} from "rxjs";
 import {ConfirmationService} from "primeng/api";
 
 @Component({

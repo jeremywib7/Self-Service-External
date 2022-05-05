@@ -144,7 +144,7 @@ import {HomeComponent} from './controllers/home/home.component';
 import {NavbarComponent} from './controllers/navbar/navbar.component';
 import {MenuBookComponent} from './controllers/menu-book/menu-book.component';
 import {ConfirmationService, MessageService} from "primeng/api";
-import {RxFormBuilder} from "@rxweb/reactive-form-validators";
+import {RxFormBuilder, RxwebValidators} from "@rxweb/reactive-form-validators";
 import {IntersectionObserverHooks, LAZYLOAD_IMAGE_HOOKS, LazyLoadImageModule} from "ng-lazyload-image";
 import {LOADING_BAR_CONFIG} from "@ngx-loading-bar/core";
 import {LoadingBarHttpClientModule} from "@ngx-loading-bar/http-client";
@@ -354,6 +354,7 @@ import {QRCodeModule} from "angularx-qrcode";
         OrderService,
         ProductService,
         RxFormBuilder,
+        RxwebValidators
     ],
     bootstrap: [AppComponent]
 })

@@ -1,6 +1,5 @@
-<div class="px-4 py-8 md:px-6 lg:px-8">
-    <!--    [imageSrc]="'./assets/angular-logo.png'"-->
-    <div class="card">
+<div class="surface-section px-4 py-8 md:px-6 lg:px-8">
+    <div class="flex flex-column align-items-center mb-6">
         <div *ngIf="this.cartService?.cart?.customerProfile?.id;then content else skeleton">here is ignored</div>
 
         <ng-template #content>
@@ -24,11 +23,75 @@
                     [width]="300"
                 ></qrcode>
             </div>
-            <p class="text-700 text-3xl mt-0 mb-6 text-center">Proceeds to cashier and enjoy your order.</p>
+            <p class="text-700 text-3xl mt-0 mb-6 text-center">Show this QR Code in cashier. <br>
+                Avoid cash hassle by keeping the exact amount ready</p>
         </ng-template>
 
         <ng-template #skeleton>
         </ng-template>
-
+        <div class="text-900 text-4xl mb-4 font-medium text-center">Your cart total is
+            {{cartService.calculateTotalPrice() | currency:'Rp. ':'symbol':'3.0'}}</div>
     </div>
+    <ul class="list-none p-0 m-0">
+        <li
+            *ngFor="let orderedProduct of cartService?.cart?.cartOrderedProduct;let i = index; let last = last"
+            class="flex flex-column md:flex-row py-6 border-top-1 border-bottom-1 surface-border md:align-items-center">
+            <img defaultImage="/assets/demo/images/galleria/spinner.gif"
+            [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
+                                'imageName=' + orderedProduct?.product.images[0]?.imageName + '&' +
+                                'productId=' + orderedProduct.product.id " [alt]="orderedProduct.product.name"
+                 class="w-10rem h-10rem flex-shrink-0 mx-auto md:mx-0"/>
+            <div class="flex-auto py-5 md:pl-5">
+                <div
+                    class="flex flex-wrap align-items-start sm:align-items-center sm:flex-row sm:justify-content-between surface-border pb-6">
+                    <div class="w-full sm:w-6 flex flex-column">
+                        <span class="text-900 text-xl font-medium mb-3">{{orderedProduct?.product?.name}}</span>
+                    </div>
+                    <div class="w-full sm:w-6 flex align-items-start justify-content-between mt-3 sm:mt-0">
+
+                        <div>
+                            <p-inputNumber
+                                [readonly]="true"
+                                prefix="Qty : "
+                                [ngModel]="orderedProduct.quantity"
+                                buttonLayout="horizontal" spinnerMode="horizontal" min="1"
+                                inputStyleClass="w-6rem text-center py-2 px-1 border-transparent"
+                                class="border-2 surface-border border-round"
+                                decrementButtonClass="p-button-text py-1 px-1"
+                                incrementButtonClass="p-button-text py-1 px-1" incrementButtonIcon="pi pi-plus"
+                                decrementButtonIcon="pi pi-minus"></p-inputNumber>
+                        </div>
+                        <div class="flex flex-column sm:align-items-end">
+                            <span class="text-900 text-xl font-medium mb-2 sm:mb-3">
+                                {{orderedProduct?.product?.discountedPrice | currency:'Rp. ':'symbol':'3.0'}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="flex">
+        <div class="w-12rem hidden md:block"></div>
+        <ul class="list-none py-0 pr-0 pl-0 md:pl-5 mt-6 mx-0 mb-0 flex-auto">
+            <!--            <li class="flex justify-content-between mb-4">-->
+            <!--                <span class="text-xl text-900">Subtotal</span>-->
+            <!--                <span class="text-xl text-900">$82.00</span>-->
+            <!--            </li>-->
+            <!--            <li class="flex justify-content-between mb-4">-->
+            <!--                <span class="text-xl text-900">Shipping</span>-->
+            <!--                <span class="text-xl text-900">Free</span>-->
+            <!--            </li>-->
+            <!--            <li class="flex justify-content-between mb-4">-->
+            <!--                <span class="text-xl text-900">VAT</span>-->
+            <!--                <span class="text-xl text-900">$8.00</span>-->
+            <!--            </li>-->
+            <li class="flex justify-content-between surface-border mb-4 pt-4">
+                <span class="text-xl text-900 font-bold text-3xl">Total</span>
+                <span
+                    class="text-xl text-900 font-bold text-3xl">{{cartService.calculateTotalPrice() | currency:'Rp. ':'symbol':'3.0'}}</span>
+            </li>
+        </ul>
+    </div>
+
 </div>

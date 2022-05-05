@@ -13,6 +13,7 @@ import {HistoryComponent} from "./controllers/history/history.component";
 import {MenuViewComponent} from "./controllers/menu-view/menu-view.component";
 import {SuccessOrderComponent} from "./controllers/order/success-order/success-order.component";
 import {PendingOrderComponent} from "./controllers/order/pending-order/pending-order.component";
+import {UserProfileComponent} from "./controllers/user-profile/user-profile.component";
 
 const redirectUnauthorizedToHome = () => redirectUnauthorizedTo(['']);
 
@@ -24,6 +25,12 @@ const redirectUnauthorizedToHome = () => redirectUnauthorizedTo(['']);
                 children: [
                     {path: '', component: HomeComponent},
                     {path: 'menu', component: MenuBookComponent},
+                    {
+                        path: 'profile',
+                        component: UserProfileComponent,
+                        canActivate: [AngularFireAuthGuard],
+                        data: {authGuardPipe: redirectUnauthorizedToHome}
+                    },
                     {
                         path: 'cart',
                         component: CartComponent,

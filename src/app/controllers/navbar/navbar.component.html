@@ -181,7 +181,7 @@
                  *ngFor="let orderedProduct of cartService?.cart?.cartOrderedProduct;let i = index; let last = last"
                  class="flex align-items-start sm:align-items-center mb-4">
                 <img [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
-                                                'imageName=' + orderedProduct?.product?.images + '&' +
+                                                'imageName=' + orderedProduct?.product?.images[0].imageName + '&' +
                                                 'productId=' + orderedProduct?.product?.id "
                      class="w-6rem sm:w-8rem flex-shrink-0"/>
                 <div class="flex-auto px-3">

@@ -32,6 +32,15 @@ img.ng-lazyloaded {
     }
 }
 
+.two-max-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+
 .item-badge {
     border-radius: var(--border-radius);
     padding: .25em .5rem;
