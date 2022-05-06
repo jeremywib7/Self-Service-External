@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
@@ -160,10 +160,13 @@ import {UserProfileComponent} from './controllers/user-profile/user-profile.comp
 import {MenuViewComponent} from './controllers/menu-view/menu-view.component';
 import {ImageLoaderComponent} from './components/image-loader/image-loader.component';
 import {SuccessOrderComponent} from './controllers/order/success-order/success-order.component';
-import {CartOrderedProduct} from "./model/CartOrderedProduct";
 import {OrderService} from "./service/order.service";
 import {PendingOrderComponent} from './controllers/order/pending-order/pending-order.component';
 import {QRCodeModule} from "angularx-qrcode";
+
+import { registerLocaleData } from '@angular/common';
+import localeId from '@angular/common/locales/id';
+registerLocaleData(localeId, 'id');
 
 @NgModule({
     imports: [
@@ -328,6 +331,9 @@ import {QRCodeModule} from "angularx-qrcode";
     providers: [
         {
             provide: LocationStrategy, useClass: HashLocationStrategy
+        },
+        {
+            provide: LOCALE_ID, useValue: "id-ID"
         },
         CountryService,
         CustomerService,

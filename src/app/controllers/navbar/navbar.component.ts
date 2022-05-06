@@ -11,7 +11,7 @@ import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {CartService} from "../../service/cart.service";
 import {HttpParams} from "@angular/common/http";
 import {CustomerProfile} from "../../model/CustomerProfile";
-import {CustomerCart} from "../../model/CustomerCart";
+import {CustomerCart} from "../../model/customerCart/CustomerCart";
 import {environment} from "../../../environments/environment";
 import {OrderService} from "../../service/order.service";
 
@@ -74,6 +74,7 @@ export class NavbarComponent implements OnInit {
             ], updateOn: 'blur'
         }),
     });
+
 
     registerForm: FormGroup = new FormGroup({
         id: new FormControl(''),
@@ -151,7 +152,13 @@ export class NavbarComponent implements OnInit {
                                 // update user profile data
                                 this.userAuthService.formProfile.patchValue(value.data.customerProfile);
 
-                                console.log(value.data);
+                                // view customer orders
+                                this.orderService.viewCustomerOrders(response.uid).subscribe({
+                                    next: (value: any) => {
+                                        this.orderService.customerOrders = value.data;
+                                        console.log(value.data);
+                                    }
+                                });
 
                                 this.cartService.calculateTotalPrice();
                             }
@@ -175,7 +182,6 @@ export class NavbarComponent implements OnInit {
         });
 
     }
-
 
     ngOnInit(): void {
         this.config = this.configService.config;

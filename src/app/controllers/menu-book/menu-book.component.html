@@ -88,12 +88,12 @@
                                     <div>
                                         <span class="text-xl font-medium {{product.discount ? 'text-pink-500':''}}">
                                            {{product.discountedPrice | currency:'Rp. ':'symbol':
-                                            '3.0'}}
+                                            '2.0'}}
                                         </span>
                                         <span *ngIf="product.discount"
                                               class="text-xl font-medium text-700 line-through ml-3">
                                             {{product.unitPrice | currency:'Rp. ':'symbol':
-                                            '3.0'}}
+                                            '2.0'}}
                                         </span>
                                     </div>
                                     <div>

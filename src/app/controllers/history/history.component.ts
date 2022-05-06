@@ -1,15 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {OrderService} from "../../service/order.service";
+import {HttpParams} from "@angular/common/http";
+import Big from 'big.js';
+import {UserAuthService} from "../../service/user-auth.service";
+import {environment} from "../../../environments/environment";
 
 @Component({
-  selector: 'app-history',
-  templateUrl: './history.component.html',
-  styleUrls: ['./history.component.scss']
+    selector: 'app-history',
+    templateUrl: './history.component.html',
+    styleUrls: ['./history.component.scss']
 })
 export class HistoryComponent implements OnInit {
 
-  constructor() { }
+    apiBaseUrl = environment.apiBaseUrl;
+    projectName = environment.project;
 
-  ngOnInit(): void {
-  }
+    constructor(
+        public userAuthService: UserAuthService,
+        public orderService: OrderService
+    ) {
+    }
+
+    ngOnInit(): void {
+    }
 
 }

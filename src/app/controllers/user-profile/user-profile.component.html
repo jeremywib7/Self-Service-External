@@ -89,7 +89,8 @@
 
                     <div class="field mb-4">
                         <label class="font-medium text-900">Password</label>
-                        <p-password formControlName="password" [toggleMask]="true" [ngClass]="{'ng-invalid ng-dirty' :
+                        <p-password styleClass="p-password p-component p-inputwrapper p-input-icon-right"
+                                    formControlName="password" [toggleMask]="true" [ngClass]="{'ng-invalid ng-dirty' :
                         this.userService.formProfile.controls.password?.errors &&
                         (this.userService.formProfile.controls.password?.touched || this.userService.formProfile.controls.password?.dirty)}">
                             <ng-template pTemplate="header">
@@ -109,7 +110,8 @@
                     </div>
 
                     <div class="col-12">
-                        <button (click)="saveUserProfile()" pButton pRipple label="Save Changes" class="w-auto mt-3"></button>
+                        <button (click)="saveUserProfile()" pButton pRipple label="Save Changes"
+                                class="w-auto mt-3"></button>
                     </div>
                 </div>
             </form>

@@ -1,4 +1,4 @@
-import {CustomerProfile} from "./CustomerProfile";
+import {CustomerProfile} from "../CustomerProfile";
 import {CartOrderedProduct} from "./CartOrderedProduct";
 
 export class CustomerCart {

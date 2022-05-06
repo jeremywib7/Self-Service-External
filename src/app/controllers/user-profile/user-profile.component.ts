@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CartService} from "../../service/cart.service";
 import {environment} from "../../../environments/environment.prod";
 import {UserAuthService} from "../../service/user-auth.service";
@@ -14,8 +14,6 @@ export class UserProfileComponent implements OnInit {
 
     apiBaseUrl = environment.apiBaseUrl;
     projectName = environment.project;
-
-    userImgUrl: string;
 
     constructor(
         public cartService: CartService,

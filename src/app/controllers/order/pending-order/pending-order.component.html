@@ -37,9 +37,10 @@
             *ngFor="let orderedProduct of cartService?.cart?.cartOrderedProduct;let i = index; let last = last"
             class="flex flex-column md:flex-row py-6 border-top-1 border-bottom-1 surface-border md:align-items-center">
             <img defaultImage="/assets/demo/images/galleria/spinner.gif"
-            [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
-                                'imageName=' + orderedProduct?.product.images[0]?.imageName + '&' +
-                                'productId=' + orderedProduct.product.id " [alt]="orderedProduct.product.name"
+                 [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
+                                                'imageName=' + orderedProduct?.product?.images[0].imageName + '&' +
+                                                'productId=' + orderedProduct?.product?.id "
+                 [alt]="orderedProduct.product.name"
                  class="w-10rem h-10rem flex-shrink-0 mx-auto md:mx-0"/>
             <div class="flex-auto py-5 md:pl-5">
                 <div
