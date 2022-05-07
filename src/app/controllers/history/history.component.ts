@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {OrderService} from "../../service/order.service";
-import {HttpParams} from "@angular/common/http";
-import Big from 'big.js';
 import {UserAuthService} from "../../service/user-auth.service";
 import {environment} from "../../../environments/environment";
 
@@ -22,6 +20,17 @@ export class HistoryComponent implements OnInit {
     }
 
     ngOnInit(): void {
+    }
+
+    backgroundStatus(status: string) {
+        switch (status) {
+            case "Completed":
+                return "bg-green-500";
+            case "Waiting for payment":
+                return "bg-yellow-500";
+            default :
+                return "bg-primary";
+        }
     }
 
 }

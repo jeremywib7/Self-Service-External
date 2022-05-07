@@ -1,8 +1,7 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CartService} from "../../service/cart.service";
 import {environment} from "../../../environments/environment.prod";
 import {UserAuthService} from "../../service/user-auth.service";
-import {CustomerProfile} from "../../model/CustomerProfile";
 import {MessageService} from "primeng/api";
 
 @Component({
