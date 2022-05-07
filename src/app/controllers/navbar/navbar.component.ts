@@ -152,14 +152,6 @@ export class NavbarComponent implements OnInit {
                                 // update user profile data
                                 this.userAuthService.formProfile.patchValue(value.data.customerProfile);
 
-                                // view customer orders
-                                this.orderService.viewCustomerOrders(response.uid).subscribe({
-                                    next: (value: any) => {
-                                        this.orderService.customerOrders = value.data;
-                                        console.log(value.data);
-                                    }
-                                });
-
                                 this.cartService.calculateTotalPrice();
                             }
                         });
