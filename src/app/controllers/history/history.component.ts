@@ -20,8 +20,8 @@ export class HistoryComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // view customer orders
 
+        // view customer orders
         (async () => {
             while (this.userAuthService.customer['id'] === undefined)
                 await new Promise(resolve => setTimeout(resolve, 1000));
@@ -34,7 +34,6 @@ export class HistoryComponent implements OnInit {
             });
 
         })();
-
 
     }
 
