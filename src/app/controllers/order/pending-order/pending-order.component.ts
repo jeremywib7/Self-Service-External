@@ -16,11 +16,7 @@ export class PendingOrderComponent implements OnInit {
 
     constructor(
         public cartService: CartService,
-        private router: Router
     ) {
-        // if (!this.cartService.cart.isPlacedInOrder) {
-        //     this.router.navigate(["/"]).then(r => null);
-        // }
     }
 
     ngOnInit(): void {

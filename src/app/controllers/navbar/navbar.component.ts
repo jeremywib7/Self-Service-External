@@ -14,6 +14,8 @@ import {CustomerProfile} from "../../model/CustomerProfile";
 import {CustomerCart} from "../../model/customerCart/CustomerCart";
 import {environment} from "../../../environments/environment";
 import {OrderService} from "../../service/order.service";
+import {WaitingList} from "../../model/WaitingList";
+import {CustomerOrder} from "../../model/customerOrder/CustomerOrder";
 
 @Component({
     selector: 'app-navbar',
@@ -58,7 +60,9 @@ export class NavbarComponent implements OnInit {
 
     showResetPasswordDialog: boolean = false;
 
+
     @ViewChildren('allTheseThings') things: QueryList<any>;
+
 
     loginForm: FormGroup = new FormGroup({
         email: new FormControl('', {
@@ -114,6 +118,7 @@ export class NavbarComponent implements OnInit {
         }),
     });
 
+
     resetPasswordForm: FormGroup = new FormGroup({
         email: new FormControl('', {
             validators: [
@@ -122,6 +127,7 @@ export class NavbarComponent implements OnInit {
             ], updateOn: 'blur'
         }),
     });
+
 
     constructor(
         public router: Router,
@@ -141,8 +147,9 @@ export class NavbarComponent implements OnInit {
                     this.userAuthService.customer['email'] = response['email'];
 
                     // because view cart in method register
-                    // if not will be called twice
+                    // if not will be called twice without if else
                     if (!this.isRegisterMode) {
+
                         // get cart items
                         let params = new HttpParams().append("customerId", response.uid);
                         this.cartService.viewCart(params).subscribe({
@@ -168,8 +175,23 @@ export class NavbarComponent implements OnInit {
                     this.userAuthService.isLoggedIn = false;
                 }
 
-                // set checking login status to false
-                this.isCheckingLoginStatus = false;
+                // get from firestore waiting list, if waiting list exist, then order is paid
+                this.orderService.getWaitingListForCustomer(response.uid).subscribe({
+                    next: res => {
+
+                        // if data exists, then waiting list in firestore is placed
+                        if (res.payload.data()) {
+                            this.orderService.currentOrder = {...res.payload.data() as CustomerOrder};
+                            this.orderService.isInWaitingList = true;
+
+                            console.log(orderService.currentOrder);
+
+                            // set checking login status to false
+                            this.isCheckingLoginStatus = false;
+                        }
+                    }
+                });
+
             }
         });
 

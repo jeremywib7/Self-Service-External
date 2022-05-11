@@ -5,6 +5,7 @@ import {map} from "rxjs";
 import {environment} from "../../environments/environment";
 import {UserAuthService} from "./user-auth.service";
 import {CustomerOrder} from "../model/customerOrder/CustomerOrder";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Injectable({
     providedIn: 'root'
@@ -16,10 +17,19 @@ export class OrderService {
 
     customerOrders: CustomerOrder[] = [];
 
+    // from waiting list firestore firebase
+    currentOrder: CustomerOrder;
+
+    isInWaitingList: boolean = false;
+
     constructor(
         private httpClient: HttpClient,
-        public userAuthService: UserAuthService
-    ) {
+        public userAuthService: UserAuthService,
+        public fireServices: AngularFirestore) {
+    }
+
+    getWaitingListForCustomer(customerId: string) {
+        return this.fireServices.collection('Waiting_List').doc(customerId).snapshotChanges();
     }
 
     addOrder(params: HttpParams, orderedProduct: CartOrderedProduct[]) {

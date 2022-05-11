@@ -7,6 +7,7 @@ export class CustomerCart {
     updatedOn: string;
     customerProfile: CustomerProfile;
     isPlacedInOrder: boolean;
+    isPayed: boolean;
     cartOrderedProduct: CartOrderedProduct[];
 }
 

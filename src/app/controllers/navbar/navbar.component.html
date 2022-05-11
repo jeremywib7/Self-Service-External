@@ -117,7 +117,6 @@
                     hover:border-primary py-3 lg:py-0 px-6 lg:px-3 text-700 select-none text-xl lg:text-base font-medium lg:font-base w-full lg:w-auto">
                     <span>Membership</span>
                 </a>
-
             </li>
         </ul>
     </div>
@@ -241,10 +240,14 @@
                     </ng-template>
                 </p-inplace>
             </ng-template>
+
             <ng-template #other_content>
-                <button routerLink="/order-pending" (click)="closeSideCart.click()" pButton pRipple
+                <button [routerLink]="cartService?.cart?.isPlacedInOrder && orderService?.isInWaitingList ?
+                        '/order-pending' : ''" (click)="closeSideCart.click()" pButton pRipple
                         class="p-button-success mb-3 w-full"
-                        label="Pay"></button>
+                        [label]="cartService?.cart?.isPlacedInOrder && orderService?.isInWaitingList ?
+                        'Watch Order':'Pay'">
+                </button>
             </ng-template>
 
         </div>
