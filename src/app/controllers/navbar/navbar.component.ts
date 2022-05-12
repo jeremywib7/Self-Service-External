@@ -144,18 +144,20 @@ export class NavbarComponent implements OnInit {
                     this.userAuthService.customer['id'] = response.uid;
                     this.userAuthService.customer['email'] = response['email'];
 
-                    // get from firestore waiting list, if waiting list exist, then order is paid
+                    // listen data from firestore waiting list, if response is not undefined, then order is paid and is
+                    // in firestore waiting list
                     this.orderService.getWaitingListForCustomer(response.uid).subscribe({
                         next: res => {
 
                             // if data exists, then waiting list in firestore is placed
                             if (res.payload.data()) {
-                                this.orderService.currentOrder = {...res.payload.data() as CustomerOrder};
+                                this.orderService.currentOrder = {...res.payload.data() as WaitingList};
                                 this.orderService.isInWaitingList = true;
+                                this.router.navigate(["/order-success"]).then(null);
                             }
 
                             // because view cart in method register
-                            // if not will be called twice without if else
+                            // will be called twice without if else
                             if (!this.isRegisterMode) {
 
                                 // get cart items
@@ -163,7 +165,6 @@ export class NavbarComponent implements OnInit {
                                 this.cartService.viewCart(params).subscribe({
                                     next: (value: any) => {
                                         this.cartService.cart = value.data;
-                                        console.log(value.data);
 
                                         // update user profile data
                                         this.userAuthService.formProfile.patchValue(value.data.customerProfile);
@@ -383,11 +384,13 @@ export class NavbarComponent implements OnInit {
                             this.cartService.viewCart(params).subscribe({
                                 next: (value: any) => {
                                     this.cartService.cart = value.data;
+                                    this.userAuthService.isLoggedIn = true;
                                 }
                             });
 
                         },
                         error: err => {
+
                             // cancel created user by delete in firebase
                             // because username already exists in backend
                             this.auth.currentUser.then(async res => {
@@ -397,10 +400,9 @@ export class NavbarComponent implements OnInit {
                                 }]
                             });
 
-                        },
-                        complete: () => {
-                            this.isRegisterButtonLoading = false;
                         }
+                    }).add(() => {
+                        this.isRegisterButtonLoading = false;
                     });
 
                 },

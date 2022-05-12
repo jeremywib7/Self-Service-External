@@ -24,15 +24,19 @@ export class PendingOrderComponent implements OnInit {
         public router: Router
     ) {
 
-        // check if customer already paid
         (async () => {
             while (!userAuthService.isDoneLoadConfig)
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
+            // check if customer already put order and paid
             if (cartService?.cart?.isPlacedInOrder && orderService?.isInWaitingList ) {
-                this.router.navigate(["/order-success"]).then(r => null);
-            }})();
+                return this.router.navigate(["/order-success"]).then(r => null);
+            } else if (!cartService?.cart?.isPlacedInOrder) {
+                // check if customer hasn't placed order yet
+                return this.router.navigate(["/"]).then(r => null);
+            }
 
+        })();
     }
 
     ngOnInit(): void {

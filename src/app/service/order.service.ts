@@ -6,6 +6,7 @@ import {environment} from "../../environments/environment";
 import {UserAuthService} from "./user-auth.service";
 import {CustomerOrder} from "../model/customerOrder/CustomerOrder";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {WaitingList} from "../model/WaitingList";
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +19,7 @@ export class OrderService {
     customerOrders: CustomerOrder[] = [];
 
     // from waiting list firestore firebase
-    currentOrder: CustomerOrder;
+    currentOrder: WaitingList;
 
     isInWaitingList: boolean = false;
 
