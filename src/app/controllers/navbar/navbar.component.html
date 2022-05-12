@@ -1,5 +1,5 @@
 <!-- LOADING SPINNER -->
-<div class="progress-spinner" *ngIf="isCheckingLoginStatus">
+<div class="progress-spinner" *ngIf="!userAuthService.isDoneLoadConfig">
     <p-progressSpinner></p-progressSpinner>
 </div>
 
@@ -243,7 +243,7 @@
 
             <ng-template #other_content>
                 <button [routerLink]="cartService?.cart?.isPlacedInOrder && orderService?.isInWaitingList ?
-                        '/order-pending' : ''" (click)="closeSideCart.click()" pButton pRipple
+                        '/order-success' : '/order-pending'" (click)="closeSideCart.click()" pButton pRipple
                         class="p-button-success mb-3 w-full"
                         [label]="cartService?.cart?.isPlacedInOrder && orderService?.isInWaitingList ?
                         'Watch Order':'Pay'">

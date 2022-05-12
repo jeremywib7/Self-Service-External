@@ -54,8 +54,6 @@ export class NavbarComponent implements OnInit {
 
     isPlaceOrderButtonLoading: boolean = false;
 
-    isCheckingLoginStatus: boolean = true;
-
     showAuthDialog: boolean = false;
 
     showResetPasswordDialog: boolean = false;
@@ -146,26 +144,41 @@ export class NavbarComponent implements OnInit {
                     this.userAuthService.customer['id'] = response.uid;
                     this.userAuthService.customer['email'] = response['email'];
 
-                    // because view cart in method register
-                    // if not will be called twice without if else
-                    if (!this.isRegisterMode) {
+                    // get from firestore waiting list, if waiting list exist, then order is paid
+                    this.orderService.getWaitingListForCustomer(response.uid).subscribe({
+                        next: res => {
 
-                        // get cart items
-                        let params = new HttpParams().append("customerId", response.uid);
-                        this.cartService.viewCart(params).subscribe({
-                            next: (value: any) => {
-                                this.cartService.cart = value.data;
-
-                                // update user profile data
-                                this.userAuthService.formProfile.patchValue(value.data.customerProfile);
-
-                                this.cartService.calculateTotalPrice();
+                            // if data exists, then waiting list in firestore is placed
+                            if (res.payload.data()) {
+                                this.orderService.currentOrder = {...res.payload.data() as CustomerOrder};
+                                this.orderService.isInWaitingList = true;
                             }
-                        });
 
-                    }
+                            // because view cart in method register
+                            // if not will be called twice without if else
+                            if (!this.isRegisterMode) {
 
-                    this.userAuthService.isLoggedIn = true;
+                                // get cart items
+                                let params = new HttpParams().append("customerId", response.uid);
+                                this.cartService.viewCart(params).subscribe({
+                                    next: (value: any) => {
+                                        this.cartService.cart = value.data;
+                                        console.log(value.data);
+
+                                        // update user profile data
+                                        this.userAuthService.formProfile.patchValue(value.data.customerProfile);
+
+                                        this.cartService.calculateTotalPrice();
+
+                                        this.userAuthService.isLoggedIn = true;
+
+                                        // set checking login status to false
+                                        this.userAuthService.isDoneLoadConfig = true;
+                                    }
+                                });
+                            }
+                        }
+                    });
                 } else {
                     // clear global state
                     this.userAuthService.customer = new CustomerProfile();
@@ -173,25 +186,10 @@ export class NavbarComponent implements OnInit {
 
                     // set logged in to false
                     this.userAuthService.isLoggedIn = false;
+
+                    // set checking login status to false
+                    this.userAuthService.isDoneLoadConfig = true;
                 }
-
-                // get from firestore waiting list, if waiting list exist, then order is paid
-                this.orderService.getWaitingListForCustomer(response.uid).subscribe({
-                    next: res => {
-
-                        // if data exists, then waiting list in firestore is placed
-                        if (res.payload.data()) {
-                            this.orderService.currentOrder = {...res.payload.data() as CustomerOrder};
-                            this.orderService.isInWaitingList = true;
-
-                            console.log(orderService.currentOrder);
-
-                            // set checking login status to false
-                            this.isCheckingLoginStatus = false;
-                        }
-                    }
-                });
-
             }
         });
 
@@ -309,7 +307,7 @@ export class NavbarComponent implements OnInit {
             message: 'Are you sure you want to log out?',
             header: 'Logout',
             accept: () => {
-                this.isCheckingLoginStatus = true;
+                this.userAuthService.isDoneLoadConfig = true;
                 this.auth.signOut().then();
             }
         });

@@ -4,7 +4,6 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Customer} from "../api/customer";
 import {CustomerProfile} from "../model/CustomerProfile";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {User} from "../model/User";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
 
 @Injectable({
@@ -16,6 +15,8 @@ export class UserAuthService {
     private project = environment.project;
 
     public isLoggedIn: boolean = false;
+
+    public isDoneLoadConfig: boolean = false;
 
     public formProfile: FormGroup;
 
