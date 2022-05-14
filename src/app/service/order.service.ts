@@ -44,4 +44,11 @@ export class OrderService {
         return this.httpClient.get(`${this.apiServerUrl}/${this.project}/order/view`, {params: params})
             .pipe(map((data) => data || []))
     }
+
+    viewCurrentCustomerOrder(customerId: string) {
+        let params = new HttpParams().append("customerId", customerId);
+
+        return this.httpClient.get(`${this.apiServerUrl}/${this.project}/order/view/active`, {params: params})
+            .pipe(map((data) => data || []))
+    }
 }

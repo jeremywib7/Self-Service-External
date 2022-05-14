@@ -166,6 +166,7 @@ import {QRCodeModule} from "angularx-qrcode";
 
 import { registerLocaleData } from '@angular/common';
 import localeId from '@angular/common/locales/id';
+import {CountdownModule} from "ngx-countdown";
 registerLocaleData(localeId, 'id');
 
 @NgModule({
@@ -270,6 +271,7 @@ registerLocaleData(localeId, 'id');
         BlockUIModule,
         ProgressSpinnerModule,
         QRCodeModule,
+        CountdownModule,
 
     ],
     declarations: [

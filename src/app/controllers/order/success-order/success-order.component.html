@@ -1,152 +1,254 @@
-<div class="surface-section px-4 py-8 md:px-6 lg:px-8">
-    <div class="flex flex-column lg:flex-row">
-        <div class="flex flex-auto flex-column md:flex-row">
-            <div
-                class="md:pr-5 lg:pr-8 border-bottom-1 pb-5 md:border-bottom-none md:border-right-1 surface-border flex justify-content-center md:justify-content-start">
-                <ul class="list-none p-0 m-0">
-                    <li *ngFor="let steps of orderSteps; let i = index" class="h-6rem flex">
-                        <div class="flex flex-column align-items-center">
-                            <div class="bg-primary border-primary border-circle flex-shrink-0"
-                                 style="border: 3px solid; height:1.5rem; width: 1.5rem"></div>
-                            <div class="bg-primary h-6rem" style="width:3px"></div>
-                        </div>
-                        <div class="flex flex-column ml-3">
-                            <span class="font-medium text-900 mb-2">{{steps.name}}</span>
-                            <span class="text-600">22 Feb</span>
-                        </div>
-                    </li>
-                </ul>
-<!--                <ul class="list-none p-0 m-0">-->
-<!--                    <li class="h-6rem flex">-->
-<!--                        <div class="flex flex-column align-items-center">-->
-<!--                            <div class="bg-primary border-primary border-circle flex-shrink-0"-->
-<!--                                 style="border: 3px solid; height:1.5rem; width: 1.5rem"></div>-->
-<!--                            <div class="bg-primary h-6rem" style="width:3px"></div>-->
-<!--                        </div>-->
-<!--                        <div class="flex flex-column ml-3">-->
-<!--                            <span class="font-medium text-900 mb-2">Ordered</span>-->
-<!--                            <span class="text-600">22 Feb</span>-->
-<!--                        </div>-->
-<!--                    </li>-->
-<!--                    <li class="h-6rem flex">-->
-<!--                        <div class="flex flex-column align-items-center">-->
-<!--                            <div class="surface-card border-primary border-circle flex-shrink-0"-->
-<!--                                 style="border: 3px solid; height:1.5rem; width: 1.5rem"></div>-->
-<!--                            <div class="surface-300 h-6rem" style="width:3px"></div>-->
-<!--                        </div>-->
-<!--                        <div class="flex flex-column ml-3">-->
-<!--                            <span class="font-medium text-900 mb-2">Processing</span>-->
-<!--                            <span class="text-600">23 Feb</span>-->
-<!--                        </div>-->
-<!--                    </li>-->
-<!--                    <li class="h-6rem flex">-->
-<!--                        <div class="flex flex-column align-items-center">-->
-<!--                            <div class="surface-300 border-300 border-circle flex-shrink-0"-->
-<!--                                 style="border: 3px solid; height:1.5rem; width: 1.5rem"></div>-->
-<!--                            <div class="surface-300 h-6rem" style="width:3px"></div>-->
-<!--                        </div>-->
-<!--                        <div class="flex flex-column ml-3">-->
-<!--                            <span class="font-medium text-900 mb-2">Waiting for pickup</span>-->
-<!--                            <span class="text-600">Est. 24 Feb</span>-->
-<!--                        </div>-->
-<!--                    </li>-->
-<!--                    <li class="h-6rem flex">-->
-<!--                        <div class="flex flex-column align-items-center">-->
-<!--                            <div class="surface-300 border-300 border-circle flex-shrink-0"-->
-<!--                                 style="border: 3px solid; height:1.5rem; width: 1.5rem"></div>-->
-<!--                            <div class="surface-300 h-6rem" style="width:3px"></div>-->
-<!--                        </div>-->
-<!--                        <div class="flex flex-column ml-3">-->
-<!--                            <span class="font-medium text-900 mb-2">Completed</span>-->
-<!--                            <span class="text-600">Est. 26 Feb</span>-->
-<!--                        </div>-->
-<!--                    </li>-->
-<!--                </ul>-->
+<div *ngIf="!isDoneLoadCurrentOrder;then content else other_content">here is ignored</div>
 
-            </div>
-            <div class="flex-auto md:pl-5 lg:pr-5 pt-5 md:pt-0 border-right-none lg:border-right-1 surface-border">
-                <span class="text-700 text-xl">Wohooo!</span>
-                <div class="font-bold text-4xl my-2">Order Created 🚀</div>
-                <p class="text-700 text-xl mt-0 mb-4 p-0">
-                    Your order is confirmed. It'll be ready soon. We'll inform you.
-                </p>
-                <div style="height:3px;background:linear-gradient(90deg, #2196F3 0%, rgba(33, 150, 243, 0) 50%);"></div>
-                <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between py-5">
-                    <div class="mb-3 sm:mb-0">
-                        <span class="font-medium text-xl text-900 mr-2">Order number:</span>
-                        <span class="font-medium text-xl text-blue-500">{{orderService?.currentOrder?.number}}</span>
+<ng-template #content>
+    <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
+        <div class="flex flex-column lg:flex-row">
+            <div class="flex flex-auto flex-column md:flex-row">
+                <div
+                    class="md:pr-5 lg:pr-8 border-bottom-1 pb-5 md:border-bottom-none md:border-right-1 surface-border flex justify-content-center md:justify-content-start">
+                    <ul class="list-none p-0 m-0">
+                        <p-skeleton width="5rem" height="24rem" borderRadius="16px"></p-skeleton>
+                    </ul>
+                </div>
+                <div class="flex-auto md:pl-5 lg:pr-5 pt-5 md:pt-0 border-right-none lg:border-right-1 surface-border">
+                    <p-skeleton width="9rem" height="1.5rem" borderRadius="16px" styleClass="mb-2"></p-skeleton>
+                    <p-skeleton width="12rem" height="2rem" borderRadius="16px" styleClass="mb-2"></p-skeleton>
+                    <p-skeleton width="30rem" height="2rem" borderRadius="16px" styleClass="mb-2"></p-skeleton>
+                    <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between py-5">
+                        <div class="mb-3 sm:mb-0">
+                            <p-skeleton width="5rem" height="3rem" borderRadius="16px"></p-skeleton>
+                        </div>
+                        <div class="flex">
+                            <p-skeleton width="5rem" height="3rem" borderRadius="16px" styleClass="mr-2"></p-skeleton>
+                            <p-skeleton width="5rem" height="3rem" borderRadius="16px" styleClass="mr-2"></p-skeleton>
+                        </div>
                     </div>
-                    <div>
-                        <button pButton pRipple label="Details" icon="pi pi-list"
-                                class="p-button-outlined p-button-secondary mr-2"></button>
-                        <button pButton pRipple label="Print" icon="pi pi-print"
-                                class="p-button-outlined p-button-secondary"></button>
+                    <div class="border-round surface-border border-1">
+                        <ul class="list-none p-0 m-0">
+                            <!--         if last index dont need to show separator (border-bottom-1)              -->
+                            <li
+                                class="p-3 border-bottom-1 surface-border flex align-items-start sm:align-items-center">
+                                <p-skeleton styleClass="mr-2" size="5rem"></p-skeleton>
+                                <div class="flex flex-column">
+                                <span class="text-900 font-medium text-xl mb-2">
+                                     <p-skeleton width="5rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                                </span>
+                                    <span class="text-900 font-medium">
+                                     <p-skeleton width="5rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                                </span>
+                                </div>
+                                <span class="text-900 font-medium text-lg ml-auto">
+                                <p-skeleton width="5rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                            </span>
+                            </li>
+                            <li
+                                class="p-3 surface-border flex align-items-start sm:align-items-center">
+                                <p-skeleton styleClass="mr-2" size="5rem"></p-skeleton>
+                                <div class="flex flex-column">
+                                <span class="text-900 font-medium text-xl mb-2">
+                                     <p-skeleton width="5rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                                </span>
+                                    <span class="text-900 font-medium">
+                                     <p-skeleton width="5rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                                </span>
+                                </div>
+                                <span class="text-900 font-medium text-lg ml-auto">
+                                <p-skeleton width="5rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                            </span>
+                            </li>
+
+                        </ul>
                     </div>
                 </div>
-                <div class="border-round surface-border border-1">
+            </div>
+            <div
+                class="flex flex-column border-top-1 lg:border-top-none surface-border pl-0 pt-5 lg:pt-0 lg:pl-5 mt-5 lg:mt-0">
+                <p-skeleton width="5rem" height="3rem" borderRadius="16px"></p-skeleton>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap mt-5 pb-3">
+            <div class="w-full lg:w-6 pl-3">
+            <span class="font-medium text-900">
+                <p-skeleton width="5rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+            </span>
+                <div class="flex flex-column text-900 mt-3 mb-5">
+                <span class="mb-1">
+                    <p-skeleton width="6rem" height="1.5rem"
+                                borderRadius="16px"></p-skeleton>
+                </span>
+                    <span>
+                    <p-skeleton width="7rem" height="1.5rem"
+                                borderRadius="16px"></p-skeleton>
+                </span>
+                </div>
+            </div>
+            <div class="w-full lg:w-6 pl-3 lg:pl-0 lg:pr-3 flex align-items-end mt-5 lg:mt-0">
+                <ul class="list-none p-0 m-0 w-full">
+                    <li class="mb-3">
+                    <span class="font-medium text-900">
+                     <p-skeleton width="6rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                    </span>
+                    </li>
+                    <li class="flex justify-content-between mb-3">
+                    <span class="text-900">
+                        <p-skeleton width="5rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                    </span>
+                        <span class="text-900 font-medium text-lg">
+                        <p-skeleton width="6rem" height="1.5rem"
+                                    borderRadius="16px"></p-skeleton>
+
+                    </span>
+                    </li>
+                    <li class="flex justify-content-between mb-3">
+                    <span class="text-900">
+                        <p-skeleton width="5rem" height="1.5rem"
+                                    borderRadius="16px"></p-skeleton>
+                    </span>
+                        <span class="text-900 font-medium text-lg">
+                        <p-skeleton width="6rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                    </span>
+                    </li>
+                    <li class="flex justify-content-between mb-3">
+                    <span class="text-900">
+                        <p-skeleton width="5rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                    </span>
+                        <span class="text-900 font-medium text-lg">
+                        <p-skeleton width="6rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                    </span>
+                    </li>
+                    <li class="flex justify-content-between border-top-1 surface-border py-3">
+                    <span class="text-900 font-medium">
+                        <p-skeleton width="5rem" height="1.5rem" borderRadius="16px"></p-skeleton>
+                    </span>
+                        <span class="text-900 font-bold text-lg">
+                        <p-skeleton width="6rem" height="2rem" borderRadius="16px"></p-skeleton>
+                    </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #other_content>
+    <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
+        <div class="flex flex-column lg:flex-row">
+            <div class="flex flex-auto flex-column md:flex-row">
+                <div
+                    class="md:pr-5 lg:pr-8 border-bottom-1 pb-5 md:border-bottom-none md:border-right-1 surface-border flex justify-content-center md:justify-content-start">
                     <ul class="list-none p-0 m-0">
-                        <!--         if last index dont need to show separator (border-bottom-1)              -->
-                        <li *ngFor="let product of cartService?.cart?.cartOrderedProduct; let i = index"
-                            class="p-3 {{i != cartService?.cart?.cartOrderedProduct.length -1 ? 'border-bottom-1' : ''}}
-                            surface-border flex align-items-start sm:align-items-center">
-                            <img [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
-                                'imageName=' + product?.product?.images[0]?.imageName + '&' +
-                                'productId=' + product?.product?.id "
-                                 class="w-3rem h-3rem sm:w-8rem sm:h-8rem flex-shrink-0 mr-3 shadow-2"/>
-                            <div class="flex flex-column">
-                                <span class="text-900 font-medium text-xl mb-2">
-                                    {{product?.product?.name}}
-                                </span>
-                                <span class="text-900 font-medium">
-                                    Qty : {{product?.quantity}}
-                                </span>
+                        <li *ngFor="let steps of orderSteps; let i = index" class="h-6rem flex">
+                            <div class="flex flex-column align-items-center">
+                                <div class="bg-primary border-primary border-circle flex-shrink-0"
+                                     style="border: 3px solid; height:1.5rem; width: 1.5rem"></div>
+                                <div class="bg-primary h-6rem" style="width:3px"></div>
                             </div>
-                            <span class="text-900 font-medium text-lg ml-auto">
-                                {{product?.product?.discountedPrice | currency: 'Rp. '}}
-                            </span>
+                            <div class="flex flex-column ml-3">
+                                <span class="font-medium text-900 mb-2">{{steps.name}}</span>
+                                <span class="text-600">22 Feb</span>
+                            </div>
                         </li>
                     </ul>
                 </div>
+                <div class="flex-auto md:pl-5 lg:pr-5 pt-5 md:pt-0 border-right-none lg:border-right-1 surface-border">
+                    <span class="text-700 text-xl">Wohooo!</span>
+                    <div class="font-bold text-4xl my-2">Order Created 🚀</div>
+                    <p class="text-700 text-xl mt-0 mb-4 p-0">
+                        Your order is confirmed. It'll be ready soon. We'll inform you.
+                    </p>
+                    <p class="text-700 text-xl mt-0 mb-2 p-0">
+                        Remaining Est. Time :
+                        <countdown *ngIf="!isCountdownFinished" class="font-bold" [config]="{ stopTime: orderService?.currentOrder?.estTime}"
+                                   (event)="isCountdownFinished = true">
+                        </countdown>
+                        <span *ngIf="isCountdownFinished" class="font-bold">Almost.. get ready to pick up your order</span>
+                    </p>
+                    <div
+                        style="height:3px;background:linear-gradient(90deg, #2196F3 0%, rgba(33, 150, 243, 0) 50%);"></div>
+                    <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between py-5">
+                        <div class="mb-3 sm:mb-0">
+                            <span class="font-medium text-xl text-900 mr-2">Order number:</span>
+                            <span
+                                class="font-medium text-xl text-blue-500">{{orderService?.currentOrder?.number}}</span>
+                        </div>
+                        <div>
+                            <button pButton pRipple label="Details" icon="pi pi-list"
+                                    class="p-button-outlined p-button-secondary mr-2"></button>
+                            <button pButton pRipple label="Print" icon="pi pi-print"
+                                    class="p-button-outlined p-button-secondary"></button>
+                        </div>
+                    </div>
+                    <div class="border-round surface-border border-1">
+                        <ul class="list-none p-0 m-0">
+                            <!--         if last index dont need to show separator (border-bottom-1)              -->
+                            <li *ngFor="let product of cartService?.cart?.cartOrderedProduct; let i = index"
+                                class="p-3 {{i != cartService?.cart?.cartOrderedProduct.length -1 ? 'border-bottom-1' : ''}}
+                            surface-border flex align-items-start sm:align-items-center">
+                                <img [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
+                                'imageName=' + product?.product?.images[0]?.imageName + '&' +
+                                'productId=' + product?.product?.id "
+                                     class="w-3rem h-3rem sm:w-8rem sm:h-8rem flex-shrink-0 mr-3 shadow-2"/>
+                                <div class="flex flex-column">
+                                <span class="text-900 font-medium text-xl mb-2">
+                                    {{product?.product?.name}}
+                                </span>
+                                    <span class="text-900 font-medium">
+                                    Qty : {{product?.quantity}}
+                                </span>
+                                </div>
+                                <span class="text-900 font-medium text-lg ml-auto">
+                                {{product?.product?.discountedPrice | currency: 'Rp. '}}
+                            </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="flex flex-column border-top-1 lg:border-top-none surface-border pl-0 pt-5 lg:pt-0 lg:pl-5 mt-5 lg:mt-0">
+<!--                <button pButton pRipple icon="pi pi-star" label="Review" class="p-button-outlined mb-3"></button>-->
+                <button pButton pRipple icon="pi pi-times" label="Cancel"
+                        class="p-button-outlined p-button-danger"></button>
             </div>
         </div>
-        <div
-            class="flex flex-column border-top-1 lg:border-top-none surface-border pl-0 pt-5 lg:pt-0 lg:pl-5 mt-5 lg:mt-0">
-            <button pButton pRipple icon="pi pi-star" label="Review" class="p-button-outlined mb-3"></button>
-            <button pButton pRipple icon="pi pi-times" label="Cancel"
-                    class="p-button-outlined p-button-danger"></button>
-        </div>
-    </div>
 
 
-    <div class="flex flex-wrap mt-5 pb-3">
-        <div class="w-full lg:w-6 pl-3">
-            <span class="font-medium text-900">Customer Information</span>
-            <div class="flex flex-column text-900 mt-3 mb-5">
+        <div class="flex flex-wrap mt-5 pb-3">
+            <div class="w-full lg:w-6 pl-3">
+                <span class="font-medium text-900">Customer Information</span>
+                <div class="flex flex-column text-900 mt-3 mb-5">
                 <span class="mb-1">{{this.userAuthService.formProfile.get("firstName").value}}
                     {{this.userAuthService.formProfile.get("lastName").value}}</span>
-                <span>{{this.userAuthService.formProfile.get("email").value}}</span>
+                    <span>{{this.userAuthService.formProfile.get("email").value}}</span>
+                </div>
+            </div>
+            <div class="w-full lg:w-6 pl-3 lg:pl-0 lg:pr-3 flex align-items-end mt-5 lg:mt-0">
+                <ul class="list-none p-0 m-0 w-full">
+                    <li class="mb-3"><span class="font-medium text-900">Summary</span></li>
+                    <li class="flex justify-content-between mb-3">
+                        <span class="text-900">Subtotal</span>
+                        <span class="text-900 font-medium text-lg">{{cartService?.totalPrice | currency: 'Rp. '}}</span>
+                    </li>
+                    <li class="flex justify-content-between mb-3">
+                        <span class="text-900">Paid</span>
+                        <span class="text-900 font-medium text-lg">
+                            {{customerOrder?.totalPaid | currency: 'Rp. '}}
+                        </span>
+                    </li>
+                    <li class="flex justify-content-between mb-3">
+                        <span class="text-900">Change</span>
+                        <span class="text-900 font-medium text-lg">
+                            {{customerOrder?.totalChange | currency: 'Rp. '}}
+                        </span>
+                    </li>
+                    <li class="flex justify-content-between border-top-1 surface-border py-3">
+                        <span class="text-900 font-medium">Total</span>
+                        <span class="text-900 font-bold text-lg">{{cartService?.totalPrice | currency: 'Rp. '}}</span>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="w-full lg:w-6 pl-3 lg:pl-0 lg:pr-3 flex align-items-end mt-5 lg:mt-0">
-            <ul class="list-none p-0 m-0 w-full">
-                <li class="mb-3"><span class="font-medium text-900">Summary</span></li>
-                <li class="flex justify-content-between mb-3">
-                    <span class="text-900">Subtotal</span>
-                    <span class="text-900 font-medium text-lg">{{cartService?.totalPrice | currency: 'Rp. '}}</span>
-                </li>
-                <li class="flex justify-content-between mb-3">
-                    <span class="text-900">Paid</span>
-                    <span class="text-900 font-medium text-lg">Free</span>
-                </li>
-                <li class="flex justify-content-between mb-3">
-                    <span class="text-900">Change</span>
-                    <span class="text-900 font-medium text-lg">Free</span>
-                </li>
-                <li class="flex justify-content-between border-top-1 surface-border py-3">
-                    <span class="text-900 font-medium">Total</span>
-                    <span class="text-900 font-bold text-lg">{{cartService?.totalPrice | currency: 'Rp. '}}</span>
-                </li>
-            </ul>
-        </div>
     </div>
-</div>
+</ng-template>
+

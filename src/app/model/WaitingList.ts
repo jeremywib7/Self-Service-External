@@ -1,11 +1,8 @@
 export class WaitingList {
     id: string;
-    number: number;
-    customerName: string;
-    status: string;
+    username: string;
     estTime: number;
-    estHour: number;
-    estMinute: number;
-    estSecond: number;
+    number: number;
+    status: string;
     steps: number;
 }

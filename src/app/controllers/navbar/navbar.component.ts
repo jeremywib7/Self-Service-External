@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {Router} from "@angular/router";
 import {AppConfig} from "../../api/appconfig";
 import {from, Subscription} from "rxjs";
@@ -15,7 +15,6 @@ import {CustomerCart} from "../../model/customerCart/CustomerCart";
 import {environment} from "../../../environments/environment";
 import {OrderService} from "../../service/order.service";
 import {WaitingList} from "../../model/WaitingList";
-import {CustomerOrder} from "../../model/customerOrder/CustomerOrder";
 
 @Component({
     selector: 'app-navbar',
