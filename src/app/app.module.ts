@@ -2,7 +2,7 @@ import {LOCALE_ID, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
-import {LocationStrategy, HashLocationStrategy, DatePipe} from '@angular/common';
+import {LocationStrategy, HashLocationStrategy, DatePipe, AsyncPipe} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 
@@ -164,9 +164,13 @@ import {OrderService} from "./service/order.service";
 import {PendingOrderComponent} from './controllers/order/pending-order/pending-order.component';
 import {QRCodeModule} from "angularx-qrcode";
 
-import { registerLocaleData } from '@angular/common';
+import {registerLocaleData} from '@angular/common';
 import localeId from '@angular/common/locales/id';
 import {CountdownModule} from "ngx-countdown";
+import {initializeApp} from "@angular/fire/app";
+import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
+import {MessagingService} from "./service/messaging.service";
+
 registerLocaleData(localeId, 'id');
 
 @NgModule({
@@ -268,6 +272,7 @@ registerLocaleData(localeId, 'id');
         // firebase
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule,
+        AngularFireMessagingModule,
         BlockUIModule,
         ProgressSpinnerModule,
         QRCodeModule,
@@ -342,6 +347,7 @@ registerLocaleData(localeId, 'id');
         EventService,
         IconService,
         NodeService,
+        AsyncPipe,
         PhotoService,
         MenuService,
         ConfigService,
@@ -355,9 +361,12 @@ registerLocaleData(localeId, 'id');
             provide: LOADING_BAR_CONFIG,
             useValue: {latencyThreshold: 0}
         },
+
         DatePipe,
         ConfirmationService,
         MessageService,
+        MessagingService,
+        AsyncPipe,
         UserAuthService,
         OrderService,
         ProductService,

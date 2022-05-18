@@ -15,6 +15,7 @@ import {CustomerCart} from "../../model/customerCart/CustomerCart";
 import {environment} from "../../../environments/environment";
 import {OrderService} from "../../service/order.service";
 import {WaitingList} from "../../model/WaitingList";
+import {AngularFireMessaging} from "@angular/fire/compat/messaging";
 
 @Component({
     selector: 'app-navbar',
@@ -133,6 +134,7 @@ export class NavbarComponent implements OnInit {
         public orderService: OrderService,
         public cartService: CartService,
         public auth: AngularFireAuth,
+        public messaging: AngularFireMessaging,
         private confirmationService: ConfirmationService) {
 
         this.auth.authState.subscribe({
@@ -142,6 +144,7 @@ export class NavbarComponent implements OnInit {
                 if (response) {
                     this.userAuthService.customer['id'] = response.uid;
                     this.userAuthService.customer['email'] = response['email'];
+
 
                     // listen data from firestore waiting list, if response is not undefined, then order is paid and is
                     // in firestore waiting list
@@ -174,6 +177,7 @@ export class NavbarComponent implements OnInit {
 
                                         // set checking login status to false
                                         this.userAuthService.isDoneLoadConfig = true;
+
                                     }
                                 });
                             }
@@ -200,8 +204,18 @@ export class NavbarComponent implements OnInit {
         this.subscription = this.configService.configUpdate$.subscribe(config => {
             this.config = config;
         });
+
+
         // init menu settings and logout
         this.initMenuUser();
+        //
+        // this.messaging.getToken.subscribe({
+        //     next: (value:any) => {
+        //         console.log(value);
+        //     }
+        // })
+
+
     }
 
     ngOnDestroy(): void {
