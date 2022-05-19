@@ -6,6 +6,7 @@ export class CustomerProfile {
     gender: string;
     email: string;
     password: string;
+    messagingToken: string;
     isActive: boolean;
     createdOn: string;
     updatedOn: string;

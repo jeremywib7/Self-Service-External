@@ -51,6 +51,7 @@ export class AppComponent implements OnInit {
                     this.orderService.getWaitingListForCustomer(response.uid).subscribe({
                         next: res => {
 
+
                             // if data exists, then waiting list in firestore is placed
                             if (res.payload.data()) {
                                 this.orderService.currentOrder = {...res.payload.data() as WaitingList};

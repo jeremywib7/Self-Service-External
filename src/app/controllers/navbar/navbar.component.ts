@@ -113,6 +113,9 @@ export class NavbarComponent implements OnInit {
                 RxwebValidators.minLength({value: 6})
             ], updateOn: 'blur'
         }),
+        messagingToken: new FormControl('', {
+            validators: [], updateOn: 'blur'
+        }),
     });
 
 
@@ -132,6 +135,8 @@ export class NavbarComponent implements OnInit {
         public userAuthService: UserAuthService,
         public orderService: OrderService,
         public cartService: CartService,
+        public angularFireMessaging: AngularFireMessaging,
+        public messagingService: MessagingService,
         public auth: AngularFireAuth,
         private confirmationService: ConfirmationService
     ) {
@@ -247,13 +252,22 @@ export class NavbarComponent implements OnInit {
         if (!this.userAuthService.isLoggedIn) {
             return this.showAuthDialog = true;
         }
+
         // if already logged in
         return this.confirmationService.confirm({
             message: 'Are you sure you want to log out?',
             header: 'Logout',
             accept: () => {
                 this.userAuthService.isDoneLoadConfig = true;
-                this.auth.signOut().then();
+                this.auth.signOut().then(() => {
+
+                    // delete token for fcm, so user will not keep receiving message
+                    this.angularFireMessaging.deleteToken(this.userAuthService.formProfile.get("messagingToken").value)
+                        .subscribe({
+                            next: (token) => {
+                            },
+                        });
+                });
             }
         });
     }
@@ -307,69 +321,44 @@ export class NavbarComponent implements OnInit {
     onRegister() {
 
         if (this.registerForm.valid) {
-            const {email, password} = this.registerForm.value;
             this.isRegisterButtonLoading = true;
 
-            // update in firebase
-            from(this.auth.createUserWithEmailAndPassword(email, password)).subscribe({
-                next: value => {
+            this.angularFireMessaging.requestToken.subscribe({
+                next: (token) => {
 
-                    // get uuid from firebase and set in backend
-                    this.registerForm.get("id").setValue(value.user.uid);
+                    this.registerForm.get("messagingToken").setValue(token);
 
                     // register in backend
                     this.userAuthService.registerCustomer(this.registerForm.value).subscribe({
-                        next: () => {
+                        next: (value: any) => {
                             this.registerMsg = [];
                             this.showAuthDialog = false;
 
                             // get cart information
-                            let params = new HttpParams().append("customerId", value.user.uid);
-                            this.cartService.viewCart(params).subscribe({
-                                next: (value: any) => {
-                                    this.cartService.cart = value.data;
-                                    this.userAuthService.isLoggedIn = true;
-                                }
-                            });
+                            this.cartService.cart = value.data;
+                            this.userAuthService.isLoggedIn = true;
 
+                            // sign in using firebase
+                            this.auth.signInWithEmailAndPassword(this.registerForm.get('email').value,
+                                this.registerForm.get('password').value).then(user => {
+                                this.loginMsg = [];
+                                this.showAuthDialog = false;
+                            })
                         },
                         error: err => {
-
-                            // cancel created user by delete in firebase
-                            // because username already exists in backend
-                            this.auth.currentUser.then(async res => {
-                                await res.delete();
-                                return this.registerMsg = [{
-                                    severity: 'error', detail: err.error.message
-                                }]
-                            });
-
+                            return this.registerMsg = [{
+                                severity: 'error', detail: err.error.message
+                            }]
                         }
+
                     }).add(() => {
                         this.isRegisterButtonLoading = false;
                     });
 
                 },
-                error: err => {
-                    let errorMessage = "";
-                    switch (err.code) {
-                        case 'auth/email-already-in-use': {
-                            errorMessage = 'Email already in use.';
-                            break;
-                        }
-
-                        default: {
-                            errorMessage = 'Register error try again later.';
-                            break;
-                        }
-                    }
-
-                    return this.registerMsg = [{
-                        severity: 'error', detail: errorMessage
-                    }]
+                error: (err) => {
+                    console.error('Unable to get permission to notify.', err);
                 }
-            }).add(() => {
-                this.isRegisterButtonLoading = false;
             });
 
         } else {

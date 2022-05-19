@@ -71,6 +71,9 @@ export class UserAuthService {
                     }
                 })]
             }),
+            messagingToken: new FormControl('', {
+                validators: [RxwebValidators.required()]
+            }),
         });
     }
 
