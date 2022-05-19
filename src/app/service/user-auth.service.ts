@@ -16,6 +16,8 @@ export class UserAuthService {
 
     public isLoggedIn: boolean = false;
 
+    public isRegisterMode: boolean = false;
+
     public isDoneLoadConfig: boolean = false;
 
     public formProfile: FormGroup;

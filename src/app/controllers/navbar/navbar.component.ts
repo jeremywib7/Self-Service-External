@@ -16,6 +16,7 @@ import {environment} from "../../../environments/environment";
 import {OrderService} from "../../service/order.service";
 import {WaitingList} from "../../model/WaitingList";
 import {AngularFireMessaging} from "@angular/fire/compat/messaging";
+import {MessagingService} from "../../service/messaging.service";
 
 @Component({
     selector: 'app-navbar',
@@ -43,8 +44,6 @@ export class NavbarComponent implements OnInit {
 
     totalPrice: number = 0;
 
-
-    isRegisterMode: boolean = false;
 
     isLoginButtonLoading: boolean = false;
 
@@ -134,68 +133,8 @@ export class NavbarComponent implements OnInit {
         public orderService: OrderService,
         public cartService: CartService,
         public auth: AngularFireAuth,
-        public messaging: AngularFireMessaging,
-        private confirmationService: ConfirmationService) {
-
-        this.auth.authState.subscribe({
-            next: response => {
-
-                // if not null, then user is already logged in
-                if (response) {
-                    this.userAuthService.customer['id'] = response.uid;
-                    this.userAuthService.customer['email'] = response['email'];
-
-
-                    // listen data from firestore waiting list, if response is not undefined, then order is paid and is
-                    // in firestore waiting list
-                    this.orderService.getWaitingListForCustomer(response.uid).subscribe({
-                        next: res => {
-
-                            // if data exists, then waiting list in firestore is placed
-                            if (res.payload.data()) {
-                                this.orderService.currentOrder = {...res.payload.data() as WaitingList};
-                                this.orderService.isInWaitingList = true;
-                                this.router.navigate(["/order-success"]).then(null);
-                            }
-
-                            // because view cart in method register
-                            // will be called twice without if else
-                            if (!this.isRegisterMode) {
-
-                                // get cart items
-                                let params = new HttpParams().append("customerId", response.uid);
-                                this.cartService.viewCart(params).subscribe({
-                                    next: (value: any) => {
-                                        this.cartService.cart = value.data;
-
-                                        // update user profile data
-                                        this.userAuthService.formProfile.patchValue(value.data.customerProfile);
-
-                                        this.cartService.calculateTotalPrice();
-
-                                        this.userAuthService.isLoggedIn = true;
-
-                                        // set checking login status to false
-                                        this.userAuthService.isDoneLoadConfig = true;
-
-                                    }
-                                });
-                            }
-                        }
-                    });
-                } else {
-                    // clear global state
-                    this.userAuthService.customer = new CustomerProfile();
-                    this.cartService.cart = new CustomerCart();
-
-                    // set logged in to false
-                    this.userAuthService.isLoggedIn = false;
-
-                    // set checking login status to false
-                    this.userAuthService.isDoneLoadConfig = true;
-                }
-            }
-        });
+        private confirmationService: ConfirmationService
+    ) {
 
     }
 
@@ -205,16 +144,8 @@ export class NavbarComponent implements OnInit {
             this.config = config;
         });
 
-
         // init menu settings and logout
         this.initMenuUser();
-        //
-        // this.messaging.getToken.subscribe({
-        //     next: (value:any) => {
-        //         console.log(value);
-        //     }
-        // })
-
 
     }
 
@@ -526,9 +457,8 @@ export class NavbarComponent implements OnInit {
         });
     }
 
-
     onHideDialog() {
-        if (this.isRegisterMode) {
+        if (this.userAuthService.isRegisterMode) {
 
         } else {
             this.loginForm.reset();
@@ -537,7 +467,7 @@ export class NavbarComponent implements OnInit {
     }
 
     onChangeAuthMode() {
-        this.isRegisterMode = !this.isRegisterMode;
+        this.userAuthService.isRegisterMode = !this.userAuthService.isRegisterMode;
         this.resetForm();
 
         // for testing

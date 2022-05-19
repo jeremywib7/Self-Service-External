@@ -297,18 +297,18 @@
     <ng-template pTemplate="content">
         <div class="text-center mb-5">
             <img src="assets/demo/images/blocks/logos/hyper.svg" alt="Image" height="50" class="mb-3">
-            <div class="text-900 text-3xl font-medium mb-3">{{isRegisterMode ? "Register" : "Welcome Back" }}</div>
+            <div class="text-900 text-3xl font-medium mb-3">{{userAuthService.isRegisterMode ? "Register" : "Welcome Back" }}</div>
             <div class="flex align-items-center justify-content-center">
                 <span class="text-600 font-medium line-height-3 mr-2">
-                    {{isRegisterMode ? "Already have an account?" : "Don't have an account?" }}
+                    {{userAuthService.isRegisterMode ? "Already have an account?" : "Don't have an account?" }}
                 </span>
                 <button pButton pRipple (click)="onChangeAuthMode()" class="p-button-text w-auto p-1"
-                        [label]="isRegisterMode ? 'Login' : 'Register'">
+                        [label]="userAuthService.isRegisterMode ? 'Login' : 'Register'">
                 </button>
             </div>
         </div>
 
-        <form [formGroup]="loginForm" *ngIf="!isRegisterMode">
+        <form [formGroup]="loginForm" *ngIf="!userAuthService.isRegisterMode">
             <div class="p-fluid p-formgrid grid">
                 <div class="col-12">
                     <label for="loginEmail" class="block text-900 font-medium mb-2">Email</label>
@@ -364,7 +364,7 @@
 
                 <div class="col-12">
                     <button pButton pRipple (click)="onLogin()" [loading]="isLoginButtonLoading"
-                            [label]="isRegisterMode ? 'Register':'Login' " icon="pi pi-user"
+                            [label]="userAuthService.isRegisterMode ? 'Register':'Login' " icon="pi pi-user"
                             class="w-full"></button>
                 </div>
 
@@ -372,7 +372,7 @@
 
         </form>
 
-        <form [formGroup]="registerForm" *ngIf="isRegisterMode" autocomplete="off">
+        <form [formGroup]="registerForm" *ngIf="userAuthService.isRegisterMode" autocomplete="off">
             <div class="p-fluid p-formgrid grid">
 
                 <div class="col-12">
