@@ -1,14 +1,17 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {AngularFireMessaging} from "@angular/fire/compat/messaging";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class MessagingService {
 
     currentMessage = new BehaviorSubject(null);
-    constructor(private angularFireMessaging: AngularFireMessaging) {
+
+    constructor(
+        private angularFireMessaging: AngularFireMessaging
+    ) {
     }
 
     requestPermission() {
@@ -24,9 +27,13 @@ export class MessagingService {
 
 
     receiveMessage() {
+
         this.angularFireMessaging.messages.subscribe(
             (payload) => {
                 console.log("new message received. ", payload);
                 this.currentMessage.next(payload);
-            })
-    }}
+            });
+
+    }
+
+}
