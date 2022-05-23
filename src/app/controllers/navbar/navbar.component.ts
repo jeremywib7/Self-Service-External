@@ -260,13 +260,6 @@ export class NavbarComponent implements OnInit {
             accept: () => {
                 this.userAuthService.isDoneLoadConfig = true;
                 this.auth.signOut().then(() => {
-
-                    // delete token for fcm, so user will not keep receiving message
-                    this.angularFireMessaging.deleteToken(this.userAuthService.formProfile.get("messagingToken").value)
-                        .subscribe({
-                            next: (token) => {
-                            },
-                        });
                 });
             }
         });
@@ -280,6 +273,7 @@ export class NavbarComponent implements OnInit {
             const {email, password} = this.loginForm.value;
 
             this.auth.signInWithEmailAndPassword(email, password).then(user => {
+
                 this.loginMsg = [];
                 this.showAuthDialog = false;
             }).catch(

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment.prod";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Customer} from "../api/customer";
 import {CustomerProfile} from "../model/CustomerProfile";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
@@ -88,6 +88,11 @@ export class UserAuthService {
 
         return this.httpClient.post(`${this.apiServerUrl}/${this.project}/customer/update/profile`,
             customerProfile);
+    }
+
+    public updateToken(params: HttpParams) {
+        return this.httpClient.put(`${this.apiServerUrl}/${this.project}/customer/update/profile`,
+            null, {params});
     }
 
 }
