@@ -90,9 +90,9 @@ export class UserAuthService {
             customerProfile);
     }
 
-    public updateToken(params: HttpParams) {
-        return this.httpClient.put(`${this.apiServerUrl}/${this.project}/customer/update/profile`,
-            null, {params});
+    public updateMessagingToken(params: HttpParams) {
+        return this.httpClient.put(`${this.apiServerUrl}/${this.project}/customer/update/messaging-token`,
+            null, {params: params});
     }
 
 }

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, lastValueFrom, Observable} from "rxjs";
 import {AngularFireMessaging} from "@angular/fire/compat/messaging";
 
 @Injectable({
@@ -14,30 +14,26 @@ export class MessagingService {
     ) {
     }
 
-    requestPermission() {
-        this.angularFireMessaging.requestToken.subscribe({
-            next: (token) => {
-                console.log(token);
-            },
-            error: (err) => {
-                console.error('Unable to get permission to notify.', err);
-            }
-        });
-    }
+    // requestPermission(): string {
+    //     this.angularFireMessaging.requestToken.subscribe({
+    //         next: (token) => {
+    //             return token;
+    //         },
+    //         error: (err) => {
+    //             console.error('Unable to get permission to notify.', err);
+    //         }
+    //     });
+    //
+    //     return null;
+    // }
 
 
-    receiveMessage() {
+    receiveMessage() : Promise<Observable<string>>{
 
-        this.angularFireMessaging.onMessage((payload: any) => {
+        return this.angularFireMessaging.onMessage((payload: any) => {
             console.log("new message received. ", payload);
-            this.currentMessage.next(payload)
+            this.currentMessage.next(payload);
         }).then(r => null);
-
-        // this.angularFireMessaging.onMessage().subscribe(
-        //     (payload) => {
-        //         console.log("new message received. ", payload);
-        //         this.currentMessage.next(payload);
-        //     });
 
     }
 

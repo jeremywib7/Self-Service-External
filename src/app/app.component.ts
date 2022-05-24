@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import { PrimeNGConfig } from 'primeng/api';
-import {getMessaging, getToken, onMessage } from "@angular/fire/messaging";
+import {PrimeNGConfig} from 'primeng/api';
+import {getMessaging, getToken, onMessage} from "@angular/fire/messaging";
 import {environment} from "../environments/environment.prod";
 import {AngularFireMessaging} from "@angular/fire/compat/messaging";
 import {MessagingService} from "./service/messaging.service";
@@ -13,6 +13,7 @@ import {UserAuthService} from "./service/user-auth.service";
 import {OrderService} from "./service/order.service";
 import {Router} from "@angular/router";
 import {CartService} from "./service/cart.service";
+import {firstValueFrom, from, lastValueFrom} from "rxjs";
 
 @Component({
     selector: 'app-root',
@@ -21,7 +22,7 @@ import {CartService} from "./service/cart.service";
 export class AppComponent implements OnInit {
 
     menuMode = 'static';
-    message:any = null;
+    message: any = null;
 
     constructor(
         private primengConfig: PrimeNGConfig,
@@ -34,23 +35,32 @@ export class AppComponent implements OnInit {
         private messagingService: MessagingService
     ) {
         this.auth.authState.subscribe({
-            next: response => {
+            next: async response => {
 
                 // if not null, then user is already logged in
                 if (response) {
                     this.userAuthService.customer['id'] = response.uid;
                     this.userAuthService.customer['email'] = response['email'];
 
-                    // for firebase notification
-                    this.messagingService.requestPermission();
-                    this.messagingService.receiveMessage();
+                    // get messaging token for fcm
+                    await firstValueFrom(this.messaging.requestToken).then(async token => {
+
+                        // update token in database
+                        let params = new HttpParams()
+                            .append("messagingToken", token)
+                            .append("customerId", response.uid);
+                        await firstValueFrom(this.userAuthService.updateMessagingToken(params)).then(value => {
+                            console.log(value);
+                        }).catch(err => {
+                        })
+                    });
+                    await this.messagingService.receiveMessage();
                     this.message = this.messagingService.currentMessage;
 
                     // listen data from firestore waiting list, if response is not undefined, then order is paid and is
                     // in firestore waiting list
                     this.orderService.getWaitingListForCustomer(response.uid).subscribe({
                         next: res => {
-
 
                             // if data exists, then waiting list in firestore is placed
                             if (res.payload.data()) {
