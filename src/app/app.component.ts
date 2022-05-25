@@ -49,11 +49,13 @@ export class AppComponent implements OnInit {
                         let params = new HttpParams()
                             .append("messagingToken", token)
                             .append("customerId", response.uid);
+
                         await firstValueFrom(this.userAuthService.updateMessagingToken(params)).then(value => {
-                            console.log(value);
+                            // console.log(value);
                         }).catch(err => {
                         })
                     });
+
                     await this.messagingService.receiveMessage();
                     this.message = this.messagingService.currentMessage;
 
