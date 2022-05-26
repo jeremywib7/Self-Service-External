@@ -14,18 +14,24 @@ export class MessagingService {
     ) {
     }
 
-    // requestPermission(): string {
-    //     this.angularFireMessaging.requestToken.subscribe({
-    //         next: (token) => {
-    //             return token;
-    //         },
-    //         error: (err) => {
-    //             console.error('Unable to get permission to notify.', err);
-    //         }
-    //     });
-    //
-    //     return null;
-    // }
+    requestPermission(): string {
+        this.angularFireMessaging.requestPermission.subscribe({
+            next: value => {
+                console.log(value);
+
+                this.angularFireMessaging.requestToken.subscribe({
+                    next: (token) => {
+                        return token;
+                    },
+                    error: (err) => {
+                        console.error('Unable to get permission to notify.', err);
+                    }
+                });
+            }
+        })
+
+        return null;
+    }
 
 
     receiveMessage() : Promise<Observable<string>>{

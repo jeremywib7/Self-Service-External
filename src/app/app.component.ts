@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {PrimeNGConfig} from 'primeng/api';
-import {getMessaging, getToken, onMessage} from "@angular/fire/messaging";
-import {environment} from "../environments/environment.prod";
 import {AngularFireMessaging} from "@angular/fire/compat/messaging";
 import {MessagingService} from "./service/messaging.service";
 import {WaitingList} from "./model/WaitingList";
@@ -13,7 +11,7 @@ import {UserAuthService} from "./service/user-auth.service";
 import {OrderService} from "./service/order.service";
 import {Router} from "@angular/router";
 import {CartService} from "./service/cart.service";
-import {firstValueFrom, from, lastValueFrom} from "rxjs";
+import {firstValueFrom, lastValueFrom} from "rxjs";
 
 @Component({
     selector: 'app-root',
@@ -43,17 +41,21 @@ export class AppComponent implements OnInit {
                     this.userAuthService.customer['email'] = response['email'];
 
                     // get messaging token for fcm
-                    await firstValueFrom(this.messaging.requestToken).then(async token => {
+                    await lastValueFrom(this.messaging.requestPermission).then(async value => {
 
-                        // update token in database
-                        let params = new HttpParams()
-                            .append("messagingToken", token)
-                            .append("customerId", response.uid);
+                        await firstValueFrom(this.messaging.requestToken).then(async token => {
 
-                        await firstValueFrom(this.userAuthService.updateMessagingToken(params)).then(value => {
-                            // console.log(value);
-                        }).catch(err => {
-                        })
+                            // update token in database
+                            let params = new HttpParams()
+                                .append("messagingToken", token)
+                                .append("customerId", response.uid);
+
+                            await firstValueFrom(this.userAuthService.updateMessagingToken(params)).then(value => {
+                                // console.log(value);
+                            }).catch(err => {
+                            })
+                        });
+
                     });
 
                     await this.messagingService.receiveMessage();
@@ -66,9 +68,14 @@ export class AppComponent implements OnInit {
 
                             // if data exists, then waiting list in firestore is placed
                             if (res.payload.data()) {
+                                console.log("is in waiting list");
                                 this.orderService.currentOrder = {...res.payload.data() as WaitingList};
                                 this.orderService.isInWaitingList = true;
                                 this.router.navigate(["/order-success"]).then(null);
+                            } else {
+                                console.log("is not in waiting list");
+                                this.orderService.isInWaitingList = false;
+                                this.router.navigate(["/menu"]).then(null);
                             }
 
                             // because view cart in method register
