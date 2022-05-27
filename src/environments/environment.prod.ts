@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    apiBaseUrl: 'http://192.168.100.7:9090',
+    apiBaseUrl: 'http://localhost:8080',
     project: 'selfservice',
     firebase: {
         apiKey: "AIzaSyDCiCWjf3tms077CnqgiP0zWhFqQjzLdRc",
