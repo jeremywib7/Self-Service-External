@@ -1,6 +1,7 @@
 export const environment = {
     production: true,
     apiBaseUrl: 'https://selfserviceonline.herokuapp.com',
+    // apiBaseUrl: 'http://localhost:8080',
     project: 'selfservice',
     firebase: {
         apiKey: "AIzaSyDCiCWjf3tms077CnqgiP0zWhFqQjzLdRc",
