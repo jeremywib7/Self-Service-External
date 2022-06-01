@@ -4,8 +4,8 @@
 
 export const environment = {
     production: false,
-    // apiBaseUrl: 'http://localhost:8080',
-    apiBaseUrl: 'https://selfserviceonline.herokuapp.com',
+    apiBaseUrl: 'http://localhost:8080',
+    // apiBaseUrl: 'https://selfserviceonline.herokuapp.com',
     project: 'selfservice',};
 
 /*
