@@ -29,9 +29,11 @@ export class OrderService {
         public fireServices: AngularFirestore) {
     }
 
+    // stream
     getWaitingListForCustomer(customerId: string) {
         return this.fireServices.collection('Waiting_List').doc(customerId).snapshotChanges();
     }
+
 
     addOrder(params: HttpParams, orderedProduct: CartOrderedProduct[]) {
         return this.httpClient.post(`${this.apiServerUrl}/${this.project}/order/add`, orderedProduct, {params: params})

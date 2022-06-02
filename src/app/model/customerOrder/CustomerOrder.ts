@@ -5,16 +5,18 @@ export abstract class CustomerOrder {
 
     id: string;
     number: number;
-    status: string;
     orderIsActive: boolean;
     dateCreated: string;
-    orderProcessed: boolean;
-    orderFinished: boolean;
+    orderProcessed: string;
+    orderFinished: string;
     updatedOn: string;
     customerProfile: CustomerProfile;
     historyProductOrders: HistoryProductOrder[];
     totalPaid: number;
     totalChange: number;
     totalPrice: number;
+    estHour: number;
+    estMinute: number;
+    estSecond: number;
     estTime: string;
 }
