@@ -186,7 +186,7 @@
                             <li *ngFor="let product of cartService?.cart?.cartOrderedProduct; let i = index"
                                 class="p-3 {{i != cartService?.cart?.cartOrderedProduct.length -1 ? 'border-bottom-1' : ''}}
                             surface-border flex align-items-start sm:align-items-center">
-                                <img [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download/file?' +
+                                <img [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download?' +
                                 'imageName=' + product?.product?.images[0]?.imageName + '&' +
                                 'productId=' + product?.product?.id "
                                      class="w-3rem h-3rem sm:w-8rem sm:h-8rem flex-shrink-0 mr-3 shadow-2"/>
