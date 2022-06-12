@@ -68,14 +68,11 @@ export class AppComponent implements OnInit {
 
                             // if data exists, then waiting list in firestore is placed
                             if (res.payload.data()) {
-                                console.log("is in waiting list");
                                 this.orderService.currentOrder = {...res.payload.data() as WaitingList};
                                 this.orderService.isInWaitingList = true;
                                 this.router.navigate(["/order-success"]).then(null);
                             } else {
-                                console.log("is not in waiting list");
                                 this.orderService.isInWaitingList = false;
-                                this.router.navigate(["/menu"]).then(null);
                             }
 
                             // because view cart in method register

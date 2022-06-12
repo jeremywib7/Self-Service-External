@@ -6,6 +6,8 @@ import {HttpParams} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {InputNumber} from "primeng/inputnumber";
 import {OverlayPanel} from "primeng/overlaypanel";
+import {Dropdown} from "../../model/Dropdown";
+import {firstValueFrom} from "rxjs";
 
 @Component({
     selector: 'app-menu-book',
@@ -20,6 +22,9 @@ export class MenuBookComponent implements OnInit {
 
     products: Product[] = [];
 
+    categoryDd: Dropdown[] = []
+    selectedCategoryDd : string;
+
     sortField: string;
 
     sortOrder: number;
@@ -32,6 +37,7 @@ export class MenuBookComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.loadProductCategoryForDropdown().then(r => null);
     }
 
     loadAllProducts(event: LazyLoadEvent) {
@@ -56,6 +62,12 @@ export class MenuBookComponent implements OnInit {
             }
         });
 
+    }
+
+    async loadProductCategoryForDropdown() {
+        const res: any = await firstValueFrom(this.productService.loadAllProductCategoryForDropdowns());
+        this.categoryDd =  res.data;
+        console.log(res);
     }
 
     onAddToCart(overlayPanel: OverlayPanel, $event) {
