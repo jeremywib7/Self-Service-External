@@ -213,28 +213,13 @@ export class NavbarComponent implements OnInit {
         if (this.resetPasswordForm.valid) {
             this.isResetPasswordButtonLoading = true;
             from(this.auth.sendPasswordResetEmail(this.resetPasswordForm.value.email)).subscribe({
-                next: value => {
+                next: () => {
                     this.resetPasswordMsg = [
                         {severity: 'success', summary: 'Success', detail: 'Password reset sent to this email'},
                     ];
                 },
                 error: err => {
-                    let errorMessage;
-                    switch (err.code) {
-                        case 'auth/invalid-email': {
-                            errorMessage = 'Email format is invalid';
-                            break;
-                        }
-                        case "auth/user-not-found": {
-                            errorMessage = 'User not found for this email'
-                            break;
-                        }
-                        default: {
-                            errorMessage = 'Reset password error. Try again later';
-                            break;
-                        }
-                    }
-
+                    let errorMessage = this.userAuthService.catchSendPasswordResetEmail(err);
                     this.resetPasswordMsg = [
                         {severity: 'error', summary: 'Failed', detail: errorMessage},
                     ];

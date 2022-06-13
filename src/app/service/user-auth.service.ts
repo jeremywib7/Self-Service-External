@@ -95,41 +95,29 @@ export class UserAuthService {
             customerProfile);
     }
 
-    public async resetPassword(email: string) {
-        await from(this.auth.sendPasswordResetEmail(email)).subscribe({
-            next: value => {
-                return value;
-            },
-            error: err => {
-                let errorMessage;
-                switch (err.code) {
-                    case 'auth/invalid-email': {
-                        errorMessage = 'Email format is invalid';
-                        break;
-                    }
-                    case "auth/user-not-found": {
-                        errorMessage = 'User not found for this email'
-                        break;
-                    }
-                    default: {
-                        errorMessage = 'Reset password error. Try again later';
-                        break;
-                    }
-                }
-
-                // this.resetPasswordMsg = [
-                //     {severity: 'error', summary: 'Failed', detail: errorMessage},
-                // ];
-            }
-        }).add(() => {
-            //Called when operation is complete (both success and error)
-            // this.isResetPasswordButtonLoading = false;
-        });
-    }
-
     public updateMessagingToken(params: HttpParams) {
         return this.httpClient.put(`${this.apiServerUrl}/${this.project}/customer/update/messaging-token`,
             null, {params: params});
+    }
+
+    public catchSendPasswordResetEmail(err: any): string {
+        let errorMessage;
+        switch (err.code) {
+            case 'auth/invalid-email': {
+                errorMessage = 'Email format is invalid';
+                break;
+            }
+            case "auth/user-not-found": {
+                errorMessage = 'User not found for this email'
+                break;
+            }
+            default: {
+                errorMessage = 'Reset password error. Try again later';
+                break;
+            }
+        }
+
+        return errorMessage;
     }
 
 }
