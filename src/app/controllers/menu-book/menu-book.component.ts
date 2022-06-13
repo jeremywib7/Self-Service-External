@@ -18,6 +18,10 @@ export class MenuBookComponent implements OnInit {
     apiBaseUrl = environment.apiBaseUrl;
     projectName = environment.project;
 
+    params: HttpParams;
+
+    withCategory: boolean = false;
+
     isLoadingProducts: boolean = false;
 
     products: Product[] = [];
@@ -55,6 +59,7 @@ export class MenuBookComponent implements OnInit {
 
         params = params.append("order", 0);
         params = params.append("size", event.rows);
+        this.params = params;
 
         this.productService.loadAllProducts(params).subscribe({
             next: (value: any) => {
@@ -64,10 +69,23 @@ export class MenuBookComponent implements OnInit {
 
     }
 
+    loadAllProductsWithCategory(event: any) {
+        this.params = this.params.delete("categoryName"); // reset
+
+        if (event.value != null) {
+            this.params = this.params.append("categoryName", event.value); // filter with category name
+        }
+
+        this.productService.loadAllProducts(this.params).subscribe({
+            next: (value: any) => {
+                this.products = value['data']['content'];
+            }
+        });
+    }
+
     async loadProductCategoryForDropdown() {
         const res: any = await firstValueFrom(this.productService.loadAllProductCategoryForDropdowns());
         this.categoryDd =  res.data;
-        console.log(res);
     }
 
     onAddToCart(overlayPanel: OverlayPanel, $event) {

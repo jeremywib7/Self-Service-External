@@ -30,7 +30,6 @@ export class HistoryComponent implements OnInit {
             this.orderService.viewCustomerOrders(this.userAuthService.customer['id']).subscribe({
                 next: (value: any) => {
                     this.orderService.customerOrders = value.data;
-                    console.log(value.data);
                 }
             });
 

@@ -73,6 +73,11 @@ export class AppComponent implements OnInit {
                                 this.router.navigate(["/order-success"]).then(null);
                             } else {
                                 this.orderService.isInWaitingList = false;
+                                // if route is order success then change the dashboard
+                                // because order is not available or already finished
+                                if (this.router.url === '/order-success') {
+                                    this.router.navigate(["/"]).then(null);
+                                }
                             }
 
                             // because view cart in method register
@@ -91,6 +96,7 @@ export class AppComponent implements OnInit {
                                         this.cartService.calculateTotalPrice();
 
                                         this.userAuthService.isLoggedIn = true;
+                                        this.userAuthService.buttonAuthText = "Sign Out";
 
                                         // set checking login status to false
                                         this.userAuthService.isDoneLoadConfig = true;
@@ -107,6 +113,7 @@ export class AppComponent implements OnInit {
 
                     // set logged in to false
                     this.userAuthService.isLoggedIn = false;
+                    this.userAuthService.buttonAuthText = "Sign In";
 
                     // set checking login status to false
                     this.userAuthService.isDoneLoadConfig = true;

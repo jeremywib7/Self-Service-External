@@ -2,7 +2,9 @@
     <div class="grid">
         <div class="col-12 lg:col-6 text-center">
             <app-image-loader></app-image-loader>
-            <img [lazyLoad]="apiBaseUrl +'/'+ projectName +'/images/customer/product/download?' +
+            <img
+                defaultImage="/assets/demo/images/galleria/spinner.gif"
+                [lazyLoad]="apiBaseUrl +'/'+ projectName +'/images/customer/product/download?' +
                                 'imageName=' + product?.images[selectedImageIndex]?.imageName + '&' +
                                 'productId=' + product?.id"
                  [alt]="product?.name"
@@ -15,7 +17,9 @@
                 <!--                    <p-skeleton width="7rem" height="5rem"></p-skeleton>-->
                 <!--                </div>-->
                 <div *ngFor="let image of product?.images; let i = index" class="col-3">
-                    <img [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download?' +
+                    <img
+                        defaultImage="/assets/demo/images/galleria/spinner.gif"
+                        [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download?' +
                                                 'imageName=' + image.imageName + '&' +
                                                 'productId=' + product?.id "
                          class="w-7rem h-5rem cursor-pointer border-2 border-round border-transparent transition-colors transition-duration-150"

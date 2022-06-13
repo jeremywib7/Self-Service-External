@@ -9,8 +9,8 @@
                             [sortOrder]="sortOrder" layout="grid">
                     <ng-template pTemplate="header">
                         <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-                            <p-dropdown [options]="categoryDd" [(ngModel)]="selectedCategoryDd"
-                                        [filter]="true" [showClear]="true"
+                            <p-dropdown [options]="categoryDd" optionValue="label"
+                                        [filter]="true" [showClear]="true" (onChange)="loadAllProductsWithCategory($event)"
                                         placeholder="Select a category">
                             </p-dropdown>
                             <span class="p-input-icon-left mb-2 md:mb-0">

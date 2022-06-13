@@ -44,6 +44,8 @@ export class NavbarComponent implements OnInit {
 
     totalPrice: number = 0;
 
+    buttonAuthText: string;
+
 
     isLoginButtonLoading: boolean = false;
 

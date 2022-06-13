@@ -5,6 +5,8 @@ import {Customer} from "../api/customer";
 import {CustomerProfile} from "../model/CustomerProfile";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
+import {firstValueFrom, from} from "rxjs";
+import {AngularFireAuth} from "@angular/fire/compat/auth";
 
 @Injectable({
     providedIn: 'root'
@@ -13,6 +15,8 @@ export class UserAuthService {
 
     private apiServerUrl = environment.apiBaseUrl;
     private project = environment.project;
+
+    public buttonAuthText: string;
 
     public isLoggedIn: boolean = false;
 
@@ -36,6 +40,7 @@ export class UserAuthService {
     constructor(
         private httpClient: HttpClient,
         private fb: FormBuilder,
+        private auth: AngularFireAuth
     ) {
         this.formProfile = this.fb.group({
             id: new FormControl(
@@ -88,6 +93,38 @@ export class UserAuthService {
 
         return this.httpClient.post(`${this.apiServerUrl}/${this.project}/customer/update/profile`,
             customerProfile);
+    }
+
+    public async resetPassword(email: string) {
+        await from(this.auth.sendPasswordResetEmail(email)).subscribe({
+            next: value => {
+                return value;
+            },
+            error: err => {
+                let errorMessage;
+                switch (err.code) {
+                    case 'auth/invalid-email': {
+                        errorMessage = 'Email format is invalid';
+                        break;
+                    }
+                    case "auth/user-not-found": {
+                        errorMessage = 'User not found for this email'
+                        break;
+                    }
+                    default: {
+                        errorMessage = 'Reset password error. Try again later';
+                        break;
+                    }
+                }
+
+                // this.resetPasswordMsg = [
+                //     {severity: 'error', summary: 'Failed', detail: errorMessage},
+                // ];
+            }
+        }).add(() => {
+            //Called when operation is complete (both success and error)
+            // this.isResetPasswordButtonLoading = false;
+        });
     }
 
     public updateMessagingToken(params: HttpParams) {

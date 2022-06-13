@@ -5,11 +5,11 @@
             <span class="text-900 text-3xl mb-2">My Orders</span>
             <span class="text-600 text-xl">Your order history.</span>
         </div>
-        <span class="p-input-icon-right mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
-                <i class="pi pi-search text-gray-400"></i>
-                <input type="text" class="p-inputtext w-full lg:w-25rem surface-100 surface-border"
-                       placeholder="Search"/>
-            </span>
+<!--        <span class="p-input-icon-right mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">-->
+<!--                <i class="pi pi-search text-gray-400"></i>-->
+<!--                <input type="text" class="p-inputtext w-full lg:w-25rem surface-100 surface-border"-->
+<!--                       placeholder="Search"/>-->
+<!--            </span>-->
     </div>
 
     <div *ngIf="orderService.customerOrders.length >= 1; then thenTemplateName else elseTemplateName">
@@ -27,13 +27,13 @@
                 <p-divider align="center" layout="vertical" styleClass="h-full  mx-0 lg:mx-3"></p-divider>
                 <div class="p-2 flex-auto text-center md:text-left">
                     <span class="text-600 block">Order Created</span>
-                    <span class="text-900 font-medium block mt-2">{{order.dateCreated}}</span>
+                    <span class="text-900 font-medium block mt-2">{{order.dateTimeCreated}}</span>
                 </div>
                 <p-divider *ngIf="order.orderFinished != null" align="center" layout="vertical"
                            styleClass="h-full  mx-0 lg:mx-3"></p-divider>
                 <div *ngIf="order.orderFinished != null" class="p-2 flex-auto text-center md:text-left">
                     <span class="text-600 block">Order Finished</span>
-                    <span class="text-900 font-medium block mt-2">{{order.updatedOn}}</span>
+                    <span class="text-900 font-medium block mt-2">{{order.orderFinished}}</span>
                 </div>
                 <p-divider align="center" layout="vertical" styleClass="h-full  mx-0 lg:mx-3"></p-divider>
                 <div class="p-2 flex-auto text-center md:text-left">

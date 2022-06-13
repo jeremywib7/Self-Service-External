@@ -6,7 +6,7 @@ export abstract class CustomerOrder {
     id: string;
     number: number;
     orderIsActive: boolean;
-    dateCreated: string;
+    dateTimeCreated: string;
     orderProcessed: string;
     orderFinished: string;
     updatedOn: string;
