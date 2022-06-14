@@ -7,6 +7,7 @@ import {UserAuthService} from "./user-auth.service";
 import {CustomerOrder} from "../model/customerOrder/CustomerOrder";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
 import {WaitingList} from "../model/WaitingList";
+import {DatePipe} from "@angular/common";
 
 @Injectable({
     providedIn: 'root'
@@ -26,6 +27,7 @@ export class OrderService {
     constructor(
         private httpClient: HttpClient,
         public userAuthService: UserAuthService,
+        private datePipe: DatePipe,
         public fireServices: AngularFirestore) {
     }
 
@@ -47,9 +49,17 @@ export class OrderService {
             .pipe(map((data) => data || []))
     }
 
-    viewCustomerOrders(customerId: string, page: number, size: number) {
+    viewCustomerOrders(customerId: string, page: number, size: number, dateFrom: Date, dateTill: Date) {
         let params = new HttpParams()
-            .append("customerId", customerId)
+            .append("customerId", customerId);
+
+        if (dateFrom != null) {
+            params = params.append("dateFrom", this.datePipe.transform(dateFrom, 'dd-MM-yyyy'));
+        }
+
+        if (dateTill != null) {
+            params = params.append("dateTill", this.datePipe.transform(dateTill, 'dd-MM-yyyy'));
+        }
 
         if (page != null) {
             params = params.append("page", page);

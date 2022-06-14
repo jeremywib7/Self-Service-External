@@ -8,6 +8,7 @@ import {CartService} from "../../service/cart.service";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {UserAuthService} from "../../service/user-auth.service";
 import {ConfirmationService} from "primeng/api";
+import {OrderService} from "../../service/order.service";
 
 @Component({
     selector: 'app-menu-view',
@@ -35,6 +36,7 @@ export class MenuViewComponent implements OnInit {
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
+        public orderService: OrderService,
         public cartService: CartService,
         private confirmationService: ConfirmationService,
         public auth: AngularFireAuth,

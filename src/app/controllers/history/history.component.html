@@ -7,24 +7,16 @@
             <span class="text-600 text-xl">Your order history.</span>
         </div>
 
-        <!--        <div class="flex align-items-center col-12 md:col-3 ml-auto my-3 md:my-0">-->
-        <!--            <p-calendar placeholder="Date From" dateFormat="dd-mm-yy" appendTo="body" [showIcon]="true"-->
-        <!--                        inputId="icon"></p-calendar>-->
-        <!--        </div>-->
-
-        <!--        <div class="flex align-items-center col-12 md:col-3">-->
-        <!--            <p-calendar placeholder="Date Till" dateFormat="dd-mm-yy"-->
-        <!--                        appendTo="body" [showIcon]="true"-->
-        <!--                        inputId="icon"></p-calendar>-->
-        <!--        </div>-->
-
-        <span class="p-input-icon-right mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
-            <p-calendar placeholder="Date From" dateFormat="dd-mm-yy" appendTo="body" [showIcon]="true"
-                        inputId="icon"></p-calendar>
-<!--            <i class="pi pi-search text-gray-400"></i>-->
-<!--            <input type="text" class="p-inputtext w-full lg:w-25rem surface-100 surface-border"-->
-<!--                   placeholder="Search"/>-->
-        </span>
+        <div class="mt-5 ld:mt-0">
+            <p-calendar placeholder="Date From" styleClass="w-12rem" dateFormat="dd-mm-yy" appendTo="body"
+                        [showIcon]="true" [(ngModel)]="dateFrom" (ngModelChange)="onDateFromChanged()" inputId="icon"></p-calendar>
+            -
+            <p-calendar placeholder="Date Till" styleClass="w-12rem mr-2" dateFormat="dd-mm-yy" appendTo="body"
+                        [showIcon]="true" [(ngModel)]="dateTill" (ngModelChange)="onDateTillChanged()" inputId="icon"></p-calendar>
+            <button (click)="onFilterDateHistory()" pButton pRipple
+                    type="button" icon="pi pi-search"
+                    class="p-button-rounded"></button>
+        </div>
     </div>
 
     <div *ngIf="orderService.customerOrders.length >= 1; then thenTemplateName else elseTemplateName">
@@ -109,7 +101,7 @@
                 <img src="assets/empty-history.png" width="300" height="300">
             </div>
 
-            <p class="text-700 text-3xl mt-0 mb-6 text-center">Your have no order yet</p>
+            <p class="text-700 text-3xl mt-0 mb-6 text-center">You have no order yet</p>
         </div>
     </ng-template>
 

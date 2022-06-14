@@ -7,8 +7,8 @@
                 [lazyLoad]="apiBaseUrl +'/'+ projectName +'/images/customer/product/download?' +
                                 'imageName=' + product?.images[selectedImageIndex]?.imageName + '&' +
                                 'productId=' + product?.id"
-                 [alt]="product?.name"
-                 class="mb-3 w-24rem h-18rem"/>
+                [alt]="product?.name"
+                class="mb-3 w-24rem h-18rem"/>
 
             <div class="grid justify-content-center">
                 <!--                <div class="flex">-->
@@ -22,9 +22,9 @@
                         [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download?' +
                                                 'imageName=' + image.imageName + '&' +
                                                 'productId=' + product?.id "
-                         class="w-7rem h-5rem cursor-pointer border-2 border-round border-transparent transition-colors transition-duration-150"
-                         [ngClass]="{'border-primary': selectedImageIndex === i}"
-                         (click)="selectedImageIndex = i"/>
+                        class="w-7rem h-5rem cursor-pointer border-2 border-round border-transparent transition-colors transition-duration-150"
+                        [ngClass]="{'border-primary': selectedImageIndex === i}"
+                        (click)="selectedImageIndex = i"/>
                 </div>
             </div>
         </div>
@@ -34,13 +34,31 @@
                 <button *ngIf="cartService.isInCart" (click)="onDeleteFromCart()" pButton pRipple icon="pi pi-trash"
                         class="p-button-danger p-button-text p-button-rounded"></button>
             </div>
-            <span class="text-900 font-medium text-3xl block mb-5">
+
+            <span *ngIf="product.discount" class="text-900 font-medium text-2xl line-through block mb-2">
                 {{product?.unitPrice | currency:'Rp. ':
                 'symbol':'3.0'}}
             </span>
 
+            <span
+                  class="text-900 font-medium text-3xl   block mb-5 {{product.discount ? 'text-pink-500':''}}">
+                {{product?.discountedPrice | currency:'Rp. ':
+                'symbol':'3.0'}}
+            </span>
+
+
+            <!--            <span class="text-xl font-medium {{product.discount ? 'text-pink-500':''}}">-->
+            <!--                {{product.discountedPrice | currency:'Rp. ':'symbol':-->
+            <!--                '2.0'}}-->
+            <!--            </span>-->
+            <!--            <span *ngIf="product.discount"-->
+            <!--                  class="text-xl font-medium text-700 line-through ml-3">-->
+            <!--                                            {{product.unitPrice | currency:'Rp. ':'symbol':-->
+            <!--                '2.0'}}-->
+            <!--            </span>-->
+
             <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between mb-5">
-                <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" min="1"
+                <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" min="1" [disabled]="cartService.cart.isPlacedInOrder"
                                inputStyleClass="w-3rem text-center" [(ngModel)]="this.currentQuantity"
                                decrementButtonClass="p-button-text" incrementButtonClass="p-button-text"
                                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
@@ -49,11 +67,12 @@
                         (click)="cartService.onSubmitProductToCart(product?.id, this.currentQuantity,
                         this.userAuthService.customer['id'])"
                         pButton pRipple
+                        [disabled]="cartService.cart.isPlacedInOrder"
                         [label]="cartService.isInCart ? 'Update Cart': 'Add To Cart'"
                         class="flex-1 mr-5"></button>
-                    <i class="pi text-2xl cursor-pointer"
-                       [ngClass]="{'pi-heart text-600': !liked, 'pi-heart-fill text-orange-500': liked}"
-                       (click)="liked = !liked"></i>
+<!--                    <i class="pi text-2xl cursor-pointer"-->
+<!--                       [ngClass]="{'pi-heart text-600': !liked, 'pi-heart-fill text-orange-500': liked}"-->
+<!--                       (click)="liked = !liked"></i>-->
                 </div>
             </div>
 

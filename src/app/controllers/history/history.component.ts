@@ -14,6 +14,10 @@ export class HistoryComponent implements OnInit {
     apiBaseUrl = environment.apiBaseUrl;
     projectName = environment.project;
 
+    todayDate: Date = new Date();
+    dateFrom: Date;
+    dateTill: Date;
+
     totalElements: number = 0;
     selectedRowSize: number = 5;
 
@@ -21,6 +25,8 @@ export class HistoryComponent implements OnInit {
         public userAuthService: UserAuthService,
         public orderService: OrderService
     ) {
+        this.dateFrom = new Date(this.todayDate.getFullYear(), this.todayDate.getMonth(), 1);
+        this.dateTill = new Date(this.todayDate.getFullYear(), this.todayDate.getMonth() + 1, 0);
     }
 
     ngOnInit(): void {
@@ -29,13 +35,33 @@ export class HistoryComponent implements OnInit {
             while (this.userAuthService.customer['id'] === undefined)
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
-            this.orderService.viewCustomerOrders(this.userAuthService.customer['id'], null, null).subscribe({
+            this.orderService.viewCustomerOrders(this.userAuthService.customer['id'], null, null, null, null).subscribe({
                 next: (value: any) => {
                     this.totalElements =  value.data.totalElements;
                     this.orderService.customerOrders = value.data.content;
                 }
             });
         })();
+    }
+
+    onDateFromChanged() {
+        if (this.dateFrom == null) {
+            this.dateFrom = new Date(this.todayDate.getFullYear(), this.todayDate.getMonth(), 1);
+        }
+    }
+
+    onDateTillChanged() {
+        if (this.dateTill == null) {
+            this.dateTill = new Date(this.todayDate.getFullYear(), this.todayDate.getMonth() + 1, 0);
+        }
+    }
+
+    onFilterDateHistory() {
+        this.orderService.viewCustomerOrders(this.userAuthService.customer['id'], null, null, this.dateFrom, this.dateTill).subscribe({
+            next: (value: any) => {
+                this.orderService.customerOrders = value.data.content;
+            }
+        });
     }
 
     labelStatus(customerOrder: CustomerOrder): string {
@@ -93,7 +119,7 @@ export class HistoryComponent implements OnInit {
 
     changePagination(event) {
         this.selectedRowSize = event.rows;
-        this.orderService.viewCustomerOrders(this.userAuthService.customer['id'], event.page, event.rows).subscribe({
+        this.orderService.viewCustomerOrders(this.userAuthService.customer['id'], event.page, event.rows, this.dateFrom, this.dateTill).subscribe({
             next: (value: any) => {
                 this.orderService.customerOrders = value.data.content;
             }
