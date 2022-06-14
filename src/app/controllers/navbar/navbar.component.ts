@@ -1,7 +1,7 @@
 import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {Router} from "@angular/router";
 import {AppConfig} from "../../api/appconfig";
-import {from, Subscription} from "rxjs";
+import {firstValueFrom, from, Subscription} from "rxjs";
 import {ConfigService} from "../../service/app.config.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {UserAuthService} from "../../service/user-auth.service";
@@ -366,6 +366,13 @@ export class NavbarComponent implements OnInit {
             }
         })
 
+    }
+
+    async onCancelOrder() {
+        const res: any = await firstValueFrom(this.orderService.cancelOrder(this.userAuthService.formProfile.get('id').value));
+        this.cartService.cart.isPlacedInOrder = false;
+        this.cartService.cart.cartOrderedProduct = [];
+        console.log(res);
     }
 
     onChangeQuantityFromCart(quantity: number, productId: string, index: number) {

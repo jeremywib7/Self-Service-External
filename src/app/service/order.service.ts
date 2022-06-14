@@ -40,8 +40,24 @@ export class OrderService {
             .pipe(map((data) => data || []))
     }
 
-    viewCustomerOrders(customerId: string) {
+    cancelOrder(customerId: string) {
         let params = new HttpParams().append("customerId", customerId);
+
+        return this.httpClient.put(`${this.apiServerUrl}/${this.project}/order/cancel`, null, {params: params})
+            .pipe(map((data) => data || []))
+    }
+
+    viewCustomerOrders(customerId: string, page: number, size: number) {
+        let params = new HttpParams()
+            .append("customerId", customerId)
+
+        if (page != null) {
+            params = params.append("page", page);
+        }
+
+        if (size != null) {
+            params = params.append("size", size);
+        }
 
         return this.httpClient.get(`${this.apiServerUrl}/${this.project}/order/view`, {params: params})
             .pipe(map((data) => data || []))

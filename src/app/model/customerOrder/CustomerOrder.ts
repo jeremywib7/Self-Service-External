@@ -8,6 +8,7 @@ export abstract class CustomerOrder {
     orderIsActive: boolean;
     dateTimeCreated: string;
     orderProcessed: string;
+    orderCancelled: string;
     orderFinished: string;
     updatedOn: string;
     customerProfile: CustomerProfile;

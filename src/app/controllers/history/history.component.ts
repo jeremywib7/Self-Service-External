@@ -14,6 +14,9 @@ export class HistoryComponent implements OnInit {
     apiBaseUrl = environment.apiBaseUrl;
     projectName = environment.project;
 
+    totalElements: number = 0;
+    selectedRowSize: number = 5;
+
     constructor(
         public userAuthService: UserAuthService,
         public orderService: OrderService
@@ -21,20 +24,18 @@ export class HistoryComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
         // view customer orders
         (async () => {
             while (this.userAuthService.customer['id'] === undefined)
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
-            this.orderService.viewCustomerOrders(this.userAuthService.customer['id']).subscribe({
+            this.orderService.viewCustomerOrders(this.userAuthService.customer['id'], null, null).subscribe({
                 next: (value: any) => {
-                    this.orderService.customerOrders = value.data;
+                    this.totalElements =  value.data.totalElements;
+                    this.orderService.customerOrders = value.data.content;
                 }
             });
-
         })();
-
     }
 
     labelStatus(customerOrder: CustomerOrder): string {
@@ -46,6 +47,11 @@ export class HistoryComponent implements OnInit {
         // order processed
         if (customerOrder.orderProcessed != null) {
             return "Processing";
+        }
+
+        // order cancelled
+        if (customerOrder.orderCancelled != null) {
+            return "Cancelled";
         }
 
         return 'Waiting for payment';
@@ -63,6 +69,11 @@ export class HistoryComponent implements OnInit {
             return "p-button-info";
         }
 
+        // order cancelled
+        if (customerOrder.orderCancelled != null) {
+            return "p-button-danger";
+        }
+
         // waiting for payment
         return "p-button-warning";
 
@@ -78,6 +89,15 @@ export class HistoryComponent implements OnInit {
         //     default :
         //         return "bg-primary";
         // }
+    }
+
+    changePagination(event) {
+        this.selectedRowSize = event.rows;
+        this.orderService.viewCustomerOrders(this.userAuthService.customer['id'], event.page, event.rows).subscribe({
+            next: (value: any) => {
+                this.orderService.customerOrders = value.data.content;
+            }
+        });
     }
 
 }
