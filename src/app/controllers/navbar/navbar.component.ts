@@ -247,6 +247,7 @@ export class NavbarComponent implements OnInit {
             accept: () => {
                 this.userAuthService.isDoneLoadConfig = true;
                 this.auth.signOut().then(() => {
+                    this.router.navigate(["/"]);
                 });
             }
         });
@@ -312,11 +313,14 @@ export class NavbarComponent implements OnInit {
                     // register in backend
                     this.userAuthService.registerCustomer(this.registerForm.value).subscribe({
                         next: (value: any) => {
+
                             this.registerMsg = [];
                             this.showAuthDialog = false;
 
                             // get cart information
                             this.cartService.cart = value.data;
+                            // update user profile data
+                            this.userAuthService.formProfile.patchValue(value.data.customerProfile);
                             this.userAuthService.isLoggedIn = true;
 
                             // sign in using firebase

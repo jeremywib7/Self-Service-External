@@ -83,7 +83,6 @@ export class AppComponent implements OnInit {
                             // because view cart in method register
                             // will be called twice without if else
                             if (!this.userAuthService.isRegisterMode) {
-
                                 // get cart items
                                 let params = new HttpParams().append("customerId", response.uid);
                                 this.cartService.viewCart(params).subscribe({

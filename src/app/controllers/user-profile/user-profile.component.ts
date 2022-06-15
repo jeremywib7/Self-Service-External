@@ -4,6 +4,7 @@ import {environment} from "../../../environments/environment.prod";
 import {UserAuthService} from "../../service/user-auth.service";
 import {MessageService} from "primeng/api";
 import {from} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-user-profile',
@@ -17,6 +18,7 @@ export class UserProfileComponent implements OnInit {
 
     constructor(
         public cartService: CartService,
+        private router: Router,
         public userService: UserAuthService,
         public messageService: MessageService
     ) {
@@ -34,30 +36,12 @@ export class UserProfileComponent implements OnInit {
                         summary: 'Success',
                         detail: value.message
                     });
+                    this.router.navigate(["/menu"]);
                 }
             });
         } else {
             this.userService.formProfile.markAllAsTouched();
         }
     }
-
-    // resetPassword(email: string) {
-    //     from(this.auth.sendPasswordResetEmail(this.resetPasswordForm.value.email)).subscribe({
-    //         next: () => {
-    //             this.resetPasswordMsg = [
-    //                 {severity: 'success', summary: 'Success', detail: 'Password reset sent to this email'},
-    //             ];
-    //         },
-    //         error: err => {
-    //             let errorMessage = this.userAuthService.catchSendPasswordResetEmail(err);
-    //             this.resetPasswordMsg = [
-    //                 {severity: 'error', summary: 'Failed', detail: errorMessage},
-    //             ];
-    //         }
-    //     }).add(() => {
-    //         //Called when operation is complete (both success and error)
-    //         this.isResetPasswordButtonLoading = false;
-    //     });
-    // }
 
 }

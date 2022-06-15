@@ -67,15 +67,18 @@ export class UserAuthService {
                 validators: [RxwebValidators.required()]
             }),
             password: new FormControl('', {
-                validators: [RxwebValidators.required(), RxwebValidators.password({
-                    validation: {
-                        minLength: 8,
-                        digit: true,
-                        specialCharacter: true,
-                        upperCase: true
-                    }
-                })]
+                validators: [RxwebValidators.required()]
             }),
+            // password: new FormControl('', {
+            //     validators: [RxwebValidators.required(), RxwebValidators.password({
+            //         validation: {
+            //             minLength: 8,
+            //             digit: true,
+            //             specialCharacter: true,
+            //             upperCase: true
+            //         }
+            //     })]
+            // }),
             messagingToken: new FormControl('', {
                 validators: [RxwebValidators.required()]
             }),
