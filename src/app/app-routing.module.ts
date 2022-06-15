@@ -1,7 +1,6 @@
 import {RouterModule} from '@angular/router';
 import {NgModule} from '@angular/core';
 import {AppMainComponent} from './app.main.component';
-import {LandingComponent} from './components/landing/landing.component';
 import {ErrorComponent} from './components/error/error.component';
 import {NotfoundComponent} from './components/notfound/notfound.component';
 import {AccessComponent} from './components/access/access.component';
