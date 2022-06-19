@@ -28,6 +28,7 @@ export class AppComponent implements OnInit {
         public userAuthService: UserAuthService,
         public cartService: CartService,
         public orderService: OrderService,
+        public angularFireMessaging: AngularFireMessaging,
         private router: Router,
         private messaging: AngularFireMessaging,
         private messagingService: MessagingService
@@ -73,6 +74,8 @@ export class AppComponent implements OnInit {
                                 this.router.navigate(["/order-success"]).then(null);
                             } else {
                                 this.orderService.isInWaitingList = false;
+                                this.cartService.cart.isPlacedInOrder = false;
+                                this.cartService.cart.cartOrderedProduct = [];
                                 // if route is order success then change the dashboard
                                 // because order is not available or already finished
                                 if (this.router.url === '/order-success') {
@@ -86,11 +89,17 @@ export class AppComponent implements OnInit {
                                 // get cart items
                                 let params = new HttpParams().append("customerId", response.uid);
                                 this.cartService.viewCart(params).subscribe({
-                                    next: (value: any) => {
+                                    next: async (value: any) => {
                                         this.cartService.cart = value.data;
 
                                         // update user profile data
                                         this.userAuthService.formProfile.patchValue(value.data.customerProfile);
+
+                                        // check if fcm token is null
+                                        if (this.userAuthService.formProfile.get("messagingToken").value == null) {
+                                            const res: any = await firstValueFrom(this.angularFireMessaging.requestToken);
+                                            this.userAuthService.formProfile.get("messagingToken").setValue(res);
+                                        }
 
                                         this.cartService.calculateTotalPrice();
 

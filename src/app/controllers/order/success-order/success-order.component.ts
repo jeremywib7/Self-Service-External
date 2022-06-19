@@ -114,7 +114,7 @@ export class SuccessOrderComponent implements OnInit, AfterContentChecked {
         this.orderService.viewCurrentCustomerOrder(this.userAuthService.customer.id).subscribe({
             next: (value: any) => {
                 this.customerOrder = value.data;
-                this.orderSteps[0].time = value.data.dateCreated;
+                this.orderSteps[0].time = value.data.dateTimeCreated;
                 this.orderSteps[1].time = value.data.orderProcessed;
             }
         }).add(() => {

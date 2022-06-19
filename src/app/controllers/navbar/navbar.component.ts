@@ -307,7 +307,6 @@ export class NavbarComponent implements OnInit {
 
             this.angularFireMessaging.requestToken.subscribe({
                 next: (token) => {
-
                     this.registerForm.get("messagingToken").setValue(token);
 
                     // register in backend
@@ -316,6 +315,7 @@ export class NavbarComponent implements OnInit {
 
                             this.registerMsg = [];
                             this.showAuthDialog = false;
+                            this.userAuthService.buttonAuthText = "Sign Out";
 
                             // get cart information
                             this.cartService.cart = value.data;
