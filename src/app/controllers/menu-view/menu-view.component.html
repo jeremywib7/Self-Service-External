@@ -31,7 +31,9 @@
         <div *ngIf="cartService.isDoneLoadProductInfo" class="col-12 lg:col-6 py-3 lg:pl-6">
             <div class="flex align-items-center justify-content-between text-xl font-medium text-900 mb-2">
                 <span>{{product?.name}}</span>
-                <button *ngIf="cartService.isInCart" (click)="onDeleteFromCart()" pButton pRipple icon="pi pi-trash"
+                <button *ngIf="cartService.isInCart"
+                        [disabled]="cartService.cart.isPlacedInOrder || currentQuantity == 0"
+                        (click)="onDeleteFromCart()" pButton pRipple icon="pi pi-trash"
                         class="p-button-danger p-button-text p-button-rounded"></button>
             </div>
 
@@ -46,17 +48,6 @@
                 'symbol':'3.0'}}
             </span>
 
-
-            <!--            <span class="text-xl font-medium {{product.discount ? 'text-pink-500':''}}">-->
-            <!--                {{product.discountedPrice | currency:'Rp. ':'symbol':-->
-            <!--                '2.0'}}-->
-            <!--            </span>-->
-            <!--            <span *ngIf="product.discount"-->
-            <!--                  class="text-xl font-medium text-700 line-through ml-3">-->
-            <!--                                            {{product.unitPrice | currency:'Rp. ':'symbol':-->
-            <!--                '2.0'}}-->
-            <!--            </span>-->
-
             <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between mb-5">
                 <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" min="1" [disabled]="cartService.cart.isPlacedInOrder"
                                inputStyleClass="w-3rem text-center" [(ngModel)]="this.currentQuantity"
@@ -67,7 +58,7 @@
                         (click)="cartService.onSubmitProductToCart(product?.id, this.currentQuantity,
                         this.userAuthService.customer['id'])"
                         pButton pRipple
-                        [disabled]="cartService.cart.isPlacedInOrder"
+                        [disabled]="cartService.cart.isPlacedInOrder || currentQuantity == 0"
                         [label]="cartService.isInCart ? 'Update Cart': 'Add To Cart'"
                         class="flex-1 mr-5"></button>
 <!--                    <i class="pi text-2xl cursor-pointer"-->

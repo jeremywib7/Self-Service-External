@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment.prod";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Customer} from "../api/customer";
 import {CustomerProfile} from "../model/CustomerProfile";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
-import {firstValueFrom, from} from "rxjs";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'

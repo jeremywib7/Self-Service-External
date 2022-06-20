@@ -354,21 +354,17 @@ export class NavbarComponent implements OnInit {
 
     onPlaceOrder() {
         this.isPlaceOrderButtonLoading = true;
-        let params = new HttpParams().append("customerId", this.cartService.cart.customerProfile.id)
+        let params = new HttpParams().append("customerId", this.cartService.cart.customerProfile.id);
 
         this.orderService.addOrder(params, this.cartService.cart.cartOrderedProduct).subscribe({
             next: () => {
-                this.isPlaceOrderButtonLoading = false;
-
-                // update status set as placed order true
                 this.cartService.cart.isPlacedInOrder = true;
-
-                // close side cart
-                document.getElementById("closeSideCart").click();
-
+                document.getElementById("closeSideCart").click();  // close side cart
                 this.router.navigate(["/order-pending"]).then(null);
             }
-        })
+        }).add(() => {
+            this.isPlaceOrderButtonLoading = false;
+        });
 
     }
 
