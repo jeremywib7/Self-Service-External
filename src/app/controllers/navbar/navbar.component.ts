@@ -434,15 +434,6 @@ export class NavbarComponent implements OnInit {
         });
     }
 
-    onHideDialog() {
-        if (this.userAuthService.isRegisterMode) {
-
-        } else {
-            this.loginForm.reset();
-            this.loginMsg = [];
-        }
-    }
-
     onChangeAuthMode() {
         this.userAuthService.isRegisterMode = !this.userAuthService.isRegisterMode;
         this.resetForm();
