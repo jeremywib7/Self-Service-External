@@ -40,7 +40,6 @@ export class PendingOrderComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
     }
 
 }
