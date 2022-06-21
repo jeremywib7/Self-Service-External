@@ -439,15 +439,15 @@ export class NavbarComponent implements OnInit {
         this.resetForm();
 
         // for testing
-        this.registerForm.patchValue({
-            username: 'TheWorldWar3',
-            firstName: 'Jeremy',
-            lastName: 'Yonathan',
-            gender: 'Male',
-            email: 'jeremywib7@gmail.com',
-            password: '123456'
-
-        })
+        // this.registerForm.patchValue({
+        //     username: 'TheWorldWar3',
+        //     firstName: 'Jeremy',
+        //     lastName: 'Yonathan',
+        //     gender: 'Male',
+        //     email: 'jeremywib7@gmail.com',
+        //     password: '123456'
+        //
+        // })
     }
 
     resetForm() {
