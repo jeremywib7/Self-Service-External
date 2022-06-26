@@ -66,11 +66,12 @@
                                             '2.0'}}
                                         </span>
                                     </div>
+<!--                                    [routerLink]="product.active ? '/menu': null"-->
+<!--                                    [queryParams]="{name: product.name}"-->
                                     <div>
                                         <p-button icon="pi pi-shopping-cart"
-                                                  [routerLink]="product.active ? '/view': null"
-                                                  [queryParams]="{name: product.name}"
-                                                  [disabled]="!product.active" class="mb-2"></p-button>
+                                                  (onClick)="onButtonCartClicked(product.name)"
+                                                  [disabled]="!product.active || !userAuthService.isLoggedIn" class="mb-2"></p-button>
                                     </div>
                                 </div>
 

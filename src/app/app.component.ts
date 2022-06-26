@@ -106,10 +106,13 @@ export class AppComponent implements OnInit {
                                         this.userAuthService.isLoggedIn = true;
                                         this.userAuthService.buttonAuthText = "Sign Out";
 
-                                        // set checking login status to false
-                                        this.userAuthService.isDoneLoadConfig = true;
+                                    },
+                                    error: err => {
 
                                     }
+                                }).add(() => {
+                                    // set checking login status to false
+                                    this.userAuthService.isDoneLoadConfig = true;
                                 });
                             }
                         }

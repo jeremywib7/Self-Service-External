@@ -8,6 +8,8 @@ import {InputNumber} from "primeng/inputnumber";
 import {OverlayPanel} from "primeng/overlaypanel";
 import {Dropdown} from "../../model/Dropdown";
 import {firstValueFrom} from "rxjs";
+import {Router} from "@angular/router";
+import {UserAuthService} from "../../service/user-auth.service";
 
 @Component({
     selector: 'app-menu-book',
@@ -27,7 +29,7 @@ export class MenuBookComponent implements OnInit {
     products: Product[] = [];
 
     categoryDd: Dropdown[] = []
-    selectedCategoryDd : string;
+    selectedCategoryDd: string;
 
     sortField: string;
 
@@ -37,7 +39,11 @@ export class MenuBookComponent implements OnInit {
 
     @ViewChild('inputQuantity') inputQuantity;
 
-    constructor(private productService: ProductService, private messageService: MessageService) {
+    constructor(
+        private productService: ProductService,
+        private router: Router,
+        public userAuthService: UserAuthService,
+        private messageService: MessageService) {
     }
 
     ngOnInit(): void {
@@ -85,7 +91,7 @@ export class MenuBookComponent implements OnInit {
 
     async loadProductCategoryForDropdown() {
         const res: any = await firstValueFrom(this.productService.loadAllProductCategoryForDropdowns());
-        this.categoryDd =  res.data;
+        this.categoryDd = res.data;
     }
 
     onAddToCart(overlayPanel: OverlayPanel, $event) {
@@ -95,6 +101,10 @@ export class MenuBookComponent implements OnInit {
         setTimeout(() => {                           // <<<---using ()=> syntax
             this.inputQuantity.input.nativeElement.focus();
         }, 200);
+    }
+
+    onButtonCartClicked(productName: string) {
+        this.router.navigate(['/view', {name: productName}]);
     }
 
     onConfirmQuantityToCart(inputNumber: InputNumber, overlayPanel: OverlayPanel) {
