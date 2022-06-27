@@ -10,7 +10,8 @@
                     <ng-template pTemplate="header">
                         <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
                             <p-dropdown [options]="categoryDd" optionValue="label"
-                                        [filter]="true" [showClear]="true" (onChange)="loadAllProductsWithCategory($event)"
+                                        [filter]="true" [showClear]="true"
+                                        (onChange)="loadAllProductsWithCategory($event)"
                                         placeholder="Select a category">
                             </p-dropdown>
                             <span class="p-input-icon-left mb-2 md:mb-0">
@@ -66,12 +67,13 @@
                                             '2.0'}}
                                         </span>
                                     </div>
-<!--                                    [routerLink]="product.active ? '/menu': null"-->
-<!--                                    [queryParams]="{name: product.name}"-->
+                                    <!--                                    [routerLink]="product.active ? '/menu': null"-->
+                                    <!--                                    [queryParams]="{name: product.name}"-->
                                     <div>
                                         <p-button icon="pi pi-shopping-cart"
                                                   (onClick)="onButtonCartClicked(product.name)"
-                                                  [disabled]="!product.active || !userAuthService.isLoggedIn" class="mb-2"></p-button>
+                                                  [disabled]="!product.active || !userAuthService.isLoggedIn"
+                                                  class="mb-2"></p-button>
                                     </div>
                                 </div>
 
