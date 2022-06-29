@@ -53,7 +53,7 @@ export class MenuViewComponent implements OnInit {
         this.cartService.isDoneLoadProductInfo = false; // set skeleton
 
         // create params
-        let name = this.activatedRoute.snapshot.queryParamMap.get('name');
+        let name = JSON.parse(this.activatedRoute.snapshot.paramMap.get('name'));
         let params = new HttpParams();
         params = params.append("name", name);
 

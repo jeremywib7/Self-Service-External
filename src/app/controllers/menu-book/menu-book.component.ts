@@ -104,7 +104,8 @@ export class MenuBookComponent implements OnInit {
     }
 
     onButtonCartClicked(productName: string) {
-        this.router.navigate(['/view', {name: productName}]);
+        console.log(productName);
+        this.router.navigate(['/view', {name: JSON.stringify(productName)}]);
     }
 
     onConfirmQuantityToCart(inputNumber: InputNumber, overlayPanel: OverlayPanel) {
