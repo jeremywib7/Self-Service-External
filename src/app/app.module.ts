@@ -170,6 +170,7 @@ import {CountdownModule} from "ngx-countdown";
 import {initializeApp} from "@angular/fire/app";
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {MessagingService} from "./service/messaging.service";
+import {ServiceWorkerModule, SwRegistrationOptions} from '@angular/service-worker';
 
 registerLocaleData(localeId, 'id');
 
@@ -278,6 +279,13 @@ registerLocaleData(localeId, 'id');
         QRCodeModule,
         CountdownModule,
 
+        // ServiceWorkerModule.register('ngsw-worker.js', {
+        //   enabled: environment.production,
+          // Register the ServiceWorker as soon as the application is stable
+          // or after 30 seconds (whichever comes first).
+        //   registrationStrategy: 'registerWhenStable:30000'
+        // }),
+
     ],
     declarations: [
         AppComponent,
@@ -342,6 +350,7 @@ registerLocaleData(localeId, 'id');
         {
             provide: LOCALE_ID, useValue: "id-ID"
         },
+
         CountryService,
         CustomerService,
         EventService,
