@@ -8,16 +8,18 @@
                             totalRecords="{{products?.length}}" [loading]="isLoadingProducts"
                             [sortOrder]="sortOrder" layout="grid">
                     <ng-template pTemplate="header">
-                        <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
+                        <div class="flex flex-column md:flex-row md:justify-content-between">
                             <p-dropdown [options]="categoryDd" optionValue="label"
                                         [filter]="true" [showClear]="true"
                                         (onChange)="loadAllProductsWithCategory($event)"
+                                        [style]="{'width':'100%'}"
+                                        class="mb-2 md:mb-0"
                                         placeholder="Select a category">
                             </p-dropdown>
-                            <span class="p-input-icon-left mb-2 md:mb-0">
+                            <span class="p-input-icon-left">
                             <i class="pi pi-search"></i>
                                 <!--suppress TypeScriptUnresolvedVariable -->
-                            <input type="search" pInputText placeholder="Search by Name"
+                            <input type="search" pInputText placeholder="Search by Name" [style]="{'width':'100%'}"
                                    (input)="dv.filter($event.target.value)">
                         </span>
                         </div>
