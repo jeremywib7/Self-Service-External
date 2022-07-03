@@ -1,7 +1,6 @@
 <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
     <div class="grid">
         <div class="col-12 lg:col-6 text-center">
-            <app-image-loader></app-image-loader>
             <img
                 defaultImage="/assets/demo/images/galleria/spinner.gif"
                 [lazyLoad]="apiBaseUrl +'/'+ projectName +'/images/customer/product/download?' +
@@ -11,22 +10,18 @@
                 class="mb-3 w-24rem h-18rem"/>
 
             <div class="grid justify-content-center">
-                <!--                <div class="flex">-->
-                <!--                    <p-skeleton width="7rem" height="5rem" styleClass="mr-2"></p-skeleton>-->
-                <!--                    <p-skeleton width="7rem" height="5rem" styleClass="mr-2"></p-skeleton>-->
-                <!--                    <p-skeleton width="7rem" height="5rem"></p-skeleton>-->
-                <!--                </div>-->
                 <div *ngFor="let image of product?.images; let i = index" class="col-3">
                     <img
                         defaultImage="/assets/demo/images/galleria/spinner.gif"
                         [lazyLoad]=" apiBaseUrl +'/'+ projectName +'/images/customer/product/download?' +
                                                 'imageName=' + image.imageName + '&' +
                                                 'productId=' + product?.id "
-                        class="w-7rem h-5rem cursor-pointer border-2 border-round border-transparent transition-colors transition-duration-150"
+                        class="w-full h-5rem md:h-6rem sm:h-7rem cursor-pointer border-2 border-round border-transparent transition-colors transition-duration-150"
                         [ngClass]="{'border-primary': selectedImageIndex === i}"
                         (click)="selectedImageIndex = i"/>
                 </div>
             </div>
+
         </div>
         <div *ngIf="cartService.isDoneLoadProductInfo" class="col-12 lg:col-6 py-3 lg:pl-6">
             <div class="flex align-items-center justify-content-between text-xl font-medium text-900 mb-2">
