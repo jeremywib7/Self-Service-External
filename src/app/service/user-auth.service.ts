@@ -25,6 +25,8 @@ export class UserAuthService {
 
     public formProfile: FormGroup;
 
+    public showAuthDialog: boolean = false;
+
     public customer: CustomerProfile = new CustomerProfile();
 
     gender: any[] = [

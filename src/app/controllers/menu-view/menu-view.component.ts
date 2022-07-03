@@ -43,10 +43,14 @@ export class MenuViewComponent implements OnInit {
         public userAuthService: UserAuthService,
         private productService: ProductService
     ) {
-        this.loadProduct();
+
     }
 
     ngOnInit(): void {
+        if (!this.userAuthService.isLoggedIn) {
+            this.router.navigate(["/menu"]);
+        }
+        this.loadProduct();
     }
 
     loadProduct() {

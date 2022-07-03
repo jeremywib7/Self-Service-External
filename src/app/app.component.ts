@@ -35,37 +35,41 @@ export class AppComponent implements OnInit {
     ) {
         this.auth.authState.subscribe({
             next: async response => {
-
                 // if not null, then user is already logged in
-                if (response) {
+                if (response != null) {
                     this.userAuthService.customer['id'] = response.uid;
                     this.userAuthService.customer['email'] = response['email'];
+                    this.userAuthService.isLoggedIn = true;
+                    this.userAuthService.buttonAuthText = "Sign Out";
+
+                    // get cart items
+                    let params1 = new HttpParams().append("customerId", response.uid);
+                    const value: any =  await firstValueFrom(this.cartService.viewCart(params1)).finally(() => {
+                        this.userAuthService.isDoneLoadConfig = true;
+                    });
+                    this.cartService.cart = value.data;
+                    this.cartService.calculateTotalPrice();
+                    this.userAuthService.formProfile.patchValue(value.data.customerProfile); // update user profile data
+                    //
 
                     // get messaging token for fcm
-                    await lastValueFrom(this.messaging.requestPermission).then(async value => {
+                    await lastValueFrom(this.messaging.requestPermission);
+                    const token : any = await firstValueFrom(this.messaging.requestToken);
+                    // update token in database
+                    let params2 = new HttpParams()
+                        .append("messagingToken", token)
+                        .append("customerId", response.uid);
 
-                        await firstValueFrom(this.messaging.requestToken).then(async token => {
+                    await firstValueFrom(this.userAuthService.updateMessagingToken(params2));
 
-                            // update token in database
-                            let params = new HttpParams()
-                                .append("messagingToken", token)
-                                .append("customerId", response.uid);
-
-                            await firstValueFrom(this.userAuthService.updateMessagingToken(params)).then(value => {
-                                // console.log(value);
-                            }).catch(err => {
-                            })
-                        });
-
-                    });
-
+                    // detect for push notification
                     await this.messagingService.receiveMessage();
                     this.message = this.messagingService.currentMessage;
 
                     // listen data from firestore waiting list, if response is not undefined, then order is paid and is
                     // in firestore waiting list
                     this.orderService.getWaitingListForCustomer(response.uid).subscribe({
-                        next: res => {
+                        next: async res => {
 
                             // if data exists, then waiting list in firestore is placed
                             if (res.payload.data()) {
@@ -81,36 +85,6 @@ export class AppComponent implements OnInit {
                                 if (this.router.url === '/order-success') {
                                     this.router.navigate(["/"]).then(null);
                                 }
-                            }
-
-                            // because view cart in method register
-                            // will be called twice without if else
-                            if (!this.userAuthService.isRegisterMode) {
-                                // get cart items
-                                let params = new HttpParams().append("customerId", response.uid);
-                                this.cartService.viewCart(params).subscribe({
-                                    next: async (value: any) => {
-                                        this.cartService.cart = value.data;
-
-                                        // update user profile data
-                                        this.userAuthService.formProfile.patchValue(value.data.customerProfile);
-
-                                        // check if fcm token is null
-                                        if (this.userAuthService.formProfile.get("messagingToken").value == null) {
-                                            const res: any = await firstValueFrom(this.angularFireMessaging.requestToken);
-                                            this.userAuthService.formProfile.get("messagingToken").setValue(res);
-                                        }
-
-                                        this.cartService.calculateTotalPrice();
-
-                                        this.userAuthService.isLoggedIn = true;
-                                        this.userAuthService.buttonAuthText = "Sign Out";
-
-                                    },
-                                }).add(() => {
-                                    // set checking login status to false
-                                    this.userAuthService.isDoneLoadConfig = true;
-                                });
                             }
                         }
                     });

@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
             this.config = config;
         });
 
-        this.loadBestSellerProduct().then(null);
+        // this.loadBestSellerProduct().then(null);
 
     }
 

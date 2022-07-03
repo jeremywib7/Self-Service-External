@@ -3,6 +3,13 @@
     <p-progressSpinner></p-progressSpinner>
 </div>
 
+<div *ngIf="!this.userAuthService.isLoggedIn"
+    class="bg-bluegray-900 text-gray-100 p-3 flex justify-content-center align-items-center text-center">
+    <div class="align-items-center flex">
+        <span class="line-height-3">Login or register to begin your order 🔥</span>
+    </div>
+</div>
+
 <div
     class="bg-gray-900 px-3 sm:px-6 py-3 flex align-items-stretch justify-content-center sm:justify-content-end border-bottom-1 surface-border text-sm">
     <a pRipple (click)="openLoginOrLogoutDialog()"
@@ -292,7 +299,7 @@
     </ng-template>
 </p-dialog>
 
-<p-dialog [(visible)]="showAuthDialog" [style]="{width: '450px'}" (onShow)="this.resetForm()"
+<p-dialog [(visible)]="userAuthService.showAuthDialog" [style]="{width: '450px'}" (onShow)="this.resetForm()"
           [modal]="true" class="p-fluid" [draggable]="false">
     <ng-template pTemplate="content">
         <div class="text-center mb-5">

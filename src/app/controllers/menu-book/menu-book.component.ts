@@ -104,8 +104,10 @@ export class MenuBookComponent implements OnInit {
     }
 
     onButtonCartClicked(productName: string) {
-        console.log(productName);
-        this.router.navigate(['/view', {name: JSON.stringify(productName)}]);
+        if (!this.userAuthService.isLoggedIn) {
+             return this.userAuthService.showAuthDialog = true;
+        }
+        return this.router.navigate(['/view', {name: JSON.stringify(productName)}]);
     }
 
     onConfirmQuantityToCart(inputNumber: InputNumber, overlayPanel: OverlayPanel) {
