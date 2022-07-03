@@ -55,8 +55,6 @@ export class NavbarComponent implements OnInit {
 
     isPlaceOrderButtonLoading: boolean = false;
 
-    showAuthDialog: boolean = false;
-
     showResetPasswordDialog: boolean = false;
 
 
@@ -237,7 +235,7 @@ export class NavbarComponent implements OnInit {
     openLoginOrLogoutDialog() {
         // if not logged in
         if (!this.userAuthService.isLoggedIn) {
-            return this.showAuthDialog = true;
+            return this.userAuthService.showAuthDialog = true;
         }
 
         // if already logged in
@@ -246,9 +244,9 @@ export class NavbarComponent implements OnInit {
             header: 'Logout',
             accept: () => {
                 this.userAuthService.isDoneLoadConfig = true;
-                this.auth.signOut().then(() => {
-                    this.router.navigate(["/"]);
-                });
+                this.auth.signOut();
+                this.userAuthService.isLoggedIn = false;
+                this.router.navigate(["/"]);
             }
         });
     }
@@ -261,9 +259,9 @@ export class NavbarComponent implements OnInit {
             const {email, password} = this.loginForm.value;
 
             this.auth.signInWithEmailAndPassword(email, password).then(user => {
-
                 this.loginMsg = [];
-                this.showAuthDialog = false;
+                this.userAuthService.isLoggedIn = true;
+                this.userAuthService.showAuthDialog = false;
             }).catch(
                 err => {
                     let errorMessage = "";
@@ -292,7 +290,9 @@ export class NavbarComponent implements OnInit {
                         severity: 'error', detail: errorMessage
                     }]
                 }
-            ).finally(() => this.isLoginButtonLoading = false);
+            ).finally(() => {
+                this.isLoginButtonLoading = false;
+            });
 
         } else {
             this.loginForm.markAllAsTouched();
@@ -314,7 +314,7 @@ export class NavbarComponent implements OnInit {
                         next: (value: any) => {
 
                             this.registerMsg = [];
-                            this.showAuthDialog = false;
+                            this.userAuthService.showAuthDialog = false;
                             this.userAuthService.buttonAuthText = "Sign Out";
 
                             // get cart information
@@ -327,7 +327,7 @@ export class NavbarComponent implements OnInit {
                             this.auth.signInWithEmailAndPassword(this.registerForm.get('email').value,
                                 this.registerForm.get('password').value).then(user => {
                                 this.loginMsg = [];
-                                this.showAuthDialog = false;
+                                this.userAuthService.showAuthDialog = false;
                             })
                         },
                         error: err => {
