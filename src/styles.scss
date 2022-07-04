@@ -59,3 +59,24 @@ img.ng-lazyloaded {
         color: #C63737;
     }
 }
+
+.progress-spinner {
+    position: fixed;
+    z-index: 1031;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}
+
+/* Transparent Overlay */
+.progress-spinner:before {
+    content: '';
+    z-index: 1030;
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.53);
+}

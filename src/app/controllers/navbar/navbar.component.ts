@@ -243,7 +243,6 @@ export class NavbarComponent implements OnInit {
             message: 'Are you sure you want to log out?',
             header: 'Logout',
             accept: () => {
-                this.userAuthService.isDoneLoadConfig = true;
                 this.auth.signOut();
                 this.userAuthService.isLoggedIn = false;
                 this.router.navigate(["/"]);

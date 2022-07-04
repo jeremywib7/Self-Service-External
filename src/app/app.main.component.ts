@@ -7,6 +7,7 @@ import {Subscription} from 'rxjs';
 import {Router} from "@angular/router";
 import {UserAuthService} from "./service/user-auth.service";
 import jwt_decode from 'jwt-decode';
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
     selector: 'app-main',
@@ -56,8 +57,8 @@ export class AppMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     subscription: Subscription;
 
-    constructor(public renderer: Renderer2, public app: AppComponent, public configService: ConfigService,
-                public router: Router, private userAuthService: UserAuthService) {
+    constructor(public renderer: Renderer2, public app: AppComponent, public configService: ConfigService, private spinner: NgxSpinnerService,
+                public router: Router, public userAuthService: UserAuthService) {
     }
 
 
@@ -68,6 +69,7 @@ export class AppMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     ngAfterViewInit() {
+        this.spinner.show(undefined, { fullScreen: true });
         // hides the overlay menu and top menu if outside is clicked
         this.documentClickListener = this.renderer.listen('body', 'click', (event) => {
             if (!this.isDesktop()) {

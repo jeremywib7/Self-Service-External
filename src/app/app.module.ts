@@ -1,4 +1,4 @@
-import {LOCALE_ID, NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
@@ -171,6 +171,7 @@ import {initializeApp} from "@angular/fire/app";
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {MessagingService} from "./service/messaging.service";
 import {ServiceWorkerModule, SwRegistrationOptions} from '@angular/service-worker';
+import {NgxSpinnerModule} from "ngx-spinner";
 
 registerLocaleData(localeId, 'id');
 
@@ -224,6 +225,7 @@ registerLocaleData(localeId, 'id');
         MessageModule,
         MessagesModule,
         MultiSelectModule,
+        NgxSpinnerModule,
         OrderListModule,
         OrganizationChartModule,
         OverlayPanelModule,
@@ -382,7 +384,8 @@ registerLocaleData(localeId, 'id');
         RxFormBuilder,
         RxwebValidators
     ],
-    bootstrap: [AppComponent]
+    schemas:[CUSTOM_ELEMENTS_SCHEMA],
+    bootstrap: [AppComponent],
 })
 
 export class AppModule extends IntersectionObserverHooks {
