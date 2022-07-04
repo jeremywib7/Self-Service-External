@@ -44,20 +44,10 @@ export class AppComponent implements OnInit {
                     this.userAuthService.isLoggedIn = true;
                     this.userAuthService.buttonAuthText = "Sign Out";
 
-                    // get cart items
-                    let params1 = new HttpParams().append("customerId", response.uid);
-                    const value: any =  await firstValueFrom(this.cartService.viewCart(params1)).finally(() => {
-                        this.userAuthService.isDoneLoadConfig = true;
-                        this.spinner.hide("start");
-                    });
-                    this.cartService.cart = value.data;
-                    this.cartService.calculateTotalPrice();
-                    this.userAuthService.formProfile.patchValue(value.data.customerProfile); // update user profile data
-                    //
-
                     // get messaging token for fcm
                     await lastValueFrom(this.messaging.requestPermission);
                     const token : any = await firstValueFrom(this.messaging.requestToken);
+
                     // update token in database
                     let params2 = new HttpParams()
                         .append("messagingToken", token)
@@ -65,32 +55,51 @@ export class AppComponent implements OnInit {
 
                     await firstValueFrom(this.userAuthService.updateMessagingToken(params2));
 
+                    // get cart items
+                    let params1 = new HttpParams().append(  "customerId", response.uid);
+                    const value: any = await firstValueFrom(this.cartService.viewCart(params1));
+                    this.cartService.cart = value.data;
+                    this.cartService.calculateTotalPrice();
+                    this.userAuthService.formProfile.patchValue(value.data.customerProfile); // update user profile data
+
                     // detect for push notification
                     await this.messagingService.receiveMessage();
                     this.message = this.messagingService.currentMessage;
 
-                    // listen data from firestore waiting list, if response is not undefined, then order is paid and is
-                    // in firestore waiting list
                     this.orderService.getWaitingListForCustomer(response.uid).subscribe({
                         next: async res => {
-
-                            // if data exists, then waiting list in firestore is placed
                             if (res.payload.data()) {
+                                if (res.payload.data()["status"] == "COMPLETED") {
+                                    this.orderService.isInWaitingList = false;
+                                    this.cartService.cart.isPlacedInOrder = false;
+                                    this.cartService.cart.cartOrderedProduct = [];
+
+                                    // delete waiting list in firestore
+                                    await firstValueFrom(orderService.deleteWaitingListFirebase(new HttpParams().append(
+                                        'customerId',response.uid)));
+
+                                    if (this.router.url === '/order-success') {
+                                        return this.router.navigate(["/"]).then(null);
+                                    }
+                                    return null;
+                                }
+
                                 this.orderService.currentOrder = {...res.payload.data() as WaitingList};
                                 this.orderService.isInWaitingList = true;
-                                this.router.navigate(["/order-success"]).then(null);
-                            } else {
-                                this.orderService.isInWaitingList = false;
-                                this.cartService.cart.isPlacedInOrder = false;
-                                this.cartService.cart.cartOrderedProduct = [];
-                                // if route is order success then change the dashboard
-                                // because order is not available or already finished
-                                if (this.router.url === '/order-success') {
-                                    this.router.navigate(["/"]).then(null);
-                                }
+                                this.cartService.cart.isPlacedInOrder = true;
+                                return this.router.navigate(["/order-success"]).then(null);
                             }
-                        }
+
+                            this.orderService.isInWaitingList = false;
+                            this.cartService.cart.isPlacedInOrder = false;
+                        },
                     });
+
+                    // listen data from firestore waiting list, if response is not undefined, then order is paid and is
+                    // in firestore waiting list
+                    this.userAuthService.isDoneLoadConfig = true;
+                    await this.spinner.hide("start");
+
                 } else {
                     // clear global state
                     this.userAuthService.customer = new CustomerProfile();
@@ -106,7 +115,6 @@ export class AppComponent implements OnInit {
                 }
             }
         });
-
 
     }
 

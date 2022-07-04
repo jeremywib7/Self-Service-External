@@ -42,6 +42,11 @@ export class OrderService {
             .pipe(map((data) => data || []))
     }
 
+    deleteWaitingListFirebase(params: HttpParams) {
+        return this.httpClient.delete(`${this.apiServerUrl}/${this.project}/order/delete/waiting-list`, {params: params})
+            .pipe(map((data) => data || []))
+    }
+
     cancelOrder(customerId: string) {
         let params = new HttpParams().append("customerId", customerId);
 
