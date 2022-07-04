@@ -12,6 +12,7 @@ import {OrderService} from "./service/order.service";
 import {Router} from "@angular/router";
 import {CartService} from "./service/cart.service";
 import {firstValueFrom, lastValueFrom} from "rxjs";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
     selector: 'app-root',
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit {
         private primengConfig: PrimeNGConfig,
         public auth: AngularFireAuth,
         public userAuthService: UserAuthService,
+        private spinner: NgxSpinnerService,
         public cartService: CartService,
         public orderService: OrderService,
         public angularFireMessaging: AngularFireMessaging,
@@ -46,6 +48,7 @@ export class AppComponent implements OnInit {
                     let params1 = new HttpParams().append("customerId", response.uid);
                     const value: any =  await firstValueFrom(this.cartService.viewCart(params1)).finally(() => {
                         this.userAuthService.isDoneLoadConfig = true;
+                        this.spinner.hide("start");
                     });
                     this.cartService.cart = value.data;
                     this.cartService.calculateTotalPrice();
@@ -99,6 +102,7 @@ export class AppComponent implements OnInit {
 
                     // set checking login status to false
                     this.userAuthService.isDoneLoadConfig = true;
+                    await this.spinner.hide("start");
                 }
             }
         });

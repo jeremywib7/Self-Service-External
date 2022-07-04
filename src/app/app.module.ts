@@ -180,6 +180,7 @@ registerLocaleData(localeId, 'id');
         BrowserModule,
         FormsModule,
         AppRoutingModule,
+        NgxSpinnerModule,
         HttpClientModule,
         BrowserAnimationsModule,
         AccordionModule,
@@ -225,7 +226,6 @@ registerLocaleData(localeId, 'id');
         MessageModule,
         MessagesModule,
         MultiSelectModule,
-        NgxSpinnerModule,
         OrderListModule,
         OrganizationChartModule,
         OverlayPanelModule,
@@ -283,8 +283,8 @@ registerLocaleData(localeId, 'id');
 
         // ServiceWorkerModule.register('ngsw-worker.js', {
         //   enabled: environment.production,
-          // Register the ServiceWorker as soon as the application is stable
-          // or after 30 seconds (whichever comes first).
+        // Register the ServiceWorker as soon as the application is stable
+        // or after 30 seconds (whichever comes first).
         //   registrationStrategy: 'registerWhenStable:30000'
         // }),
 
@@ -384,8 +384,8 @@ registerLocaleData(localeId, 'id');
         RxFormBuilder,
         RxwebValidators
     ],
-    schemas:[CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 
 export class AppModule extends IntersectionObserverHooks {

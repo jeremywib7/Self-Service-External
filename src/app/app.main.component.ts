@@ -57,20 +57,19 @@ export class AppMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     subscription: Subscription;
 
-    constructor(public renderer: Renderer2, public app: AppComponent, public configService: ConfigService, private spinner: NgxSpinnerService,
-                public router: Router, public userAuthService: UserAuthService) {
+    constructor(public renderer: Renderer2, public app: AppComponent, public configService: ConfigService,
+                private spinner: NgxSpinnerService, public router: Router, public userAuthService: UserAuthService) {
     }
 
 
     ngOnInit() {
+        this.spinner.show("start").then(r => null);
         this.config = this.configService.config;
         this.subscription = this.configService.configUpdate$.subscribe(config => this.config = config);
         this.app.menuMode = 'overlay';
     }
 
     ngAfterViewInit() {
-        this.spinner.show(undefined, { fullScreen: true });
-        // hides the overlay menu and top menu if outside is clicked
         this.documentClickListener = this.renderer.listen('body', 'click', (event) => {
             if (!this.isDesktop()) {
                 if (!this.menuClick) {
