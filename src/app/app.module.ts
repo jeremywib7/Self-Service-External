@@ -172,6 +172,7 @@ import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import {MessagingService} from "./service/messaging.service";
 import {ServiceWorkerModule, SwRegistrationOptions} from '@angular/service-worker';
 import {NgxSpinnerModule} from "ngx-spinner";
+import {QnaService} from "./service/qna.service";
 
 registerLocaleData(localeId, 'id');
 
@@ -378,6 +379,7 @@ registerLocaleData(localeId, 'id');
         MessageService,
         MessagingService,
         AsyncPipe,
+        QnaService,
         UserAuthService,
         OrderService,
         ProductService,

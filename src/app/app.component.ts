@@ -71,7 +71,6 @@ export class AppComponent implements OnInit {
                             if (res.payload.data()) {
                                 if (res.payload.data()["status"] == "COMPLETED") {
                                     this.orderService.isInWaitingList = false;
-                                    this.cartService.cart.isPlacedInOrder = false;
                                     this.cartService.cart.cartOrderedProduct = [];
 
                                     // delete waiting list in firestore
@@ -86,12 +85,10 @@ export class AppComponent implements OnInit {
 
                                 this.orderService.currentOrder = {...res.payload.data() as WaitingList};
                                 this.orderService.isInWaitingList = true;
-                                this.cartService.cart.isPlacedInOrder = true;
                                 return this.router.navigate(["/order-success"]).then(null);
                             }
 
                             this.orderService.isInWaitingList = false;
-                            this.cartService.cart.isPlacedInOrder = false;
                         },
                     });
 

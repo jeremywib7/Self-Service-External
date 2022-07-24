@@ -4,6 +4,8 @@ import {firstValueFrom, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {ConfigService} from "../../service/app.config.service";
 import {ProductService} from "../../service/product.service";
+import {QnaService} from "../../service/qna.service";
+import {Qna} from "../../model/QnA";
 
 @Component({
     selector: 'app-home',
@@ -14,12 +16,19 @@ export class HomeComponent implements OnInit {
 
     config: AppConfig;
 
+    qna: Qna[] = [];
+
+    selectedRow: number = 5;
+
+    isLoadingQna: boolean = false;
+
     subscription: Subscription;
 
     constructor(
         public router: Router,
         public configService: ConfigService,
-        private productService: ProductService
+        private productService: ProductService,
+        private qnaService: QnaService
     ) {
 
     }
@@ -29,9 +38,7 @@ export class HomeComponent implements OnInit {
         this.subscription = this.configService.configUpdate$.subscribe(config => {
             this.config = config;
         });
-
-        // this.loadBestSellerProduct().then(null);
-
+        this.loadAllQna(0, 5).then(null);
     }
 
     ngOnDestroy(): void {
@@ -40,10 +47,18 @@ export class HomeComponent implements OnInit {
         }
     }
 
-    async loadBestSellerProduct() {
-        const res: any = await firstValueFrom(this.productService.loadBestSeller());
-        console.log(res);
+    async onPageQnaChange(event) {
+        this.isLoadingQna = true;
+        this.selectedRow = event.rows;
+        const res: any = await firstValueFrom(this.qnaService.loadAllQna(event.page, event.rows));
+        this.qna = res.data.content;
+        this.isLoadingQna = false;
     }
 
-
+    async loadAllQna(page?: number, size?: number) {
+        this.isLoadingQna = true;
+        const res: any = await firstValueFrom(this.qnaService.loadAllQna(page, size));
+        this.qna = res.data.content;
+        this.isLoadingQna = false;
+    }
 }
