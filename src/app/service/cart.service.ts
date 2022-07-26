@@ -27,6 +27,10 @@ export class CartService {
     }
 
     public onSubmitProductToCart(productId: string, currentQuantity: number, customerId: string) {
+        if (currentQuantity >= 100) {
+            return console.log("Quantity tidak boleh lebih dari 100");
+        }
+
         let params = new HttpParams();
         params = params.append("customerId", customerId);
         params = params.append("productId", productId);

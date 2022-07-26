@@ -78,6 +78,7 @@ export class AppComponent implements OnInit {
                                         'customerId',response.uid)));
 
                                     if (this.router.url === '/order-success') {
+                                        cartService.cart.isPlacedInOrder = false;
                                         return this.router.navigate(["/"]).then(null);
                                     }
                                     return null;
